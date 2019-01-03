@@ -1,0 +1,28 @@
+@import '../../../components/variables.less';
+
+.root {
+  > :first-child {
+    padding-bottom: 12px;
+    border-bottom: 1px solid #eee;
+    margin-bottom: 10px;
+  }
+
+  > :last-child {
+    padding-left: 20px;
+  }
+
+  [data-role='block'] {
+    margin-bottom: 10px;
+
+    > * {
+      display: inline-block;
+      vertical-align: top;
+    }
+
+    > :first-child {
+      color: @brand-primary;
+      margin-right: 10px;
+      font-size: 16px;
+    }
+  }
+}

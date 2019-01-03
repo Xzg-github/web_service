@@ -1,0 +1,14 @@
+@import '../../../components/variables.less';
+
+.root {
+  width: 100%;
+  overflow: visible;
+
+  > :first-child {
+    margin-bottom: 12px;
+  }
+
+  > div:not(:first-child) > * {
+    width: 20%;
+  }
+}

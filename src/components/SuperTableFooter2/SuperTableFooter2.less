@@ -1,0 +1,27 @@
+@import '../variables.less';
+
+.root {
+  border-spacing: 0;
+  cursor: default;
+}
+
+.required::after {
+  content: '*';
+  color: red;
+}
+
+.select {
+  background-color: @table-row-hover-bg;
+}
+
+.center {
+  text-align: center !important;
+}
+
+.left {
+  text-align: left !important;
+}
+
+.right {
+  text-align: right !important;
+}

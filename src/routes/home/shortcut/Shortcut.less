@@ -1,0 +1,23 @@
+
+.root {
+  > :first-child {
+    padding-bottom: 12px;
+    border-bottom: 1px solid #eee;
+  }
+
+  > :last-child {
+    margin-top: 10px;
+
+    > span {
+      width: 25%;
+      display: inline-block;
+      text-align: center;
+    }
+  }
+
+  &[data-size] {
+    > :last-child {
+      margin-top: 40px;
+    }
+  }
+}

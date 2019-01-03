@@ -1,0 +1,68 @@
+@import '../variables.less';
+
+@list-font-size: @font-size-base;
+@icon-width: 16px;
+@icon-height: 16px;
+@icon-space: 6px;
+@item-indent: @icon-width + @icon-space;
+@item-hover-color: #e4e4e4;
+@item-active-color: @item-hover-color;
+
+.root {
+  cursor: default;
+  border: 1px solid #ddd;
+  padding: 10px;
+  font-size: @list-font-size;
+  line-height: 2;
+
+  > div {
+    > div {
+      &:hover {
+        background-color: @item-hover-color;
+      }
+
+      > span:first-child {
+        display: inline-block;
+        cursor: pointer;
+        text-align: center;
+        width: @icon-width;
+        margin-right: @icon-space;
+
+        > img {
+          vertical-align: baseline;
+        }
+      }
+    }
+
+    > ul {
+      list-style-type: none;
+      padding-left: 0;
+      margin: 0;
+
+      li {
+        padding-left: @item-indent;
+        font-size: 0;
+
+        &:hover {
+          background-color: @item-hover-color;
+        }
+
+        > span {
+          font-size: @list-font-size;
+          vertical-align: middle;
+        }
+
+        > img {
+          cursor: pointer;
+          width: @icon-width;
+          height: @icon-width;
+          margin-right: @icon-space;
+        }
+      }
+    }
+  }
+
+  .item-active {
+    background-color: @item-active-color;
+  }
+}

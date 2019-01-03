@@ -1,0 +1,50 @@
+@import '../variables.less';
+
+.root {
+  border-spacing: 0;
+  cursor: default;
+
+  :global(.ant-checkbox-input) {
+    z-index: -1;
+  }
+
+  :global(.ant-table-tbody) {
+    :global(.ant-table-row) {
+      > td {
+        > div {
+          height: 22px;
+        }
+      }
+    }
+  }
+
+  :global(.ant-table-expanded-row) {
+    > td:last-child {
+      padding: 0
+    }
+  }
+
+  [role='marker'] {
+    color: #3fa633;
+
+    &:hover {
+      color: @primary-color;
+    }
+  }
+}
+
+.select {
+  background-color: @table-row-hover-bg;
+}
+
+.center {
+  text-align: center !important;
+}
+
+.left {
+  text-align: left !important;
+}
+
+.right {
+  text-align: right !important;
+}

@@ -1,0 +1,21 @@
+@import '../../../components/variables.less';
+
+.root {
+  > :first-child {
+    padding-bottom: 12px;
+    padding-right: 8px;
+    border-bottom: 1px solid #eee;
+
+    > :last-child {
+      float: right;
+      width: 85px;
+    }
+  }
+
+  [data-role='title'] {
+    > i {
+      margin-left: 5px;
+      color: @brand-primary;
+    }
+  }
+}

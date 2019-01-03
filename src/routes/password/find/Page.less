@@ -1,0 +1,107 @@
+@import '../../../components/variables.less';
+
+.root {
+  min-height: 222px;
+  padding: 50px 0;
+  overflow: auto;
+  .container{
+    width: 1000px;
+    height: 500px;
+    box-sizing: border-box;
+    margin: auto;
+    padding: 50px;
+    border: 1px solid #e8e8e8;
+    .customSuperTab{
+      text-align: center;
+      padding: 30px;
+      :global .ant-tabs-tab {
+        font-size: 20px;
+        margin: 0 15px;
+      }
+      :global .ant-tabs-tab-active{
+        color: rgb(255,102,11);
+      }
+      :global .ant-tabs-ink-bar{
+        width: 100px;
+      }
+      :global .ant-tabs-ink-bar{
+        background-color: rgb(255,102,11);
+      }
+    }
+    .bindingBox{
+      width: 500px;
+      text-align: left;
+      margin: 0 auto;
+      position: relative;
+      .bindingInfo{
+        display: inline-block;
+        width: 420px;
+        padding-right: 15px;
+        font-size: 15px;
+        font-weight: 700;
+        .color{
+          color: rgb(255,102,11);
+        }
+      }
+      a{
+        position: absolute;
+      }
+    }
+    .content{
+      margin: 10px auto 50px auto;
+      width: 500px;
+      .contentItem{
+        margin: 0 0 20px 0;
+        .itemTitle{
+          font-size: 15px;
+          font-weight: 700;
+          line-height: 30px;
+        }
+        input{
+          height: 40px;
+          text-indent: 10px;
+        }
+        .shortInput{
+          width: 350px;
+        }
+        :global .ant-input-group-addon{
+          background-color: #fff;
+        }
+        :global .ant-select{
+          width: 80px;
+        }
+        .verifyCodeContainer{
+          display: inline-block;
+          width: 120px;
+          height: 40px;
+          position: relative;
+          left: 30px;
+          top: 12px;
+        }
+        .sendBtn{
+          background: rgb(255,242,227);
+          border: 1px solid rgb(255,208,153);
+          color: rgb(255,102,11);
+          width: 120px;
+          height: 40px;
+          border-radius: 4px;
+          position: relative;
+          left: 30px;
+          transition: opacity .2s;
+          outline: 0;
+        }
+        .sendBtn:hover{
+          opacity: .75;
+        }
+        :global .ant-btn[disabled]{
+          color: rgba(0, 0, 0, 0.25);
+          background-color: #f2f2f2;
+          border-color: #d9d9d9;
+        }
+      }
+    }
+    .footer{
+      text-align: center;
+    }
+  }
+}

@@ -1,0 +1,33 @@
+@import '../../../components/variables.less';
+
+.root {
+  display: inline-block;
+  text-align: center;
+  width: 100px;
+
+  > :first-child {
+    display: inline-block;
+    border-radius: 30px;
+    transition: transform 1s;
+    border: solid 1px @brand-primary;
+    overflow: hidden;
+
+    > i {
+      display: inline-block;
+      width: 58px;
+      height: 58px;
+      line-height: 58px;
+      font-size: 30px;
+      color: @brand-primary;
+    }
+
+    &:hover {
+      transform: rotate(360deg);
+    }
+  }
+
+  > :last-child {
+    margin-top: 5px;
+    color: #333;
+  }
+}

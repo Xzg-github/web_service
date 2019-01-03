@@ -1,0 +1,6 @@
+{
+  "name": "ModeInput",
+  "version": "0.0.0",
+  "private": true,
+  "main": "./ModeInput.js"
+}
