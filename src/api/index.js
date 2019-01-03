@@ -6,6 +6,7 @@ import apiPassword from './password';
 import apiProxy from './proxy';
 import apiStandard from './standard';
 import permission from './permission';
+import apiSignature from './signature'
 
 const api = express.Router();
 api.use('/dictionary', apiDictionary);
@@ -15,5 +16,6 @@ api.use('/password', apiPassword);
 api.use('/proxy', apiProxy);
 api.use('/standard', apiStandard);
 api.use('/permission', permission);
+api.use('/signature', apiSignature);
 api.use('*', (req, res) => {res.send({returnCode: 404, returnMsg: '接口不存在'})});
 export default api;

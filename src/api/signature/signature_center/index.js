@@ -9,3 +9,5 @@ api.get('/config', async (req, res) => {
     const module = await require('./config');
     res.send(module.default);
 });
+
+export default api;
