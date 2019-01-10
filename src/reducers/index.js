@@ -32,7 +32,10 @@ const rootReducer = combineReducers({
     my_papers: create('my_papers',false),
     data_statistics: create('data_statistics'),
     monthly_bill: create('monthly_bill',false),
+
     enterprise_documents: create('enterprise_documents',false),
+    enterprise_documents_edit:  createReducer(['enterprise_documents_edit']),
+
     //档案管理
     enterprise_staff: create('enterprise_staff',false),
     contacts: create('contacts',false),

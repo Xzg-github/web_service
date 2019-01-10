@@ -1,12 +1,14 @@
 import React from 'react';
+import RootContainer from './RootContainer';
 
 const path = '/my_papers';
 
 const action = () => {
     return {
         wrap: true,
-        component: <h5>待开发</h5>
+        component: <RootContainer/>
     }
 };
 
 export default {path, action};
+

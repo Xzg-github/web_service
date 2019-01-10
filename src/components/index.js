@@ -4,6 +4,7 @@ export Link from './Link';
 export Loading from './Loading';
 export Indent from './Indent';
 export Search from './Search';
+export Search2 from './Search2';
 export SuperForm from './SuperForm';
 export SuperList from './SuperList';
 export SuperPagination from './SuperPagination';
