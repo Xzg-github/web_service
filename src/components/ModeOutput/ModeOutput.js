@@ -6,9 +6,6 @@ import SuperTable from '../SuperTable';
 import SuperForm from '../SuperForm';
 import ModalWithDrag from '../ModalWithDrag';
 import { fetchJson, postOption, showError, showSuccessMsg } from '../../common/common';
-import addDefaultOutput from '../../routes/basic/defaultOutput/addDefaultOutput/addDefaultOutput'
-import showPopup from '../../standard-business/showPopup';
-import getModeCode from '../../routes/track/execution/OrderPage/getModeCode';
 
 const tableCols = [
   { key: 'reportName', title: '模板' },

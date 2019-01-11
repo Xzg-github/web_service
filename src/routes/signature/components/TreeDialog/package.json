@@ -1,0 +1,7 @@
+{
+  "name": "TreeDialog",
+  "version": "0.0.0",
+  "private": true,
+  "main": "./TreeDialog.js"
+}
+
