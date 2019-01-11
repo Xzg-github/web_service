@@ -69,6 +69,7 @@ const config = {
   },
   chooseGoodsConfig: {
     searchConfig,
+    title:'选择企业员工',
     filters: [
       {key: 'filter', title: '', span: 2, type: 'text', props: {placeholder: '请输入姓名、账号、状态搜索'}}
     ],

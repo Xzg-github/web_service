@@ -25,20 +25,24 @@ const TypeEnum = [
  * key：标识所在列，在一个表格中必须唯一
  * title：列的标题，type为checkbox时，title为空字符串时，表头才会显示为复选框
  * type：嵌入的表单元素类型
+ * link: 是否为超链接，type未设置时，该属性才生效。为true表示内容来至items，为字符串表示超链接内容就是该字符串
  * options: 对象(包含value和title)数组
  * props：传递参数给被嵌入的组件
  * width: 嵌入的组件的宽度，默认值为100
  * align：对齐方式，index默认center，其他类型默认为left
  * showAdd: 表头是否显示+号，默认为false，加号会触发onAdd事件
+ * hide: 为true时隐藏该列
  */
 const ColType = {
   key: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired,
-  type: PropTypes.oneOf(TypeEnum).isRequired,
+  type: PropTypes.oneOf(TypeEnum),
+  link: PropTypes.oneOfType([PropTypes.bool, PropTypes.string]),
   align: PropTypes.oneOf(['left', 'center', 'right']),
   width: PropTypes.number,
   options: PropTypes.array,
   showAdd: PropTypes.any,
+  hide: PropTypes.bool,
   props: PropTypes.any
 };
 
@@ -46,6 +50,7 @@ const ColType = {
  * onCheck：点击复选框时触发，原型func(rowIndex, keyName, checked)
  * onContentChange: 输入框内容改变时触发，原型为function(rowIndex, keyName, value)
  * onSearch：search组件输入内容时触发，原型为function(rowIndex, keyName, value)
+ * onLink: 点击超链接时触发，原型为function(keyName, rowIndex, item)
  * onAdd：点击+号时触发，原型为function(keyName)
  * onRenderCustom：(废弃)用于渲染type为custom类型的单元格，原型为function(rowIndex, keyName, value，props)
  */
@@ -54,6 +59,7 @@ const CallbackType = {
   onCheck: PropTypes.func,
   onContentChange: PropTypes.func,
   onSearch: PropTypes.func,
+  onLink: PropTypes.func,
   onAdd: PropTypes.func,
   onRenderCustom: PropTypes.func
 };
@@ -64,8 +70,11 @@ class SuperTable2 extends React.Component {
     items: PropTypes.array.isRequired,
     options: PropTypes.object,
     valid: PropTypes.bool,
+    readonly: PropTypes.bool,
     style: PropTypes.object,
     maxHeight: PropTypes.string,
+    emptyText: PropTypes.string,
+    footer: PropTypes.func,
     callback: PropTypes.shape(CallbackType)
   };
 
@@ -148,20 +157,32 @@ class SuperTable2 extends React.Component {
     return <SuperTableCell {...cellProps} />;
   };
 
-  renderCell = (col) => (value, record, index) => {
-    if (col.type === 'checkbox') {
-      return <Checkbox onChange={this.onCheck(col.key, index)} checked={value || false}/>;
-    } else if (col.type === 'index') {
-      return index + 1;
-    } else if (col.type === 'button') {
-      const onClick = this.props.callback.onBtnClick.bind(null, index, col.key);
-      return <Button onClick={onClick} size='small'>{col.typeRelated}</Button>;
-    } else if (col.type === 'switch') {
-      return <Switch onChange={this.onSwitch(col.key, index)} size='small' checked={value || false}/>;
-    } else if (col.type === 'custom') {
-      return this.props.callback.onRenderCustom(index, col.key, value, col.props);
-    } else {
-      return this.renderEditableCell(col, value, index);
+  renderLinkCell = (col, value, record, index) => {
+    const title = typeof col.link === 'string' ? col.link : value;
+    const onClick = () => {
+      const {onLink} = this.props.callback || {};
+      onLink && onLink(col.key, index, record);
+    };
+    return <a onClick={onClick}>{title}</a>;
+  };
+
+  getCellRender = (col) => (value, record, index) => {
+    switch (col.type) {
+      case 'checkbox':
+        return <Checkbox onChange={this.onCheck(col.key, index)} checked={value || false}/>;
+      case 'index':
+        return index + 1;
+      case 'link':
+        return this.renderLinkCell(col, value, record, index);
+      case 'button':
+        const onClick = this.props.callback.onBtnClick.bind(null, index, col.key);
+        return <Button onClick={onClick} size='small'>{col.typeRelated}</Button>;
+      case 'switch':
+        return <Switch onChange={this.onSwitch(col.key, index)} size='small' checked={value || false}/>;
+      case 'custom':
+        return this.props.callback.onRenderCustom(index, col.key, value, col.props);
+      default:
+        return this.renderEditableCell(col, value, index);
     }
   };
 
@@ -198,7 +219,6 @@ class SuperTable2 extends React.Component {
     }
   };
 
-
   getColumnClassName = ({type, align}) => {
     if (type === 'index' || type === 'checkbox') {
       return 'ant-table-selection-column';
@@ -207,15 +227,25 @@ class SuperTable2 extends React.Component {
     }
   };
 
+  canReadonly = (type) => {
+    return !['index', 'checkbox', 'link', 'button', 'switch', 'custom'].includes(type);
+  };
+
   getColumns = (cols) => {
-    return cols.filter(col => !col.hide).map(col => {
-      const newState = {
-        className: this.getColumnClassName(col),
-        title: this.getColumnTitle(col),
-        dataIndex: col.key,
-        render: this.renderCell(col)
-      };
-      return Object.assign({}, col, newState);
+    const readonly = this.props.readonly;
+    return cols.filter(col => !col.hide).map(({...col}) => {
+      col.className = this.getColumnClassName(col);
+      col.title = this.getColumnTitle(col);
+      col.dataIndex = col.key;
+      if (!readonly || !this.canReadonly(col.type)) {
+        if (col.type) {
+          col.render = this.getCellRender(col);
+        } else if (col.link) {
+          col.type = 'link';
+          col.render = this.getCellRender(col);
+        }
+      }
+      return col;
     });
   };
 
@@ -230,16 +260,11 @@ class SuperTable2 extends React.Component {
 
   getPropsByCheckbox = () => {
     const {items} = this.props;
-    const rowClassName = (record) => {
-      return items[record.key].checked ? s.select : '';
-    };
-    return {
-      rowClassName: rowClassName
-    }
+    return {rowClassName: (record) => items[record.key].checked ? s.select : ''};
   };
 
   getProps = () => {
-    const {cols, items, style={}} = this.props;
+    const {cols, items, style={},footer=null} = this.props;
     return {
       className: s.root,
       columns: this.getColumns(cols),
@@ -248,6 +273,8 @@ class SuperTable2 extends React.Component {
       size: 'small',
       scroll: {x: true},
       pagination: false,
+      footer,
+      locale: this.props.emptyText ? {emptyText: this.props.emptyText} : null,
       ...this.getPropsByCheckbox()
     };
   };

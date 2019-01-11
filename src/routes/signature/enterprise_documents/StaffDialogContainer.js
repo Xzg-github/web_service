@@ -16,7 +16,6 @@ const buildState = (config, items) => {
     ...config,
     items:items,
     searchData:{},
-    title: '选择企业员工',
     visible: true,
   };
 };
@@ -78,11 +77,10 @@ const actionCreators = {
 };
 
 const URL_CONFIG = '/api/signature/enterprise_documents/config';
-export default async () => {
+export default async (result) => {
   const config = helper.getJsonResult(await helper.fetchJson(URL_CONFIG));
-
   const Container = connect(mapStateToProps, actionCreators)(StaffDialog);
-  global.store.dispatch(action.create(buildState(config.chooseGoodsConfig, [])));
+  global.store.dispatch(action.create(buildState(result ? result : config.chooseGoodsConfig, [])));
   await showPopup(Container, {}, true);
 
   const state = getSelfState(global.store.getState());

@@ -1,0 +1,22 @@
+@import '../../../../components/variables.less';
+
+.root {
+  > *:not(:last-child) {
+    margin-bottom: @padding-vertical;
+  }
+
+  > [role='toolbar'] {
+    text-align: center;
+
+    > *:not(:last-child) {
+      margin-right: 20px;
+    }
+  }
+  .button{
+    display: inline-block;
+  }
+
+  [role='title']{
+    display: inline-block;
+  }
+}
