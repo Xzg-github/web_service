@@ -18,7 +18,7 @@ const totalFilters = [
   {key: 'insertTimeEnd', title: '至', type: 'date', rule: {type: '>', key: 'insertTimeStart'}},
 ];
 
-const totalTablecols = [
+const totalTableCols = [
   {key: 'totalFiles', title: '文件总数'},
   {key: 'totalMessages', title: '短信总数'},
   {key: 'authentication_two_elements', title: '人身份验证二元素'},
@@ -42,7 +42,7 @@ const fileFilters = [
   {key: 'dateInitiationTo', title: '至', type: 'date', rule: {type: '<', key: 'dateInitiation'}},
 ];
 
-const fileTablecols = [
+const fileTableCols = [
   {key: 'systemNumber', title: '系统编号'},
   {key: 'status', title: '状态', type: 'select', dictionary: name.INPUT_ORDER_STATUS},
   {key: 'associatedFileTheme', title: '文件主题'},
@@ -62,7 +62,7 @@ const identityFilters = [
   {key: 'authenticationMode', title: '认证模式', type: 'select', dictionary: name.INPUT_ORDER_STATUS},
 ];
 
-const identityTablecols = [
+const identityTableCols = [
   {key: 'authenticationType', title: '认证类型',  dictionary: name.INPUT_ORDER_STATUS},
   {key: 'authenticationMode', title: '认证模式', dictionary: name.INPUT_ORDER_STATUS},
   {key: 'name', title: '姓名/企业'},
@@ -81,7 +81,7 @@ const smsFilters = [
   {key: 'associatedFileTheme', title: '关联文件主题', type: 'text'}
 ];
 
-const smsTablecols = [
+const smsTableCols = [
   {key: 'notificationType', title: '通知类型', dictionary: name.INPUT_ORDER_STATUS},
   {key: 'noticeDate', title: '通知日期'},
   {key: 'notifyTheInitiator', title: '通知发起人'},
@@ -106,7 +106,7 @@ const config = {
   total: {
     filters: totalFilters,
     buttons,
-    tableCols: totalTablecols,
+    tableCols: totalTableCols,
     pageSize,
     pageSizeType,
     description,
@@ -115,7 +115,7 @@ const config = {
   file: {
     filters: fileFilters,
     buttons,
-    tableCols: fileTablecols,
+    tableCols: fileTableCols,
     pageSize,
     pageSizeType,
     description,
@@ -124,7 +124,7 @@ const config = {
   identity: {
     filters: identityFilters,
     buttons,
-    tableCols: identityTablecols,
+    tableCols: identityTableCols,
     pageSize,
     pageSizeType,
     description,
@@ -133,7 +133,7 @@ const config = {
   sms: {
     filters: smsFilters,
     buttons,
-    tableCols: smsTablecols,
+    tableCols: smsTableCols,
     pageSize,
     pageSizeType,
     description,

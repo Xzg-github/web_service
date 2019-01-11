@@ -413,6 +413,28 @@ const download = (url, name) => {
   }
 };
 
+//获取当前打开的路由最后的一段字符串
+const getRouteKey = () => {
+  const url = window.location.href;
+  const index = url.lastIndexOf('/');
+  if (index !== -1) {
+    return url.substring(index+1);
+  }
+};
+
+//获取当前页面标题，返回值：组成标题的字符串数组
+const getPageTitle = () => {
+  const layoutAction = new Action(['layout']);
+  const rootState = global.store.getState();
+  return rootState.layout.pageTitles[getRouteKey()];
+};
+
+//设置当前页面标题
+const setPageTitle = (titleArr=[]) => {
+  const layoutAction = new Action(['layout']);
+  global.store.dispatch(layoutAction.assign({[getRouteKey()]: titleArr}, 'pageTitles'));
+};
+
 const helper = {
   postOption,
   fetchJson,
@@ -442,7 +464,10 @@ const helper = {
   openWindowByPostRequest,
   deepCopy,
   omit,
-  download
+  download,
+  getRouteKey,
+  getPageTitle,
+  setPageTitle
 };
 
 export {
@@ -472,7 +497,10 @@ export {
   initTableCols,
   myToFixed,
   formatTime,
-  deepCopy
+  deepCopy,
+  getRouteKey,
+  getPageTitle,
+  setPageTitle
 };
 
 export default helper;

@@ -6,7 +6,7 @@ import {getPathValue} from '../../../action-reducer/helper';
 import {buildOrderPageState} from '../../../common/state';
 import createTabPage from '../../../standard-business/createTabPage';
 import OrderPageContainer from './OrderPageContainer';
-import ShowContainer from './ShowContainer';
+import EditPageContainer from './ShowContainer';
 
 const STATE_PATH = ['data_statistics'];
 const URL_CONFIG = '/api/signature/data_statistics/config';
@@ -75,7 +75,7 @@ const getComponent = (activeKey) => {
   if(activeKey === 'index'){
     return OrderPageContainer;
   }else {
-    return ShowContainer;
+    return EditPageContainer;
   }
 };
 
