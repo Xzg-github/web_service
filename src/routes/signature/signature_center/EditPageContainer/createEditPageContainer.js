@@ -1,11 +1,13 @@
 import { connect } from  'react-redux';
 import EditPage from './EditPage';
 import {EnhanceLoading} from '../../../../components/Enhance';
-import {fetchJson, getJsonResult, showError} from "../../../../common/common";
+import {fetchJson, getJsonResult, showError, showSuccessMsg} from "../../../../common/common";
 import {fetchAllDictionary, setDictionary2} from "../../../../common/dictionary";
 import helper from '../../../../common/common';
 import showPopup from '../../../../standard-business/showPopup';
 import AddDialogContainer, {buildAddState} from './AddDialog/AddDialogContainer';
+import upload from './upload';
+import execWithLoading from "../../../../standard-business/execWithLoading";
 
 /**
  * 功能：生成一个签署中心新增页面容器组件
@@ -145,7 +147,19 @@ const createEditPageContainer = (action, getSelfState) => {
 
  //上传文件
   const uploadAction = async(dispatch, getState) => {
-
+    const url = `api/proxy/zuul/`;
+    const start = await upload(url);
+    if(start){
+      execWithLoading(async () => {
+        const sss = await start();
+        const {status, name ,response = {}} = sss;
+        if(status && response.returnCode === 0){
+          showSuccessMsg(`[${name}]上传成功`);
+        }else{
+          showError(`[${name}]上传失败`)
+        }
+      })
+    }
   };
 
 
