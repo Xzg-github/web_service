@@ -6,6 +6,7 @@ import apiMonthlyBill from './monthly_bill'
 import apiEnterpriseDocuments from './enterprise_documents'
 import apiFileManagement from './file_management'
 import apiAccountManagement from './file_management'
+import apiBusinessAccount from './business_account'
 
 
 let api = express.Router();
@@ -16,6 +17,7 @@ api.use('/monthly_bill', apiMonthlyBill);
 api.use('/enterprise_documents', apiEnterpriseDocuments);
 api.use('/file_management', apiFileManagement);
 api.use('/file_management', apiAccountManagement);
+api.use('/business_account', apiBusinessAccount);
 
 
 export default api;

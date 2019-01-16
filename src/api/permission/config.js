@@ -35,6 +35,7 @@ const signature = [
     {key:'enterprise_documents', icon: 'pld-picture'},             //企业文件
     {key:'file_management', icon: 'pld-picture',children:file},             //档案管理
     {key:'account_management', icon: 'pld-picture',children:account},           //账号管理
+    {key: 'business_account', icon: 'pld-picture'}       //企业账户金额
 ];
 
 // 所有侧边栏

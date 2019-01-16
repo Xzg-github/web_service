@@ -61,15 +61,20 @@ class Login extends React.Component {
   };
 
   toOkButton = () => {
-    const props = {
-      type: 'primary',
-      style: {width: '100%',fontSize:'16px',fontWeight:'bold'},
-      size: 'large',
-      htmlType: 'submit',
-      loading: this.state.loading,
-      disabled: this.state.disabled
+    const props = {type: 'primary',
+                    style: {width: '100%',fontSize:'16px'},
+                    htmlType: 'submit',
+                    loading: this.state.loading,
+                    disabled: this.state.disabled
     };
-    return <Button {...props}>登录</Button>;
+    const props1 = {style: {width: '100%', border: '1px solid #2196f3',fontSize: '16px'},
+    };
+    return (
+      <div style={{marginTop: '32px'}}>
+        <Button {...props}>登录</Button>
+        <Button {...props1}> <a href='/password/find'>注册</a></Button>
+      </div>
+    );
   };
 
   render() {

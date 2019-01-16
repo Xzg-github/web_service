@@ -95,6 +95,7 @@ const calculate = (privilege, actions={}) => {
 };
 
 function flattenTree(privilege, result={}) {
+
   return privilege.reduce((result, {data, title, children}) => {
     result[data.resourceKey] = title;
     if (children && data.resourceType !== TYPE_PAGE) {

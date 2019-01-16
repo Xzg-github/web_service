@@ -32,6 +32,8 @@ const rootReducer = combineReducers({
     my_papers: create('my_papers',false),
     data_statistics: create('data_statistics'),
     monthly_bill: create('monthly_bill',false),
+    business_account: create('business_account'),
+    registered: create('registered'),
 
     enterprise_documents: create('enterprise_documents',false),
     enterprise_documents_edit:  createReducer(['enterprise_documents_edit']),
