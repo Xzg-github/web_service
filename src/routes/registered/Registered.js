@@ -11,7 +11,7 @@ const getSelfState = (rootState) => {
 };
 
 const URL_CONFIG = '/api/registered/config';
-
+/*
 //初始化
 const initActionCreator = async (dispatch) => {
   try{
@@ -26,4 +26,4 @@ const initActionCreator = async (dispatch) => {
 };
 
 //输入值
-const changeActionCreator = (key, value) => action.assign({[key]: value}, 'value');
+const changeActionCreator = (key, value) => action.assign({[key]: value}, 'value');*/
