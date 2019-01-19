@@ -57,6 +57,8 @@ const isJumpLogin = (req) => {
     return false;
   } else if (path === '/password/reset') {
     return false;
+  } else if (path === '/registered') {
+    return false;
   } else {
     return !isLogin(req) && (path !== '/login');
   }

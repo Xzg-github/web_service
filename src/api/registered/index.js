@@ -10,4 +10,10 @@ api.get('/config', async (req, res) => {
   res.send({returnCode: 0, result: module.default});
 });
 
+//注册
+api.post('/personal', async (req, res) => {
+  const url = `${host}/register/register_personal_account`;
+  res.send(await fetchJsonByNode(req, url, postOption(req.body, 'post')));
+});
+
 export default api;

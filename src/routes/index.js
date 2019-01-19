@@ -47,8 +47,9 @@ export default {
       require('./password/modify').default,
       require('./password/find').default,
       require('./password/reset').default,
-      require('./notFound').default,
-      require('./registered').default
+      require('./registered').default,
+
+      require('./notFound').default
   ],
 
   async action({ next }) {

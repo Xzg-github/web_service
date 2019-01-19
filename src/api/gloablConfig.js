@@ -48,7 +48,7 @@ const readConfig = () => {
 
 readConfig();
 
-const port = '5555';
+const port = '8080';
 const host = `http://${hostname}:${port}`;
 
 //跟踪管理-轨迹信息的扩展页面地址

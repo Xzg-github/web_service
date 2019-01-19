@@ -18,6 +18,6 @@ api.use('/proxy', apiProxy);
 api.use('/standard', apiStandard);
 api.use('/permission', permission);
 api.use('/signature', apiSignature);
-api.use('./registered', apiRegistered);
+api.use('/registered', apiRegistered);
 api.use('*', (req, res) => {res.send({returnCode: 404, returnMsg: '接口不存在'})});
 export default api;
