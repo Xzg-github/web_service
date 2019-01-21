@@ -8,5 +8,4 @@ api.use('/enterprise_account_management', apiEnterpriseAccountManagement);
 api.use('/enterprise_certification', apiEnterpriseCertification);
 
 
-
 export default api;

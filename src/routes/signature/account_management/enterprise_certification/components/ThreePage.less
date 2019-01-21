@@ -1,0 +1,49 @@
+@import '../../../../../components/variables.less';
+
+.root {
+  position: relative;
+  overflow: auto !important;
+  height: 80vh;
+
+  :global(.pld-card){
+    height:95%;
+  }
+
+  [role='toolbar'] {
+    width:100%;
+    text-align: center;
+    margin-top:20px;
+
+    > *:not(:last-child) {
+      margin-right: 20px;
+    }
+  }
+
+  .container{
+    text-align: center;
+    position:relative;
+    left:50%;
+    top:50%;
+    transform: translate(-50%,-50%);
+    >p{
+      font-weight: bold;
+      font-size:18px;
+      margin: 15px 0;
+      span{
+        color:#2196F3;
+      }
+    }
+    .box{
+      margin: 0 auto;
+      padding:15px 10px;
+      width:500px;
+      text-align: left;
+      border:1px solid rgba(121, 121, 121, 1);
+      font-size:14px;
+      p:nth-child(2){
+        color:#2196F3;
+        margin:10px 0;
+      }
+    }
+  }
+}

@@ -37,8 +37,12 @@ const checkActionCreator = (isAll, checked, rowIndex) => {
 
 const addActionCreator = () => async (dispatch, getState) => {
   const {tree,select,parents,handleTree} = getSelfState(getState());
-
+  console.log(select);
   //最多新增3层，根据父节点判断是否大于3层
+  if(!select) {
+    helper.showError('请勾选一条')
+    return
+  }
   const parent = Number(tree[select].parent.split('-')[0]);
   for(let key in tree){
     if(tree[key].edit === 'add'){
@@ -53,6 +57,7 @@ const addActionCreator = () => async (dispatch, getState) => {
   }
 
   let newHandleTree = helper.deepCopy(handleTree);
+  console.log(handleTree);
 
   if(select !== '1-0'){
     for(let treeData of newHandleTree){
@@ -76,12 +81,16 @@ const addActionCreator = () => async (dispatch, getState) => {
       newTree[key].disabled = true;
     }
   }
-  dispatch(action.assign({tree:newTree,handleTree:newHandleTree,select:treeKey}));
+  dispatch(action.assign({tree:newTree,select:treeKey}));
   dispatch( action.assign({[treeParent]: true}, 'expand'))
 };
 
 const delActionCreator = () => async (dispatch, getState) => {
   const {tree,select,parents,handleTree} = getSelfState(getState());
+  if(!select) {
+    helper.showError('请勾选一条')
+    return
+  }
   const newTree = helper.deepCopy(tree);
   const data = newTree[select];
   if(select === '1-0'){
@@ -105,6 +114,11 @@ const delActionCreator = () => async (dispatch, getState) => {
 
 const editActionCreator = () => async (dispatch, getState) => {
   const {tree,select,parents,handleTree} = getSelfState(getState());
+  console.log(select);
+  if(!select) {
+    helper.showError('请勾选一条')
+    return
+  }
   const newTree = helper.deepCopy(tree);
   const data = newTree[select];
   if(select === '1-0'){
@@ -169,7 +183,7 @@ const onCancelActionCreator = (key) => async (dispatch, getState) => {
       newTree[key].edit = false;
     }
   }
-  dispatch(action.assign({tree:newTree,value:{}}))
+  dispatch(action.assign({tree:newTree,value:{},select: null}))
 };
 
 const onOkActionCreator = (key) => async (dispatch, getState) => {
@@ -203,7 +217,8 @@ const onOkActionCreator = (key) => async (dispatch, getState) => {
       newTree[key].edit = false;
     }
   }
-  dispatch(action.assign({tree:newTree,value:{}}))
+
+  dispatch(action.assign({tree:newTree,value:{},select:null}))
 };
 
 const clickActionCreator = (key) => {

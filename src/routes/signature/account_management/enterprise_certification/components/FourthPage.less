@@ -1,0 +1,37 @@
+@import '../../../../../components/variables.less';
+
+.root {
+  position: relative;
+  overflow: auto !important;
+  height: 80vh;
+
+  :global(.pld-card){
+    height:95%;
+  }
+
+  [role='toolbar'] {
+    width:100%;
+    text-align: center;
+    margin-top:20px;
+
+    > *:not(:last-child) {
+      margin-right: 20px;
+    }
+  }
+
+  .container{
+    text-align: center;
+    position:relative;
+    width: 600px;
+    left:50%;
+    top:50%;
+    transform: translate(-50%,-50%);
+    font-size:14px;
+    :nth-child(2){
+      font-weight: bold;
+      font-size:18px;
+      margin: 15px 0;
+    }
+
+  }
+}

@@ -35,7 +35,7 @@ class EditPage extends React.Component {
       valid: props.valid,
       cols: props.cols,
       items: props.tableItems,
-      maxHeight: `calc(100vh - 223px)`,
+      maxHeight: `c`,
       callback :{
         onContentChange: props.onContentChange,
         onCheck: props.onCheck,
