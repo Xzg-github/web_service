@@ -13,24 +13,31 @@ const URL_LOGIN = '/api/login';
 class Login extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {loading: false, account: '', password: '', disabled: true};
+    this.state = {loading: false, email: '',phoneNumber: '', accountPassword: '', disabled: true};
     this.onLogin = this.onLogin.bind(this);
   }
-
   componentDidMount() {
     this.setState({disabled: false});
   }
 
   async onLogin(e) {
     e.preventDefault();
-    const {account, password} = this.state;
-    if (!account || !password) {
+    const {email, accountPassword} = this.state;
+    if (!email || !accountPassword) {
       helper.showError('请输入用户名或密码');
       return;
     }
-
+    let params = {};
+    if(this.isEmail(email)){
+      params = {accountPassword, email};
+    }else if(this.isMobile(email)){
+      params = {accountPassword, phoneNumber:email}
+  }else{
+      helper.showError('手机账号或邮箱格式不正确');
+      return
+    }
     this.setState({loading: {delay: 200}});
-    const {returnCode, returnMsg} = await helper.fetchJson(URL_LOGIN, helper.postOption({account, password}));
+    const {returnCode, returnMsg} = await helper.fetchJson(URL_LOGIN, helper.postOption(params));
     if (returnCode !== 0) {
       helper.showError(returnMsg);
     } else {
@@ -48,9 +55,20 @@ class Login extends React.Component {
     return <Icon type={type} style={{fontSize: 14}} />;
   };
 
+  isEmail = (str) => {
+    const reg = /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(.[a-zA-Z0-9_-])+$/;
+    return reg.test(str);
+  };
+
+  isMobile = (str) => {
+    const reg = /^[1][34578][0-9]{9}$/;
+    return reg.test(str);
+  };
+
   toInput = (key, type, extra={}) => {
     const props = {
       ...extra,
+      type,
       prefix: this.toIcon(type),
       size: 'large',
       value: this.state[key],
@@ -63,13 +81,15 @@ class Login extends React.Component {
   toOkButton = () => {
     const props = {
       type: 'primary',
-      style: {width: '100%',fontSize:'16px',fontWeight:'bold'},
-      size: 'large',
+      style: {width: '100%',fontSize:'16px'},
       htmlType: 'submit',
       loading: this.state.loading,
-      disabled: this.state.disabled
-    };
-    return <Button {...props}>登录</Button>;
+      disabled: this.state.disabled};
+    return (
+      <div style={{marginTop: '32px'}}>
+        <Button {...props}>登录</Button>
+      </div>
+    );
   };
 
   render() {
@@ -88,15 +108,18 @@ class Login extends React.Component {
                 <h1 role='title'>ePLD供应链管理系统</h1>
                   <Form onSubmit={this.onLogin}>
                     <Form.Item>
-                      {this.toInput('account', 'user', {placeholder: '邮箱/手机号'})}
+                      {this.toInput('email', 'user', {placeholder: '邮箱/手机号'})}
                     </Form.Item>
                     <Form.Item>
-                      {this.toInput('password', 'lock', {type: 'password', placeholder: '密码'})}
+                      {this.toInput('accountPassword', 'password', {type: 'accountPassword', placeholder: '密码'})}
                     </Form.Item>
                     <Form.Item>
                       <Checkbox defaultChecked>记住密码</Checkbox>
+                      <a role='registered' href='/registered'>注册账户</a>
                       <a role='forget' href='/password/find'>忘记密码</a>
                       {this.toOkButton()}
+                      <div style={{width: '350px',height: '20px', textAlign: 'center'}}>
+                      </div>
                     </Form.Item>
                   </Form>
               </div>

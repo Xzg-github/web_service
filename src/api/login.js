@@ -7,10 +7,10 @@ const WEEK = 7 * 24 * 3600 * 1000;
 
 api.post('/', async (req, res) => {
   if (privilege) {
-    const url = `${host}/auth-center/authc/authenticate`;
+    const url = `${host}/login/login`;
     const json = await fetchJson(url, postOption(req.body));
     if (json.returnCode === 0) {
-      res.cookie('token', json.result.token, {httpOnly: true});
+      res.cookie('token', 'token moni', {httpOnly: true});
       res.cookie('username', req.body.account, {maxAge: WEEK});
       res.send({returnCode: 0});
     } else {

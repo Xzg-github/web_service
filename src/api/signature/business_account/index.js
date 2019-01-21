@@ -10,10 +10,9 @@ api.get('/config', async (req, res) => {
   res.send({returnCode: 0, result:module.default});
 });
 
-//获取主列表数据
-api.get('/data', async (req, res) => {
-  const module = await require('./data');
-  res.send(module.default);
+// 获取主列表数据
+api.get('/list', async (req, res) => {
+  res.send({returnCode: 0, result: {data:[{a:'123456'}]}});
 });
 
 export default api;

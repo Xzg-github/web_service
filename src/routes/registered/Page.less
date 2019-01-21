@@ -1,0 +1,43 @@
+@import '../../components/variables.less';
+
+.root {
+  min-height: 222px;
+  padding: 20px 0;
+  overflow: auto;
+  .container{
+    width: 400px;
+    margin: 0 auto;
+  }
+  .customSuperTab{
+    margin-bottom: 30px;
+  }
+  .content{
+    margin: 8px 0
+  }
+  .shortInput{
+    width: 220px;
+  }
+
+  .sendBtn{
+    background: rgb(255,242,227);
+    border: 1px solid rgb(255,208,153);
+    color: rgb(255,102,11);
+    width: 120px;
+    height: 36px;
+    border-radius: 4px;
+    position: relative;
+    left: 30px;
+    transition: opacity 0.2s;
+    outline: 0;
+  }
+  .sendBtn:hover{
+    opacity: .75;
+  }
+  .footer{
+    width: 400px;
+    margin-top: 20px;
+    >{
+      text-align: center;
+    }
+  }
+}
