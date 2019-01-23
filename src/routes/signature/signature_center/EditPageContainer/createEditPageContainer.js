@@ -1,12 +1,13 @@
 import { connect } from  'react-redux';
 import EditPage from './EditPage';
 import {EnhanceLoading} from '../../../../components/Enhance';
-import {fetchJson, getJsonResult, showError, showSuccessMsg} from "../../../../common/common";
+import {fetchJson, getJsonResult, postOption, showError, showSuccessMsg} from "../../../../common/common";
 import {fetchAllDictionary, setDictionary2} from "../../../../common/dictionary";
 import helper from '../../../../common/common';
 import showPopup from '../../../../standard-business/showPopup';
 import AddDialogContainer, {buildAddState} from './AddDialog/AddDialogContainer';
 import upload from './upload';
+import moment from 'moment';
 import execWithLoading from "../../../../standard-business/execWithLoading";
 
 /**
@@ -23,35 +24,24 @@ import execWithLoading from "../../../../standard-business/execWithLoading";
  */
 
 const createEditPageContainer = (action, getSelfState) => {
-  const getCurrentDate = () => {
-    const date = new Date;
-    const d = date.getDate();
-    const dd = d < 10 ? `0${d}` : String(d);
-    const m = date.getMonth()+1;
-    const mm = m < 10 ? `0${m}` : String(m);
-    const yyyy = date.getFullYear().toString();
-    const h = date.getHours();
-    const hh = h < 10 ? `0${h}` : String(h);
-    const f = date.getMinutes();
-    const ff = f < 10 ? `0${f}` : String(f);
-    const s = date.getSeconds();
-    const ss = s < 10 ? `0${s}` : String(s);
-    return `${yyyy}-${mm}-${dd} ${hh}:${ff}:${ss}`;
-  };
-
   const buildEditState = async ({id, closeFunc,}) => {
     try{
       let url = '/api/signature/signature_center/editConfig';
       const editConfig = getJsonResult(await fetchJson(url));
+      let data = {signFinishTime:moment().format('YYYY-MM-DD HH:mm:ss')};  //获取当前时间
       if(id){
         const url = '/api/signature/signature_center/list';
-        const list = getJsonResult(await fetchJson(url));
+        const list = getJsonResult(await fetchJson(url, 'post'));
+        for(let item of list.data){
+          if(item.signFileId === id){data = item}
+        }
       }
       return {
         ...editConfig,
         valid: {},
         status: 'page',
         closeFunc,
+        value: data,
         tableItems: []
       }
     }catch (e){
@@ -72,6 +62,25 @@ const createEditPageContainer = (action, getSelfState) => {
         pageTitle.push('新增');
         helper.setPageTitle(pageTitle)
       }
+    }
+  };
+
+  //上传文件
+  const uploadAction = async(dispatch, getState) => {
+    const url = `/api/proxy/sign_center/upload_file`;
+    const start = await upload(url);
+    if(start){
+      execWithLoading(async () => {
+        const sss = await start();
+        const {status, name ,response = {}} = sss;
+        const fileBody = response.result;
+        if(status && response.returnCode === 0){
+          showSuccessMsg(`[${name}]上传成功`);
+        }else{
+          showError(`[${name}]上传失败`)
+        }
+        dispatch(action.assign({signFileSubject: name, fileBody}, 'value'))
+      })
     }
   };
 
@@ -137,30 +146,33 @@ const createEditPageContainer = (action, getSelfState) => {
 
   //保存
   const saveAction = async (dispatch, getState) => {
-
+    const {value, tableItems} = getSelfState(getState());
+    const URL_SAVE = `/api/signature/signature_center/save`;
+    const postData = {
+      id: value.id,
+      signContractId: value.signContractId,
+      signFileId: value.signFileId,
+      isAddCCSide: value.isAddCCSide,
+      note: value.note,
+      isSignInSpecifiedLocation:value.isSignInSpecifiedLocation,
+      signFileSubject: value.signFileSubject,
+      signFinishTime: value.signFinishTime,
+      signOrderStrategy: value.signOrderStrategy,
+      signPartyDtoList: tableItems,
+      signWay: value.signWay
+      };
+    const {result, returnCode, returnMsg} = await fetchJson(URL_SAVE,postOption(postData, 'post'));
+    if(returnCode !== 0 ){
+      showError(returnMsg);
+      return
+    }
+    showSuccessMsg(returnMsg)
   };
 
   //下一步
  const nextAction = async(dispatch, getState) => {
 
  } ;
-
- //上传文件
-  const uploadAction = async(dispatch, getState) => {
-    const url = `api/proxy/zuul/`;
-    const start = await upload(url);
-    if(start){
-      execWithLoading(async () => {
-        const sss = await start();
-        const {status, name ,response = {}} = sss;
-        if(status && response.returnCode === 0){
-          showSuccessMsg(`[${name}]上传成功`);
-        }else{
-          showError(`[${name}]上传失败`)
-        }
-      })
-    }
-  };
 
 
 

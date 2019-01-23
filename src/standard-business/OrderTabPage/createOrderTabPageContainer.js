@@ -165,7 +165,7 @@ const buildOrderTabPageCommonState = async (urlConfig, urlList, statusNames=[]) 
       ...fixedFilters[subActiveKey],
       ...searchDataBak
     };
-    const data = helper.getJsonResult(await helper.fetchJson(urlList));
+    const data = helper.getJsonResult(await helper.fetchJson(urlList, helper.postOption(body)));
     if (!data.tags && data.tabTotal) { //转成统一结构
       data.tags = Object.keys(data.tabTotal).map(item => ({tag: item, count: data.tabTotal[item]}));
     }
