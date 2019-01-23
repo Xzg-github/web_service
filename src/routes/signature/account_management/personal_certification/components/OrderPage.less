@@ -1,0 +1,41 @@
+@import '../../../../../components/variables.less';
+
+.root {
+  position: relative;
+  overflow: auto !important;
+  margin: @padding-horizontal @padding-horizontal;
+  height:100%;
+
+  > :global(.pld-card) {
+    height:100%;
+    margin:0 0;
+  }
+  .box{
+    position:absolute;
+    left:50%;
+    top:50%;
+    transform: translate(-50%,-50%);
+
+
+    .code{
+      display: inline-block;
+      border: 1px solid #d9d9d9;
+      padding: 20px;
+    }
+
+    :global(.ant-btn){
+      width:175px;
+      margin:10px 0 10px 0;
+    }
+
+
+    p{
+      font-size:14px;
+      span{
+        color:#2196F3;
+      }
+    }
+
+  }
+
+}

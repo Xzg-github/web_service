@@ -48,7 +48,7 @@ export default {
       require('./password/find').default,
       require('./password/reset').default,
       require('./registered').default,
-
+      require('./fadada').default,
       require('./notFound').default
   ],
 

@@ -13,13 +13,24 @@ import helper from '../../../../common/common';
 
 import FirstPageContainer from './FirstPageContainer';
 
+function getCookie(cookieName) {
+  let strCookie = document.cookie;
+  let arrCookie = strCookie.split("; ");
+  for(let i = 0; i < arrCookie.length; i++){
+    let arr = arrCookie[i].split("=");
+    if(cookieName == arr[0]){
+      return arr[1];
+    }
+  }
+  return "";
+}
 
-const STATE_PATH = ['enterprise_account_management'];
+
+const STATE_PATH = ['personal_certification'];
 const action = new Action(STATE_PATH);
 
-const URL_LIST = '/api/signature/account_management/enterprise_account_management/list';
-const URL_CONFIG = '/api/signature/account_management/enterprise_account_management/config';
-
+const URL_LIST = '/api/signature/account_management/personal_certification/list';
+const URL_CONFIG = '/api/signature/account_management/personal_certification/config';
 
 const getSelfState = (rootState) => {
   return getPathValue(rootState, STATE_PATH);
@@ -29,14 +40,16 @@ const initActionCreator = () => async (dispatch, getState) => {
   try {
     dispatch(action.assign({status: 'loading'}));
     //初始化数据
-    const { tabs,one } = helper.getJsonResult(await helper.fetchJson(URL_CONFIG));
+    const { tabs } = helper.getJsonResult(await helper.fetchJson(URL_CONFIG));
 
+    let strCookie =  getCookie('token');
+    let accountId =  getCookie('accountId');
     //页面数据
     dispatch(action.assign({
       status: 'page',
       activeKey:'one',
+      one:{strCookie,accountId},
       tabs,
-      one
     }));
 
   }catch (e){

@@ -46,6 +46,9 @@ const rootReducer = combineReducers({
     //账号管理
     enterprise_certification: create('enterprise_certification',false),
     enterprise_account_management: create('enterprise_account_management'),
+    personal_certification: create('personal_certification'),
+    personal_account_management: create('personal_account_management'),
+    fadada: create('fadada'),
 });
 
 export default rootReducer;

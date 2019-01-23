@@ -76,6 +76,14 @@ app.get('*', async (req, res, next) => {
       return;
     }
 
+    if(req.path === '/code'){
+      console.log(req.query.accountId);
+      res.cookie('token', req.query.token);
+      res.cookie('accountId', req.query.accountId);
+      res.redirect(302, '/fadada');
+      return
+    }
+
     if (isJumpLogin(req)) {
       res.redirect(302, '/login');
       return;
