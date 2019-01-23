@@ -57,20 +57,15 @@ class EditPage extends React.Component {
     return <SuperForm {...props} />
   };
 
-  toTable = (cols, items, callback) => {
+  toTable = () => {
     const {tableCols, tableItems} = this.props;
     const {onContentChange, onCheck} = getObject(this.props, ['onContentChange', 'onCheck']);
     const events1 = { onContentChange, onCheck };
-    const props = {cols: tableCols, items: tableItems, callback};
+    const props = {cols: tableCols, items: tableItems, callback: events1};
     return <SuperTable2 {...props}/>
   };
 
-
-
   render(){
-    const {tableCols, tableItems} = this.props;
-    const {onContentChange, onCheck} = getObject(this.props, ['onContentChange', 'onCheck']);
-    const events1 = { onContentChange, onCheck };
     return (
       <Card className = {s.root}>
         {this.toAlert()}
@@ -78,12 +73,11 @@ class EditPage extends React.Component {
         {this.toButtons1()}
         <Title title = "文件信息" />
         {this.toForm1()}
-        添加附件：<MyUploadContainer changeType={this.props.title} fileList={this.props.fileList} fileUrl={this.props.imgUrl} />
         <Title title = "签署方信息" />
         {this.toForm2()}
         <Title title = "添加签署方" />
         {this.toButtons2()}
-        {this.toTable(tableCols, tableItems, events1)}
+        {this.toTable()}
         {this.toButtons3()}
       </Card>
     )

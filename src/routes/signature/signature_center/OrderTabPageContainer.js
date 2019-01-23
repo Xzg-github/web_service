@@ -8,23 +8,25 @@ import createOrderTabPageContainer, {buildOrderTabPageCommonState, updateTable} 
 import ShowPageContainer,{buildShowState} from "./ShowPageContainer/ShowPageContainer";
 import showPopup from '../../../standard-business/showPopup';
 
+const URL_CONFIG = '/api/signature/signature_center/config';
+const urlList = '/api/signature/signature_center/list';
+
 const STATE_PATH = ['signature_center'];
 const action = new Action(STATE_PATH);
 const getSelfState = (rootState) => {
   return getPathValue(rootState, STATE_PATH);
 };
 
+//创建主列表状态
 const buildOrderTabPageState = async () => {
-  const urlConfig = '/api/signature/signature_center/config';
-  const urlList = '/api/signature/signature_center/list';
   const statusNames = ['order_type'];
-  return buildOrderTabPageCommonState(urlConfig, urlList, statusNames)
+  return buildOrderTabPageCommonState(URL_CONFIG, urlList, statusNames)
 };
 
 //构建新增编辑页面状态
 const showOrderInfoPage = (dispatch, item, selfState, edit) => {
-  const key = item.id ? item.id : 'add ';
-  const title = edit? item.associatedFileTheme : '新增';
+  const key = item.signFileId ? item.signFileId : 'add ';
+  const title = edit? item.signFileSubject : '新增';
   if(helper.isTabExist(selfState.tabs,key)){
     dispatch(action.assign({activeKey: key}))
   }else{
@@ -34,29 +36,11 @@ const showOrderInfoPage = (dispatch, item, selfState, edit) => {
       return updateTable(dispatch, action, selfState, ['mySign']);
     };
     const payload = {
-      id: item.id,
-      closeFunc
+      id: item.signFileId,
     };
     dispatch(action.add({key, title}, 'tabs'));
     dispatch(action.assign({[key]: payload, activeKey: key}));
   }
-};
-
-// 搜索值变化
-const onChangeActionCreator = (key, value) => async (dispatch) => {
-  dispatch(action.assign({ [key]: value }, 'searchData'));
-};
-
-//搜索
-const searchAction = async (dispatch, getState) => {
-  const {pageSize, searchData} = getSelfState(getState());
-  const newState = {searchDataBak: searchData, currentPage: 1};
-  return search2(dispatch, action, URL_LIST, 1, pageSize, searchData, newState);
-};
-
-// 重置
-const resetActionCreator = (dispatch, getState) => {
-  dispatch(action.assign({ searchData: {} }));
 };
 
 //新增
@@ -79,6 +63,18 @@ const delAction = (tabKey) => async (dispatch, getState) => {
   return updateTable(dispatch, action, getSelfState(getState()));
 };
 
+//签署
+const signatureAction = (tabKey) => async (dispatch, getState) =>{
+  const {tableItems} = getSelfState(getState());
+  const checkedItems = tableItems[tabKey].filter(item => item.checked === true);
+  if(checkedItems.length !== 1)return helper.showError('请勾选一条记录');
+  const signFileId = checkedItems[0].signFileId;
+  const URL_SIGN =  '/api/signature/signature_center/sign';
+  const {returnCode, returnMsg } = await helper.fetchJson(URL_SIGN, helper.postOption(signFileId));
+  if (returnCode !== 0) return helper.showError(returnMsg);
+  window.open(returnMsg)
+};
+
 // link详情查看
 const onLinkActionCreator = (tabKey, key, rowIndex, item) => (dispatch, getState) => {
   const {showConfig, tableItems} = getSelfState(getState());
@@ -93,22 +89,27 @@ const uploadActionCreator = (tabKey) => async (dispatch, getState) => {
   const {tableItems} = getSelfState(getState());
   const checkedItems = tableItems[tabKey].filter(item => item.checked === true);
   if(checkedItems.length !== 1)return helper.showError('请勾选一条记录');
-  const URL_DOWNLOAD= '/api/track/file_manager/download';  // 点击下载
-  const {returnCode, result, returnMsg} = await helper.fetchJson(`${URL_DOWNLOAD}/${checkedItems.url}`);
-    if (returnCode !== 0) {
-      return helper.showError(returnMsg);
-    }
-    helper.download(`/api/proxy/zuul/file-center-service/${result[checkedItems.url]}`,'file');
+  const URL_DOWNLOAD= checkedItems[0].urlOfSignedFileDownload;  // 点击下载
+    helper.download(URL_DOWNLOAD,'file');
+};
+
+//在线预览
+const linePreviewAction = (tabKey) => async (dispatch, getState) => {
+  const {tableItems} = getSelfState(getState());
+  const checkedItems = tableItems[tabKey].filter(item => item.checked === true);
+  if(checkedItems.length !== 1){return helper.showError('请勾选一条记录')}
+  const URL_VIEW = checkedItems[0].urlOfSignedFileViewpdf;
+  window.open(URL_VIEW)
 };
 
 
 const toolbarActions = {
-  search: searchAction,
-  reset: resetActionCreator,
   add: addAction,
   edit: editAction,
+  signature:signatureAction,
   del: delAction,
-  upload: uploadActionCreator
+  upload: uploadActionCreator,
+  view: linePreviewAction
 };
 
 const clickActionCreator = (tabKey, key) => {
@@ -120,13 +121,8 @@ const clickActionCreator = (tabKey, key) => {
   }
 };
 
-const mapStateToProps = (state) => {
-  return getSelfState(state);
-};
-
 const actionCreators = {
   onClick: clickActionCreator,
-  onChange: onChangeActionCreator,
   onLink: onLinkActionCreator
 };
 

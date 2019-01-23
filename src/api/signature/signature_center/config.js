@@ -12,13 +12,13 @@ const isOptions1 = [
 ];
 
 const filters = [
-  {key: 'fileTheme', title: '文件主题', type: 'text'},
+  {key: 'signFileSubject', title: '文件主题', type: 'text'},
   {key: 'sponsor', title: '发起人', type: 'text'},
-  {key: 'insertTimeStart', title: '发起时间', type: 'date', rule: {type: '<', key: 'insertTimeEnd'}},
-  {key: 'insertTimeEnd', title: '至', type: 'date', rule: {type: '>', key: 'insertTimeStart'}},
-  {key: 'status', title: '状态', type: 'select', dictionary: 'order_type'},
-  {key: 'pickupTimeFrom', title: '完成时间', type: 'date', rule: {type: '<', key: 'pickupTimeTo'}},
-  {key: 'pickupTimeTo', title: '至', type: 'date', rule: {type: '>', key: 'pickupTimeFrom'}},
+  {key: 'signStartTime', title: '发起时间', type: 'date', rule: {type: '<', key: 'insertTimeEnd'}},
+  {key: 'insertTimeEnd', title: '至', type: 'date', rule: {type: '>', key: 'signStartTime'}},
+  {key: 'signState', title: '状态', type: 'select', dictionary: 'order_type'},
+  {key: 'signFinishTime', title: '完成时间', type: 'date', rule: {type: '<', key: 'pickupTimeTo'}},
+  {key: 'pickupTimeTo', title: '至', type: 'date', rule: {type: '>', key: 'signFinishTime'}},
   {key: 'copy', title: '是否抄送', type: 'select', options: isOptions}
 ];
 
@@ -26,18 +26,19 @@ const buttons = [
   {key: 'add', title: '新增', bsStyle: 'primary'},
   {key: 'edit', title: '编辑'},
   {key: 'del', title: '删除', confirm:'是否确定删除'},
-  {key: 'signature', title: '签章'},
-  {key: 'upload', title: '下载文件'}
+  {key: 'signature', title: '签署'},
+  {key: 'upload', title: '下载文件'},
+  {key: 'view', title: '在线预览'}
 ];
 
 const tableCols = [
-  {key: 'status', title: '状态', type: 'select', dictionary: 'order_type'},
-  {key: 'systemNumber', title: '系统编号', link: '20190109'},
-  {key: 'associatedFileTheme', title: '文件主题'},
+  {key: 'signState', title: '状态', type: 'select', dictionary: 'order_type'},
+  {key: 'code', title: '系统编号', link: '20190109'},
+  {key: 'signFileSubject', title: '文件主题'},
   {key: 'sponsor', title: '发起人'},
-  {key: 'insertTimeStart', title: '发起时间'},
-  {key: 'insertTimeEnd', title: '签署截止时间'},
-  {key: 'signatory', title: '签署人'},
+  {key: 'signStartTime', title: '发起时间'},
+  {key: 'signFinishTime', title: '签署截止时间'},
+  {key: 'signAccountId', title: '签署人'},
   {key: 'completeTime', title: '签完时间'},
   {key: 'copy', title: '是否抄送', options: isOptions},
 ];
@@ -46,9 +47,9 @@ const config = {
   tabs: [{ key: 'index', title: '签署中心列表', close: false}],
   subTabs: [
     {key: 'mySign', title:'待我签', status: 'mySigned'},
-    {key: 'hisSign', title:'已提交', status: 'hisSigned'},
+/*    {key: 'hisSign', title:'待他人签', status: 'hisSigned'},
     {key: 'draft', title: '草稿', status: 'draft'},
-    {key: 'all', title: '所有', status: 'orders'}
+    {key: 'all', title: '所有', status: 'orders'}*/
   ],
   activeKey: 'index',
   subActiveKey: 'mySign',
