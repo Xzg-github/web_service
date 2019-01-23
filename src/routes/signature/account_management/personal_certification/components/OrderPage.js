@@ -18,9 +18,12 @@ class OrderPage extends React.Component {
 
 
   render() {
+    const widowHref = window.location.href;
+    let href = widowHref.split('/signature/personal_certification')[0];
 
 
-    const url = `http://192.168.204.118:3001/code?token=${this.props.strCookie}&accountId=${this.props.accountId}`;
+    const url = `${href}/code?token=${this.props.strCookie}&accountId=${this.props.accountId}`;
+    console.log(url);
     const codeProps = {
       value:url,
       size:128
