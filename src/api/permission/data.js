@@ -23,6 +23,8 @@ const data = {
 
       enterprise_certification: '企业认证',
       enterprise_account_management: '企业账号管理',
+      personal_certification: '个人认证',
+      personal_account_management: '个人账号管理',
   }
 };
 

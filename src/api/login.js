@@ -10,8 +10,9 @@ api.post('/', async (req, res) => {
     const url = `${host}/login/login`;
     const json = await fetchJson(url, postOption(req.body));
     if (json.returnCode === 0) {
-      res.cookie('token', 'token moni', {httpOnly: true});
+      res.cookie('token', 'token moni');
       res.cookie('username', req.body.account, {maxAge: WEEK});
+      res.cookie('accountId',json.result.accountId, {maxAge: WEEK});
       res.send({returnCode: 0});
     } else {
       res.send(json);

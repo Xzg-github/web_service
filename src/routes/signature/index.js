@@ -16,6 +16,7 @@ const children = [
     require('./file_management/template_management').default,
     require('./account_management/enterprise_account_management').default,
     require('./account_management/enterprise_certification').default,
+    require('./account_management/personal_certification').default,
     require('./business_account').default
 ];
 

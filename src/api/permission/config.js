@@ -25,6 +25,8 @@ const file = [
 const account = [
     {key: 'enterprise_certification'}, //企业认证
     {key: 'enterprise_account_management'}, //企业账号管理
+    {key: 'personal_certification'}, //个人认证
+    {key: 'personal_account_management'}, //个人账号管理
 ];
 
 const signature = [

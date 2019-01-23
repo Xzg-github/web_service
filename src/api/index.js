@@ -8,11 +8,13 @@ import apiStandard from './standard';
 import permission from './permission';
 import apiSignature from './signature'
 import apiRegistered from './registered'
+import apiFadada from './fadada'
 
 const api = express.Router();
 api.use('/dictionary', apiDictionary);
 api.use('/home', apiHome);
 api.use('/login', apiLogin);
+api.use('/fadada', apiFadada);
 api.use('/password', apiPassword);
 api.use('/proxy', apiProxy);
 api.use('/standard', apiStandard);
