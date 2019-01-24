@@ -33,7 +33,7 @@ const controls2 = [
   { key: 'signWay', title: '签署方式', type: 'select', options: isWay},
   { key: 'signOrderStrategy', title: '签署顺序',  type: 'select', options: isStrategy, required: true},
   { key: 'isSignInSpecifiedLocation', title: '指定签署位置', type: 'select', options: isOptions},
-  { key: 'isAddCCSide', title: '添加抄送方', type: 'select',options: isOptions}
+  { key: 'isAddCcSide', title: '添加抄送方', type: 'select',options: isOptions}
 ];
 
 const tableButtons = [

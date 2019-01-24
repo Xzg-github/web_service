@@ -28,12 +28,12 @@ const createEditPageContainer = (action, getSelfState) => {
     try{
       let url = '/api/signature/signature_center/editConfig';
       const editConfig = getJsonResult(await fetchJson(url));
-      let data = {signFinishTime:moment().format('YYYY-MM-DD HH:mm:ss')};  //获取当前时间
+      let data = {signFinishTime:moment().format('YYYY-MM-DD HH:mm:ss'), signPartyList: []};  //获取当前时间
       if(id){
         const url = '/api/signature/signature_center/list';
         const list = getJsonResult(await fetchJson(url, 'post'));
         for(let item of list.data){
-          if(item.signFileId === id){data = item}
+          if(item.id === id){data = item}
         }
       }
       return {
@@ -42,7 +42,6 @@ const createEditPageContainer = (action, getSelfState) => {
         status: 'page',
         closeFunc,
         value: data,
-        tableItems: []
       }
     }catch (e){
       helper.showError(e.message);
@@ -79,14 +78,14 @@ const createEditPageContainer = (action, getSelfState) => {
         }else{
           showError(`[${name}]上传失败`)
         }
-        dispatch(action.assign({signFileSubject: name, fileBody}, 'value'))
+        dispatch(action.assign({...fileBody, signFileSubject: name}, 'value'))
       })
     }
   };
 
   //勾选
   const checkActionCreator = (rowIndex, keyName, checked) => {
-    return action.update({checked}, 'tableItems', rowIndex);
+    return action.update({checked}, ['value', 'signPartyList'], rowIndex);
   };
 
   //输入值修改
@@ -97,19 +96,19 @@ const createEditPageContainer = (action, getSelfState) => {
   //表格内容变化
   const contentChangeAction = (rowIndex, keyName, value) => async(dispatch,getState) => {
     const {tableItems} = getSelfState(getState());
-    dispatch(action.update({[keyName]: value}, 'tableItems', rowIndex))
+    dispatch(action.update({[keyName]: value}, ['value', 'signPartyList'], rowIndex))
   };
 
   //新增行
   const increaseAction = (dispatch) => {
-    dispatch(action.add({}, 'tableItems', 0))
+    dispatch(action.add({}, ['value', 'signPartyList'], 0))
   };
 
   //删除行
   const delAction = (dispatch, getState) => {
-    const {tableItems} = getSelfState(getState());
-    const newItems = tableItems.filter(item => !item.checked);
-    dispatch(action.assign({tableItems: newItems}))
+    const {value} = getSelfState(getState());
+    const newItems = value.signPartyList.filter(item => !item.checked);
+    dispatch(action.assign({signPartyList: newItems}, 'value'))
   };
 
   //从联系人中添加
@@ -146,19 +145,18 @@ const createEditPageContainer = (action, getSelfState) => {
 
   //保存
   const saveAction = async (dispatch, getState) => {
-    const {value, tableItems} = getSelfState(getState());
+    const {value} = getSelfState(getState());
     const URL_SAVE = `/api/signature/signature_center/save`;
     const postData = {
-      id: value.id,
       signContractId: value.signContractId,
-      signFileId: value.signFileId,
-      isAddCCSide: value.isAddCCSide,
+      id: value.id,
+      isAddCcSide: value.isAddCcSide,
       note: value.note,
       isSignInSpecifiedLocation:value.isSignInSpecifiedLocation,
       signFileSubject: value.signFileSubject,
       signFinishTime: value.signFinishTime,
       signOrderStrategy: value.signOrderStrategy,
-      signPartyDtoList: tableItems,
+      signPartyList: value.signPartyList,
       signWay: value.signWay
       };
     const {result, returnCode, returnMsg} = await fetchJson(URL_SAVE,postOption(postData, 'post'));
