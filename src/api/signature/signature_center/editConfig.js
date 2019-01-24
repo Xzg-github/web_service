@@ -54,8 +54,9 @@ const tableCols = [
 ];
 
 const footerButtons = [
-  { key: 'save', title: '保存'},
-  { key: 'next', title: '下一步', bsStyle: 'primary'},
+  { key: 'save', title: '保存', bsStyle: 'primary'},
+/*  { key: 'next', title: '下一步', bsStyle: 'primary'},
+  { key: 'send', title: '发送', bsStyle: 'primary'}*/
 ];
 
 const editConfig = {

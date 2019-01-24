@@ -143,6 +143,37 @@ const createEditPageContainer = (action, getSelfState) => {
     showPopup(AddDialogContainer)
   };
 
+  //刷新页面
+  const upDatePage = (guid) => async (dispatch, getState) => {
+    showSuccessMsg('保存成功');
+    const selfState = getSelfState(getState());
+    const url = '/api/signature/signature_center/list';
+    const list = getJsonResult(await fetchJson(url, 'post'));
+    if(!list){
+      return showError(`刷新页面数据失败-${returnMsg}`)
+    }
+    let data;
+    for(let item of list.data){
+      if(item.id === guid){data = item}
+    }
+    const buttons4 = [
+      {key: 'cancel', title: '关闭'},
+      {key: 'save', title: '保存'},
+      {key: 'next',title: '下一步', bsStyle: 'primary'}
+    ];
+    const buttons5 = [
+      {key: 'cancel', title: '关闭'},
+      {key: 'save', title: '保存'},
+      {key: 'send',title: '发送', bsStyle: 'primary'}
+    ];
+    if(data.signWay === "1"){   //签署文件
+      dispatch(action.assign({value: data, buttons3:buttons4}))
+    }else{
+      dispatch(action.assign({value: data, buttons3: buttons5}))
+    }
+    dispatch(action.assign({title: data.signFileSubject}, 'tabs'))
+  };
+
   //保存
   const saveAction = async (dispatch, getState) => {
     const {value} = getSelfState(getState());
@@ -164,13 +195,28 @@ const createEditPageContainer = (action, getSelfState) => {
       showError(returnMsg);
       return
     }
-    showSuccessMsg(returnMsg)
+    upDatePage(result.id)(dispatch, getState)
   };
 
   //下一步
  const nextAction = async(dispatch, getState) => {
-
+  const {value} = getSelfState(getState());
+  let id = value.id;
+  const URL_SIGN =  '/api/signature/signature_center/sign';
+   const {returnCode, returnMsg } = await helper.fetchJson(URL_SIGN, helper.postOption(id));
+   if (returnCode !== 0) return helper.showError(returnMsg);
+   window.open(returnMsg)
  } ;
+
+ //发送
+  const sendAction = async (dispatch, getState) => {
+    const {value} = getSelfState(getState());
+    let id = value.id;
+    const URL_SEND =  '/api/signature/signature_center/send';
+    const {returnCode, returnMsg } = await helper.fetchJson(URL_SEND, helper.postOption(value));
+    if (returnCode !== 0) return helper.showError(returnMsg);
+    showSuccessMsg(returnMsg)
+  };
 
 
 
@@ -181,7 +227,8 @@ const createEditPageContainer = (action, getSelfState) => {
     group:groupAction,
     save: saveAction,
     next: nextAction,
-    upload: uploadAction
+    upload: uploadAction,
+    send: sendAction
   };
 
   const clickActionCreator = (key) => {

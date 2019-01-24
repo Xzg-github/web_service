@@ -19,7 +19,7 @@ const filters = [
   {key: 'signState', title: '状态', type: 'select', dictionary: 'order_type'},
   {key: 'signFinishTime', title: '完成时间', type: 'date', rule: {type: '<', key: 'pickupTimeTo'}},
   {key: 'pickupTimeTo', title: '至', type: 'date', rule: {type: '>', key: 'signFinishTime'}},
-  {key: 'copy', title: '是否抄送', type: 'select', options: isOptions}
+  {key: 'isAddCcSide', title: '是否抄送', type: 'select', options: isOptions}
 ];
 
 const buttons = [
@@ -35,12 +35,12 @@ const tableCols = [
   {key: 'signState', title: '状态', type: 'select', dictionary: 'order_type'},
   {key: 'code', title: '系统编号', link: '20190109'},
   {key: 'signFileSubject', title: '文件主题'},
-  {key: 'sponsor', title: '发起人'},
+  {key: 'launchAccountId', title: '发起人'},
   {key: 'signStartTime', title: '发起时间'},
   {key: 'signFinishTime', title: '签署截止时间'},
   {key: 'signAccountId', title: '签署人'},
-  {key: 'completeTime', title: '签完时间'},
-  {key: 'copy', title: '是否抄送', options: isOptions},
+  {key: 'signExpirationTime', title: '签完时间'},
+  {key: 'isAddCcSide', title: '是否抄送', options: isOptions},
 ];
 
 const config = {

@@ -90,6 +90,10 @@ const uploadActionCreator = (tabKey) => async (dispatch, getState) => {
   const checkedItems = tableItems[tabKey].filter(item => item.checked === true);
   if(checkedItems.length !== 1)return helper.showError('请勾选一条记录');
   const URL_DOWNLOAD= checkedItems[0].urlOfSignedFileDownload;  // 点击下载
+  if(!URL_DOWNLOAD){
+    helper.showError('请先完成签署操作！');
+    return
+  }
     helper.download(URL_DOWNLOAD,'file');
 };
 
@@ -99,6 +103,10 @@ const linePreviewAction = (tabKey) => async (dispatch, getState) => {
   const checkedItems = tableItems[tabKey].filter(item => item.checked === true);
   if(checkedItems.length !== 1){return helper.showError('请勾选一条记录')}
   const URL_VIEW = checkedItems[0].urlOfSignedFileViewpdf;
+  if(!URL_VIEW){
+    helper.showError('请先完成签署操作！');
+    return
+  }
   window.open(URL_VIEW)
 };
 
