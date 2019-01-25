@@ -25,7 +25,7 @@ class Html extends React.Component {
           <meta httpEquiv="x-ua-compatible" content="ie=edge,chrome=1" />
           <title>{title}</title>
           <meta name="description" content={description} />
-          <meta name="viewport" content="width=device-width, initial-scale=1" />
+          <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no"/>
           <link rel="stylesheet" type="text/css" href="/assets/index.css" />
           {style && <style id="css" dangerouslySetInnerHTML={{ __html: style }} />}
           <script dangerouslySetInnerHTML={sendStateToBrowser()} />

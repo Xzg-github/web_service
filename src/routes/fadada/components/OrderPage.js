@@ -51,7 +51,7 @@ class OrderPage extends React.Component {
         <div className={s.box}>
           <h1 role='title'>ePLD供应链管理系统</h1>
           {this.toInput('idNumber', '身份证号')}
-          {this.toInput('realName', '密码')}
+          {this.toInput('realName', '姓名')}
           {this.toOkButton()}
         </div>
       </div>

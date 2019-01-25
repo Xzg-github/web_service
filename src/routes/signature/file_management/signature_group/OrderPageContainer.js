@@ -4,12 +4,46 @@ import helper,{getObject, swapItems} from '../../../../common/common';
 import {toFormValue,hasSign} from '../../../../common/check';
 import {Action} from '../../../../action-reducer/action';
 import {getPathValue} from '../../../../action-reducer/helper';
-import {search2} from '../../../../common/search';
-import { exportExcelFunc, commonExport } from '../../../../common/exportExcelSetting';
+import {search} from '../../../../common/search';
+import {handleList} from './RootContainer'
 
 const TAB_KEY = 'index';
 const STATE_PATH =  ['signature_group'];
 
+const URL_LIST = '/api/signature/file_management/signature_group/list';
+const URL_DEL = '/api/signature/file_management/signature_group/delete';
+
+const toTableItems = ({keys, data}) => {
+  if (!keys) {
+    return data;
+  } else {
+    return data.map((item) => {
+      const children = keys.slice(1).reduce((state, key) => {
+        state[key] = item[key];
+        return state;
+      }, {});
+      return Object.assign(item[keys[0]], {children});
+    });
+  }
+};
+
+
+const search2 = async (dispatch, action, url, currentPage, pageSize, filter, newState={}, path=undefined) => {
+  const from = (currentPage - 1) * pageSize;
+  const to = from + pageSize;
+  const {returnCode, returnMsg, result} = await search(url, from, to, filter);
+  result.data = handleList(result.data);
+  if (returnCode === 0) {
+    const payload = {
+      ...newState,
+      tableItems: toTableItems(result),
+      maxRecords: result.returnTotalItem
+    };
+    dispatch(action.assign(payload, path));
+  } else {
+    helper.showError(returnMsg);
+  }
+};
 
 const action = new Action(STATE_PATH);
 
@@ -23,9 +57,10 @@ const buildPageState = (tabs, tabKey, title,value={}) => {
   return {
     activeKey: tabKey,
     tabs: tabs.concat({key: tabKey, title: title}),
-    [tabKey]: {tabKey,id,updateTable},
+    [tabKey]: {tabKey,id,updateTable,title,value},
   };
 };
+
 
 
 //刷新表格
@@ -52,12 +87,52 @@ const addActionCreator = async (dispatch, getState) => {
   dispatch(action.assign(buildPageState (tabs, tabKey,title)));
 };
 
+const editActionCreator = async (dispatch, getState) => {
+  const {tabs} = getPathValue(getState(), STATE_PATH);
+  const {tableItems} = getSelfState(getState());
+  const index = helper.findOnlyCheckedIndex(tableItems);
+  if (index === -1) {
+    helper.showError('请勾选一条记录进行编辑');
+    return;
+  }else {
+    const tabKey = `edit_${tableItems[index].id}`;
+    let title = `编辑_${tableItems[index].signGroupName}`;
+    if (helper.isTabExist(tabs, tabKey)) {
+      dispatch(action.assign({activeKey: tabKey}));
+    } else {
+
+      dispatch(action.assign(buildPageState (tabs,tabKey,title,tableItems[index])));
+    }
+
+  }
+};
+
+
+const delActionCreator = async (dispatch, getState) => {
+  const {tableItems} = getSelfState(getState());
+  const index = helper.findOnlyCheckedIndex(tableItems);
+  if (index === -1) {
+    helper.showError('请勾选一条记录进行删除');
+    return;
+  }else {
+    let json = await helper.fetchJson(`${URL_DEL}/${tableItems[index].id}`, 'delete');
+
+    if(json.returnCode !== 0) {
+      helper.showError(json.returnMsg);
+      return
+    }
+    helper.showSuccessMsg('删除成功');
+    return updateTable(dispatch,getState)
+  }
+};
 
 
 const toolbarActions = {
   search: searchClickActionCreator,
   reset: resetActionCreator,
-  add: addActionCreator
+  add: addActionCreator,
+  edit:editActionCreator,
+  del:delActionCreator
 };
 
 const clickActionCreator = (key) => {

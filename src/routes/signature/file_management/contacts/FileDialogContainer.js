@@ -38,6 +38,9 @@ const checkActionCreator = (isAll, checked, rowIndex) => {
 const addActionCreator = () => async (dispatch, getState) => {
   const {tree,select,parents,handleTree} = getSelfState(getState());
 
+  if(!select){
+    return
+  }
   //最多新增3层，根据父节点判断是否大于3层
   const parent = Number(tree[select].parent.split('-')[0]);
   for(let key in tree){
@@ -47,24 +50,27 @@ const addActionCreator = () => async (dispatch, getState) => {
     }
   }
 
-  if(parent >= 2){
-    helper.showError('最多创建3层树状结构');
-    return
-  }
+  console.log(tree);
+  return
 
-  let newHandleTree = helper.deepCopy(handleTree);
-
-  if(select !== '1-0'){
-    for(let treeData of newHandleTree){
-      if(treeData.title === tree[select].title){
-        !treeData.children && (treeData.children = []);
-        treeData.children.push({edit:'add'})
-      }
-    }
-  }else {
-    newHandleTree.push({edit:'add'})
-  }
-  //生成树结构
+  // if(parent >= 2){
+  //   helper.showError('最多创建3层树状结构');
+  //   return
+  // }
+  //
+  // let newHandleTree = helper.deepCopy(handleTree);
+  //
+  // if(select !== '1-0'){
+  //   for(let treeData of newHandleTree){
+  //     if(treeData.title === tree[select].title){
+  //       !treeData.children && (treeData.children = []);
+  //       treeData.children.push({edit:'add'})
+  //     }
+  //   }
+  // }else {
+  //   newHandleTree.push({edit:'add'})
+  // }
+   //生成树结构
   const newTree = Tree.createWithInsertRoot(newHandleTree,'全部文件', {guid: 'root', districtType:0});
   let treeKey,treeParent;
   //展开树
@@ -154,7 +160,8 @@ const onChangeActionCreator = (keyValue,keyName) => async (dispatch, getState) =
 };
 
 const onCancelActionCreator = (key) => async (dispatch, getState) => {
-  const {tree,value} = getSelfState(getState());
+  const {tree,value,handleTree} = getSelfState(getState());
+  console.log(handleTree);
   const newTree = helper.deepCopy(tree);
   for(let key in newTree){
     //全部改为可以点击
@@ -203,7 +210,7 @@ const onOkActionCreator = (key) => async (dispatch, getState) => {
       newTree[key].edit = false;
     }
   }
-  dispatch(action.assign({tree:newTree,value:{}}))
+  dispatch(action.assign({tree:newTree,value:{},select:null}))
 };
 
 const clickActionCreator = (key) => {

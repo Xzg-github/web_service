@@ -19,19 +19,36 @@ const URL_LIST = '/api/signature/file_management/signature_group/list';
 const URL_CONFIG = '/api/signature/file_management/signature_group/config';
 
 
+const handleList = (data) => {
+  for(let list of data){
+    if(list.list){
+      let arr = [];
+      list.signGroupNumber = list.list.length;
+      for(let item of list.list){
+        arr.push(item.realName)
+      }
+      list.signGroupPeople = arr.join(';')
+    }else {
+      list.signGroupNumber = 0;
+    }
+  }
+  return data
+};
+
 const getSelfState = (rootState) => {
   return getPathValue(rootState, STATE_PATH);
 };
 
 const initActionCreator = () => async (dispatch, getState) => {
   try {
-    const defaultTabs = [{key: 'index', title: '月账单', close: false}];
+    const defaultTabs = [{key: 'index', title: '签署群组', close: false}];
     const {activeKey='index', tabs=defaultTabs} = getSelfState(getState());
     dispatch(action.assign({status: 'loading'}));
     //初始化数据
     const { index , edit } = helper.getJsonResult(await helper.fetchJson(URL_CONFIG));
     //页面数据
-    const list = helper.getJsonResult(await search(URL_LIST, 0, index.pageSize, {}));
+    let list = helper.getJsonResult(await search(URL_LIST, 0, index.pageSize, {}));
+    list.data = handleList(list.data);
 
 
     dispatch(action.assign({
@@ -83,6 +100,8 @@ const getComponent = (activeKey) => {
     return OrderPageContainer;
   }else if(activeKey.indexOf('add_') === 0){
     return EditContainer;
+  }else if(activeKey.indexOf('edit_') === 0){
+    return EditContainer;
   }
 };
 
@@ -90,3 +109,4 @@ const getComponent = (activeKey) => {
 
 const RootContainer = connect(mapStateToProps, actionCreators)(EnhanceLoading(createTabPage(getComponent)));
 export default RootContainer;
+export {handleList}
