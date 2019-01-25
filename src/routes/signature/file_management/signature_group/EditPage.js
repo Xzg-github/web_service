@@ -10,13 +10,13 @@ class EditPage extends React.Component {
   static propTypes = {
     buttons: PropTypes.array,
     value: PropTypes.object,
-    valid: PropTypes.string,
     options: PropTypes.object,
     onExitValid: PropTypes.func,
     onClick: PropTypes.func
   };
 
   formProps = (props ) => {
+
     return {
       readonly: false,
       container: true,
@@ -35,7 +35,7 @@ class EditPage extends React.Component {
       valid: props.valid,
       cols: props.cols,
       items: props.tableItems,
-      maxHeight: `c`,
+      maxHeight: 'calc(100vh - 290px)',
       callback :{
         onContentChange: props.onContentChange,
         onCheck: props.onCheck,

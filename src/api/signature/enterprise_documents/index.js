@@ -21,4 +21,11 @@ api.post('/list', async (req, res) => {
   res.send({returnCode: 0, result: []});
 });
 
+// 联系人列表
+api.post('/searchList', async (req, res) => {
+  const url = `${host}/user/detailByPhoneOrEmailOrName/${req.body.filter}`;
+  res.send(await fetchJsonByNode(req,url));
+});
+
+
 export default api;

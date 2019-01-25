@@ -8,26 +8,22 @@ const buttons = [
 ];
 
 const tableCols = [
-  {key:'a',title:'群组名称'},
-  {key:'b',title:'组员人数'},
-  {key:'c',title:'组员'},
-  {key:'d',title:'备注'},
-  {key:'e',title:'操作人'},
-  {key:'f',title:'操作时间'},
+  {key:'signGroupName',title:'群组名称'},
+  {key:'signGroupNumber',title:'组员人数'},
+  {key:'signGroupPeople',title:'组员'},
+  {key:'signGroupNote',title:'备注'},
 ];
 
 const controls = [
-  {key:'a',title:'群组名称',type:'text',required:true},
-  {key:'b',title:'备注',type:'text'},
+  {key:'signGroupName',title:'群组名称',type:'text',required:true},
+  {key:'signGroupNote',title:'备注',type:'text'},
 ];
 
 const cols = [
   {key: 'checked', title: '', type: 'checkbox'},
   {key: 'index', title: '序号', type: 'index'},
-  {key:'a',title:'姓名'},
-  {key:'b',title:'账号'},
-  {key:'c',title:'所属分组'},
-  {key:'d',title:'签署身份',type:'select'},
+  {key:'realName',title:'姓名'},
+  {key:'account',title:'账号'},
 ];
 
 const tableButtons = [
@@ -44,9 +40,8 @@ const chooseGoodsConfig =  {
     {key: 'filter', title: '', span: 2, type: 'text', props: {placeholder: '请输入姓名、账号、状态搜索'}}
   ],
     cols: [
-    {key: 'a', title: '姓名'},
-    {key: 'b', title: '账号'},
-    {key: 'c', title: '群组'},
+      {key:'realName', title: '姓名'},
+      {key:'account',title:'账号'},
   ]
 };
 
@@ -61,7 +56,7 @@ const config = {
   },
   edit:{
     controls,
-    buttons:[{key:'close',title:'关闭'}],
+    buttons:[{key:'close',title:'关闭'},{key:'ok',title:'确认',bsStyle:'primary'}],
     cols,
     tableButtons,
     chooseGoodsConfig

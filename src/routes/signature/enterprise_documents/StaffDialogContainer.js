@@ -6,6 +6,7 @@ import helper from '../../../common/common';
 
 const action = new Action(['temp'], false);
 
+const URL_SERCH = '/api/signature/enterprise_documents/searchList';
 
 const getSelfState = (state) => {
   return state.temp || {};
@@ -14,7 +15,7 @@ const getSelfState = (state) => {
 const buildState = (config, items) => {
   return {
     ...config,
-    items:items,
+    tableItems:items,
     searchData:{},
     visible: true,
   };
@@ -23,22 +24,45 @@ const buildState = (config, items) => {
 
 const checkActionCreator = (isAll, checked, rowIndex) => {
   isAll && (rowIndex = -1);
-  return action.update({checked}, 'items', rowIndex);
+  return action.update({checked}, 'tableItems', rowIndex);
 };
 
 
 const okActionCreator = () => async (dispatch, getState) => {
-
+  const {tableItems} = getSelfState(getState());
+  const checkItems = tableItems.filter(item => item.checked)
+  if(checkItems.length < 1){
+    helper.showError('至少请勾选一条');
+    return;
+  }
+  dispatch(action.assign({visible: false, ok: checkItems}));
 };
 
 const closeActionCreator = () => (dispatch) => {
-  dispatch(action.assign({visible: false, ok: false}));
+  dispatch(action.assign({visible: false, ok: []}));
 };
 
 
 const searchActionTor = () => async (dispatch, getState) => {
   const {searchData} = getSelfState(getState());
-  console.log(searchData);
+  const body = {
+    filter:searchData.filter
+  };
+  const {result,returnCode,returnMsg} = await helper.fetchJson(URL_SERCH,helper.postOption(body));
+  if(returnCode !== 0){
+    helper.showError(returnMsg);
+    return
+  }
+  for(let item of result){
+    if(item.registerType === 'phone_number'){
+      item.account = item.phoneNumber;
+    }else if(item.registerType === 'email'){
+      item.account = item.email;
+    }
+  }
+
+
+  dispatch(action.assign({tableItems:result}))
 };
 
 

@@ -42,7 +42,7 @@ class ShareDialog extends React.Component {
   tableProps = () => {
     return {
       cols: this.props.cols,
-      items: this.props.items,
+      items: this.props.tableItems,
       maxHeight: 'calc(100vh - 290px)',
       callback: {
         onCheck: this.props.onCheck
