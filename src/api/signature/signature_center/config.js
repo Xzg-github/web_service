@@ -32,14 +32,13 @@ const buttons = [
 ];
 
 const tableCols = [
+  {key: 'signFileSubject', title: '文件主题',link: true},
   {key: 'signState', title: '状态', type: 'select', dictionary: 'order_type'},
-  {key: 'code', title: '系统编号', link: '20190109'},
-  {key: 'signFileSubject', title: '文件主题'},
   {key: 'launchAccountId', title: '发起人'},
   {key: 'signStartTime', title: '发起时间'},
-  {key: 'signFinishTime', title: '签署截止时间'},
   {key: 'signAccountId', title: '签署人'},
-  {key: 'signExpirationTime', title: '签完时间'},
+  {key: 'signFinishTime', title: '签完时间'},
+  {key: 'signExpirationTime', title: '签署截止时间'},
   {key: 'isAddCcSide', title: '是否抄送', options: isOptions},
 ];
 

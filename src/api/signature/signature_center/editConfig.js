@@ -25,12 +25,12 @@ const uploadButtons = [
 
 const controls1 = [
   { key: 'signFileSubject', title: '文件主题', type: 'text', span: 2},
-  { key: 'signFinishTime', title: '签署截止时间', type: 'date'},
+  { key: 'signExpirationTime', title: '签署截止时间', type: 'date'},
   { key: 'note', title: '备注', type: 'textArea', span: 4},
 ];
 
 const controls2 = [
-  { key: 'signWay', title: '签署方式', type: 'select', options: isWay},
+  { key: 'signWay', title: '签署方式', type: 'select', options: isWay, required: true},
   { key: 'signOrderStrategy', title: '签署顺序',  type: 'select', options: isStrategy, required: true},
   { key: 'isSignInSpecifiedLocation', title: '指定签署位置', type: 'select', options: isOptions},
   { key: 'isAddCcSide', title: '添加抄送方', type: 'select',options: isOptions}
@@ -46,7 +46,7 @@ const tableButtons = [
 const tableCols = [
   { key: 'checked', title: '', type: 'checkbox'},
   { key: 'index', title: '序号', type: 'index'},
-  { key: 'signPartyName', title: '姓名/机构',type: 'text'},
+  { key: 'signPartyName', title: '姓名/机构',type: 'text', required: true},
   { key: 'signPartyEmail', title: '邮箱', type: 'text'},
   { key: 'signPartyPhoneNumber', title: '手机号码',type: 'text'},
   //{ key: 'whether', title: '允许增加签署方', type: 'select', options: isOptions},

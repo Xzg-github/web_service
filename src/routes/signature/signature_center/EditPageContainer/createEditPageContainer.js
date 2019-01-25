@@ -9,6 +9,7 @@ import AddDialogContainer, {buildAddState} from './AddDialog/AddDialogContainer'
 import upload from './upload';
 import moment from 'moment';
 import execWithLoading from "../../../../standard-business/execWithLoading";
+import {updateTable} from '../../../../standard-business/OrderTabPage/createOrderTabPageContainer'
 
 /**
  * 功能：生成一个签署中心新增页面容器组件
@@ -28,7 +29,7 @@ const createEditPageContainer = (action, getSelfState) => {
     try{
       let url = '/api/signature/signature_center/editConfig';
       const editConfig = getJsonResult(await fetchJson(url));
-      let data = {signFinishTime:moment().format('YYYY-MM-DD HH:mm:ss'), signPartyList: []};  //获取当前时间
+      let data = {signExpirationTime:moment().format('YYYY-MM-DD HH:mm:ss'), signPartyList: []};  //获取当前时间
       if(id){
         const url = '/api/signature/signature_center/list';
         const list = getJsonResult(await fetchJson(url, 'post'));
@@ -150,19 +151,17 @@ const createEditPageContainer = (action, getSelfState) => {
     const url = '/api/signature/signature_center/list';
     const list = getJsonResult(await fetchJson(url, 'post'));
     if(!list){
-      return showError(`刷新页面数据失败-${returnMsg}`)
+      return showError(`刷新页面数据失败`)
     }
     let data;
     for(let item of list.data){
       if(item.id === guid){data = item}
     }
     const buttons4 = [
-      {key: 'cancel', title: '关闭'},
       {key: 'save', title: '保存'},
       {key: 'next',title: '下一步', bsStyle: 'primary'}
     ];
     const buttons5 = [
-      {key: 'cancel', title: '关闭'},
       {key: 'save', title: '保存'},
       {key: 'send',title: '发送', bsStyle: 'primary'}
     ];
@@ -171,7 +170,6 @@ const createEditPageContainer = (action, getSelfState) => {
     }else{
       dispatch(action.assign({value: data, buttons3: buttons5}))
     }
-    dispatch(action.assign({title: data.signFileSubject}, 'tabs'))
   };
 
   //保存
@@ -184,18 +182,19 @@ const createEditPageContainer = (action, getSelfState) => {
       isAddCcSide: value.isAddCcSide,
       note: value.note,
       isSignInSpecifiedLocation:value.isSignInSpecifiedLocation,
-      signFileSubject: value.signFileSubject,
+      signExpirationTime: value.signExpirationTime,
       signFinishTime: value.signFinishTime,
       signOrderStrategy: value.signOrderStrategy,
       signPartyList: value.signPartyList,
-      signWay: value.signWay
+      signWay: value.signWay,
+      signFileSubject: value.signFileSubject
       };
     const {result, returnCode, returnMsg} = await fetchJson(URL_SAVE,postOption(postData, 'post'));
     if(returnCode !== 0 ){
       showError(returnMsg);
       return
     }
-    upDatePage(result.id)(dispatch, getState)
+    upDatePage(result.id)(dispatch, getState);
   };
 
   //下一步
