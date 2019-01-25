@@ -34,9 +34,15 @@ api.post('/save', async(req, res) => {
   res.send(await fetchJsonByNode(req, url, postOption(req.body)));
 });
 
-//签署
+//签署 -- 下一步
 api.post('/sign', async(req, res) => {
   const url = `${host}/sign_center/sign_file`;
+  res.send(await fetchJsonByNode(req, url, postOption(req.body)));
+});
+
+//发送
+api.post('/send', async(req, res) => {
+  const url = `${host}/sign_center/send_file`;
   res.send(await fetchJsonByNode(req, url, postOption(req.body)));
 });
 

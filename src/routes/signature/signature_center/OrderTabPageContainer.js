@@ -25,7 +25,7 @@ const buildOrderTabPageState = async () => {
 
 //构建新增编辑页面状态
 const showOrderInfoPage = (dispatch, item, selfState, edit) => {
-  const key = item.signFileId ? item.signFileId : 'add ';
+  const key = item.id ? item.id : 'add ';
   const title = edit? item.signFileSubject : '新增';
   if(helper.isTabExist(selfState.tabs,key)){
     dispatch(action.assign({activeKey: key}))
@@ -36,7 +36,7 @@ const showOrderInfoPage = (dispatch, item, selfState, edit) => {
       return updateTable(dispatch, action, selfState, ['mySign']);
     };
     const payload = {
-      id: item.signFileId,
+      id: item.id,
     };
     dispatch(action.add({key, title}, 'tabs'));
     dispatch(action.assign({[key]: payload, activeKey: key}));
@@ -68,9 +68,9 @@ const signatureAction = (tabKey) => async (dispatch, getState) =>{
   const {tableItems} = getSelfState(getState());
   const checkedItems = tableItems[tabKey].filter(item => item.checked === true);
   if(checkedItems.length !== 1)return helper.showError('请勾选一条记录');
-  const signFileId = checkedItems[0].signFileId;
+  const id = checkedItems[0].id;
   const URL_SIGN =  '/api/signature/signature_center/sign';
-  const {returnCode, returnMsg } = await helper.fetchJson(URL_SIGN, helper.postOption(signFileId));
+  const {returnCode, returnMsg } = await helper.fetchJson(URL_SIGN, helper.postOption(id));
   if (returnCode !== 0) return helper.showError(returnMsg);
   window.open(returnMsg)
 };
@@ -90,6 +90,10 @@ const uploadActionCreator = (tabKey) => async (dispatch, getState) => {
   const checkedItems = tableItems[tabKey].filter(item => item.checked === true);
   if(checkedItems.length !== 1)return helper.showError('请勾选一条记录');
   const URL_DOWNLOAD= checkedItems[0].urlOfSignedFileDownload;  // 点击下载
+  if(!URL_DOWNLOAD){
+    helper.showError('请先完成签署操作！');
+    return
+  }
     helper.download(URL_DOWNLOAD,'file');
 };
 
@@ -99,6 +103,10 @@ const linePreviewAction = (tabKey) => async (dispatch, getState) => {
   const checkedItems = tableItems[tabKey].filter(item => item.checked === true);
   if(checkedItems.length !== 1){return helper.showError('请勾选一条记录')}
   const URL_VIEW = checkedItems[0].urlOfSignedFileViewpdf;
+  if(!URL_VIEW){
+    helper.showError('请先完成签署操作！');
+    return
+  }
   window.open(URL_VIEW)
 };
 

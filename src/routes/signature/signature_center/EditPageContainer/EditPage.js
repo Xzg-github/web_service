@@ -58,10 +58,10 @@ class EditPage extends React.Component {
   };
 
   toTable = () => {
-    const {tableCols, tableItems} = this.props;
+    const {tableCols, value} = this.props;
     const {onContentChange, onCheck} = getObject(this.props, ['onContentChange', 'onCheck']);
     const events1 = { onContentChange, onCheck };
-    const props = {cols: tableCols, items: tableItems, callback: events1};
+    const props = {cols: tableCols, items: value.signPartyList, callback: events1};
     return <SuperTable2 {...props}/>
   };
 
