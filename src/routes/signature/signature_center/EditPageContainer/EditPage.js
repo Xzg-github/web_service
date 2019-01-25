@@ -46,22 +46,22 @@ class EditPage extends React.Component {
   };
 
   toForm1 = () => {
-    const {controls1, onChange, value} = this.props;
-    const props = {controls: controls1, value, onChange};
+    const {controls1, onChange, value, onExitValid, valid} = this.props;
+    const props = {controls: controls1, value, onChange, onExitValid, valid};
     return <SuperForm {...props} />
   };
 
   toForm2 = () => {
-    const {controls2, onChange, value} = this.props;
-    const props = {controls: controls2, onChange, value};
+    const {controls2, onChange, value, onExitValid, valid} = this.props;
+    const props = {controls: controls2, onChange, value, onExitValid, valid};
     return <SuperForm {...props} />
   };
 
   toTable = () => {
-    const {tableCols, value} = this.props;
+    const {tableCols, value, onExitValid, valid} = this.props;
     const {onContentChange, onCheck} = getObject(this.props, ['onContentChange', 'onCheck']);
-    const events1 = { onContentChange, onCheck };
-    const props = {cols: tableCols, items: value.signPartyList, callback: events1};
+    const events1 = { onContentChange, onCheck, onExitValid };
+    const props = {cols: tableCols, items: value.signPartyList, callback: events1, valid};
     return <SuperTable2 {...props}/>
   };
 

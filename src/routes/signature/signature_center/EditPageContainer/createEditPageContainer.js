@@ -1,7 +1,7 @@
 import { connect } from  'react-redux';
 import EditPage from './EditPage';
 import {EnhanceLoading} from '../../../../components/Enhance';
-import {fetchJson, getJsonResult, postOption, showError, showSuccessMsg} from "../../../../common/common";
+import {fetchJson, getJsonResult, postOption, showError, showSuccessMsg, validValue, validArray} from "../../../../common/common";
 import {fetchAllDictionary, setDictionary2} from "../../../../common/dictionary";
 import helper from '../../../../common/common';
 import showPopup from '../../../../standard-business/showPopup';
@@ -39,7 +39,7 @@ const createEditPageContainer = (action, getSelfState) => {
       }
       return {
         ...editConfig,
-        valid: {},
+        valid: true,
         status: 'page',
         closeFunc,
         value: data,
@@ -47,6 +47,10 @@ const createEditPageContainer = (action, getSelfState) => {
     }catch (e){
       helper.showError(e.message);
     }
+  };
+
+  const exitValidAction = () => {
+    return action.assign({ valid: false})
   };
 
   const initActionCreators = () => async (dispatch, getState) => {
@@ -159,7 +163,7 @@ const createEditPageContainer = (action, getSelfState) => {
     }
     const buttons4 = [
       {key: 'save', title: '保存'},
-      {key: 'next',title: '下一步', bsStyle: 'primary'}
+      {key: 'next',title: '签署', bsStyle: 'primary'}
     ];
     const buttons5 = [
       {key: 'save', title: '保存'},
@@ -174,7 +178,23 @@ const createEditPageContainer = (action, getSelfState) => {
 
   //保存
   const saveAction = async (dispatch, getState) => {
-    const {value} = getSelfState(getState());
+    const {value, controls1, controls2, tableCols} = getSelfState(getState());
+    if(!validValue(controls1, value)){   //判断from1必填
+      dispatch(action.assign({valid: true}));
+      return
+    }
+    if(!validValue(controls2, value)){   //判断from2必填
+      dispatch(action.assign({valid: true}));
+      return
+    }
+    if(!validArray(tableCols, value.signPartyList.filter(item => !item.hide))){   //判断表格必填
+      dispatch(action.assign({valid: true, from: false}));
+      return
+    }
+    if(value.signPartyList.length === 0){
+      showError('至少添加一个签署方');
+      return
+    }
     const URL_SAVE = `/api/signature/signature_center/save`;
     const postData = {
       signContractId: value.signContractId,
@@ -248,7 +268,8 @@ const createEditPageContainer = (action, getSelfState) => {
     onClick: clickActionCreator,
     onCheck: checkActionCreator,
     onChange: changeActionCreator,
-    onContentChange:contentChangeAction
+    onContentChange:contentChangeAction,
+    onExitValid: exitValidAction
   };
 
   return connect(mapStateToProps, actionCreators)(EnhanceLoading(EditPage))
