@@ -46,4 +46,16 @@ api.post('/send', async(req, res) => {
   res.send(await fetchJsonByNode(req, url, postOption(req.body)));
 });
 
+//删除
+api.post('/del', async(req, res) => {
+  const url = `${host}/sign_center/delete_sign_file`;
+  res.send(await fetchJsonByNode(req, url, postOption(req.body)))
+});
+
+//从群组中添加
+api.post('/groups', async(req, res) => {
+  const url = `${host}/user/sign_groups/search`;
+  res.send(await fetchJsonByNode(req, url, postOption(req.body)))
+});
+
 export default api;

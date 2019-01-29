@@ -120,7 +120,7 @@ const createEditPageContainer = (action, getSelfState) => {
   const contactAction = async (dispatch, getState) => {
     const {contactConfig, tableItems}  = getSelfState(getState());
     const url = '/api/signature/signature_center/list';
-    const json = await fetchJson(url);
+    const json = await fetchJson(url, 'post');
     if(json.returnCode !== 0) return showError(json.returnMsg);
     const selectItems = json.result;
     const filterItems = json.result;
@@ -134,17 +134,18 @@ const createEditPageContainer = (action, getSelfState) => {
 
   //从签署群组中添加
   const groupAction = async (dispatch, getState) => {
-    const {groupConfig, tableItems} = getSelfState(getState());
-    const url = '/api/signature/signature_center/list';
-    const json = await fetchJson(url);
+    const {groupConfig, value} = getSelfState(getState());
+    const url = '/api/signature/signature_center/groups';
+    const json = await fetchJson(url, 'post');
     if(json.returnCode !== 0) return showError(json.returnMsg);
-    const selectItems = [];
-    const filterItems = [];
+    const selectItems = value.signPartyList;
+    const filterItems = json.result;
+    console.log(filterItems.data)
     const okFunc = (addItems = []) => {
-      const newItems = addItems.concat(tableItems);
-      dispatch(action.assign({tableItems: newItems}))
+      const newItems = addItems.concat(selectItems);
+      dispatch(action.assign({signPartyList: newItems}, 'value'))
     };
-    buildAddState(groupConfig, selectItems.data, filterItems.data, true, dispatch, okFunc);
+    buildAddState(groupConfig, selectItems, filterItems.data, true, dispatch, okFunc);
     showPopup(AddDialogContainer)
   };
 
@@ -221,7 +222,10 @@ const createEditPageContainer = (action, getSelfState) => {
  const nextAction = async(dispatch, getState) => {
   const {value} = getSelfState(getState());
   let id = value.id;
-  const URL_SIGN =  '/api/signature/signature_center/sign';
+   const URL_SEND =  '/api/signature/signature_center/send';   //发送
+  const URL_SIGN =  '/api/signature/signature_center/sign';   //签署
+   const result = await helper.fetchJson(URL_SEND, helper.postOption(value));
+   if (result.returnCode !== 0) return helper.showError(result.returnMsg);
    const {returnCode, returnMsg } = await helper.fetchJson(URL_SIGN, helper.postOption(id));
    if (returnCode !== 0) return helper.showError(returnMsg);
    window.open(returnMsg)
