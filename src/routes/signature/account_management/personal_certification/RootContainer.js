@@ -12,6 +12,7 @@ import helper from '../../../../common/common';
 
 
 import FirstPageContainer from './FirstPageContainer';
+import ThirdPageContainer from './ThirdPageContainer';
 
 function getCookie(cookieName) {
   let strCookie = document.cookie;
@@ -40,7 +41,7 @@ const initActionCreator = () => async (dispatch, getState) => {
   try {
     dispatch(action.assign({status: 'loading'}));
     //初始化数据
-    const { tabs } = helper.getJsonResult(await helper.fetchJson(URL_CONFIG));
+    const { tabs ,three} = helper.getJsonResult(await helper.fetchJson(URL_CONFIG));
 
     let strCookie =  getCookie('token');
     let accountId =  getCookie('accountId');
@@ -50,6 +51,7 @@ const initActionCreator = () => async (dispatch, getState) => {
       activeKey:'one',
       one:{strCookie,accountId},
       tabs,
+      three
     }));
 
   }catch (e){
@@ -80,7 +82,7 @@ const getComponent = (activeKey) => {
   }else if(activeKey === 'two'){
     return null;
   }else if(activeKey === 'three'){
-    return null
+    return ThirdPageContainer
   }else if(activeKey === 'four'){
     return null
   }

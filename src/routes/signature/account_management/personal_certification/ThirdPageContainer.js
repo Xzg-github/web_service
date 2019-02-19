@@ -1,14 +1,14 @@
 import { connect } from 'react-redux';
-import OrderPage from './components/OrderPage';
+import OrderPage from '../../../../components/OrderPage';
 import {EnhanceLoading} from '../../../../components/Enhance';
 import helper,{getObject, swapItems} from '../../../../common/common';
 import {Action} from '../../../../action-reducer/action';
 import {getPathValue} from '../../../../action-reducer/helper';
-import showDiaLogOne from './ShowDiaLog/DialogContainer';
-import showConfirm from './ShowDiaLog/ConfirmContainer';
+import execWithLoading from '../../../../standard-business/execWithLoading';
 
-const TAB_KEY = 'one';
-const STATE_PATH =  ['enterprise_account_management'];
+const TAB_KEY = 'three';
+const STATE_PATH =  ['personal_certification'];
+
 
 
 const action = new Action(STATE_PATH);
@@ -19,12 +19,10 @@ const getSelfState = (rootState) => {
 
 const initActionCreator = () => async (dispatch, getState) => {
   const state = getSelfState(getState());
-
   dispatch(action.assign({status: 'loading'}, TAB_KEY));
   try {
     dispatch(action.assign({
       ...state,
-      value:{},
       status: 'page',
     }, TAB_KEY));
 
@@ -34,36 +32,16 @@ const initActionCreator = () => async (dispatch, getState) => {
   }
 };
 
-const zzjgdmAction = () => async (dispatch, getState) => {
-  const {diaLogOne} = getSelfState(getState());
-  if (await showDiaLogOne(diaLogOne,{})) {
 
-  }
-};
-
-const dgyhzhAction = () => async (dispatch, getState) => {
-  if (await showConfirm()) {
-
-  }
-};
-
-const frxmAction = () => async (dispatch, getState) => {
-  const {diaLogTwo} = getSelfState(getState());
-  if (await showDiaLogOne(diaLogTwo,{})) {
-
-  }
-};
 
 const toolbarActions = {
-  zzjgdm:zzjgdmAction,
-  dgyhzh:dgyhzhAction,
-  frxm:frxmAction
 };
 
 const clickActionCreator = (key) => {
   if (toolbarActions.hasOwnProperty(key)) {
-    return toolbarActions[key]();
+    return toolbarActions[key];
   } else {
+    console.log('unknown key:', key);
     return {type: 'unknown'};
   }
 };
@@ -82,11 +60,12 @@ const exitValidActionCreator = () => {
 };
 
 
+
 const actionCreators = {
   onClick: clickActionCreator,
   onChange: changeActionCreator,
   onInit: initActionCreator,
-  onExitValid: exitValidActionCreator
+  onExitValid: exitValidActionCreator,
 };
 
 const Container = connect(mapStateToProps, actionCreators)(EnhanceLoading(OrderPage));

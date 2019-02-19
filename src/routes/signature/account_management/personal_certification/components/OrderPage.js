@@ -23,7 +23,7 @@ class OrderPage extends React.Component {
 
 
     const url = `${href}/code?token=${this.props.strCookie}&accountId=${this.props.accountId}`;
-    console.log(url);
+
     const codeProps = {
       value:url,
       size:128

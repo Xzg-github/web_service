@@ -15,7 +15,6 @@ class OrderPage extends React.Component {
   }
 
   onClick = (key) => {
-    console.log(key);
     this.props.onClick(key);
   };
 

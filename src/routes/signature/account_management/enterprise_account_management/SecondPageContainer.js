@@ -1,13 +1,13 @@
 import { connect } from 'react-redux';
-import OrderPage from './components/OrderPage';
+import SecondPage from './components/SecondPage';
 import {EnhanceLoading} from '../../../../components/Enhance';
 import helper,{getObject, swapItems} from '../../../../common/common';
 import {Action} from '../../../../action-reducer/action';
 import {getPathValue} from '../../../../action-reducer/helper';
-import showDiaLogOne from './ShowDiaLog/DialogContainer';
-import showConfirm from './ShowDiaLog/ConfirmContainer';
+import showDiaLog from './ShowDiaLog/UploadDialogContainer';
 
-const TAB_KEY = 'one';
+
+const TAB_KEY = 'two';
 const STATE_PATH =  ['enterprise_account_management'];
 
 
@@ -24,7 +24,8 @@ const initActionCreator = () => async (dispatch, getState) => {
   try {
     dispatch(action.assign({
       ...state,
-      value:{},
+      checkValue:{},
+      radioValue:{},
       status: 'page',
     }, TAB_KEY));
 
@@ -34,30 +35,16 @@ const initActionCreator = () => async (dispatch, getState) => {
   }
 };
 
-const zzjgdmAction = () => async (dispatch, getState) => {
-  const {diaLogOne} = getSelfState(getState());
-  if (await showDiaLogOne(diaLogOne,{})) {
+const addAction = () => async (dispatch, getState) => {
+  const {edit} = getSelfState(getState());
 
-  }
-};
-
-const dgyhzhAction = () => async (dispatch, getState) => {
-  if (await showConfirm()) {
-
-  }
-};
-
-const frxmAction = () => async (dispatch, getState) => {
-  const {diaLogTwo} = getSelfState(getState());
-  if (await showDiaLogOne(diaLogTwo,{})) {
+  if (await showDiaLog(edit,{},false)) {
 
   }
 };
 
 const toolbarActions = {
-  zzjgdm:zzjgdmAction,
-  dgyhzh:dgyhzhAction,
-  frxm:frxmAction
+  add:addAction
 };
 
 const clickActionCreator = (key) => {
@@ -71,6 +58,15 @@ const clickActionCreator = (key) => {
 const changeActionCreator = (key, value) => (dispatch,getState) =>{
   dispatch(action.assign({[key]: value}, [TAB_KEY,'value']));
 };
+
+const checkActionCreator = (checked,key) => (dispatch,getState) =>{
+  dispatch(action.assign({[key]: checked}, [TAB_KEY,'checkValue']))
+};
+
+const radioActionCreator = (radio,key) => (dispatch,getState) =>{
+  dispatch(action.assign({[key]: radio}, [TAB_KEY,'radioValue']))
+};
+
 
 const mapStateToProps = (state) => {
   return getSelfState(state);
@@ -86,8 +82,10 @@ const actionCreators = {
   onClick: clickActionCreator,
   onChange: changeActionCreator,
   onInit: initActionCreator,
-  onExitValid: exitValidActionCreator
+  onExitValid: exitValidActionCreator,
+  onCheck:checkActionCreator,
+  onRadio:radioActionCreator
 };
 
-const Container = connect(mapStateToProps, actionCreators)(EnhanceLoading(OrderPage));
+const Container = connect(mapStateToProps, actionCreators)(EnhanceLoading(SecondPage));
 export default Container;

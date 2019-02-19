@@ -1,13 +1,16 @@
 import { connect } from 'react-redux';
-import OrderPage from './components/OrderPage';
+import OrderPage from '../../components/OrderPage/OrderPage';
 import {EnhanceLoading} from '../../../../components/Enhance';
 import helper,{getObject, swapItems} from '../../../../common/common';
 import {Action} from '../../../../action-reducer/action';
 import {getPathValue} from '../../../../action-reducer/helper';
+import showDiaLog from './ShowDiaLog/OrderContainer';
+import showPayDiaLog from './ShowDiaLog/PayDialogContainer';
 import showDiaLogOne from './ShowDiaLog/DialogContainer';
-import showConfirm from './ShowDiaLog/ConfirmContainer';
+import showApplication from './ShowDiaLog/ApplicationDialogContainer';
 
-const TAB_KEY = 'one';
+
+const TAB_KEY = 'four';
 const STATE_PATH =  ['enterprise_account_management'];
 
 
@@ -24,7 +27,6 @@ const initActionCreator = () => async (dispatch, getState) => {
   try {
     dispatch(action.assign({
       ...state,
-      value:{},
       status: 'page',
     }, TAB_KEY));
 
@@ -34,30 +36,43 @@ const initActionCreator = () => async (dispatch, getState) => {
   }
 };
 
-const zzjgdmAction = () => async (dispatch, getState) => {
-  const {diaLogOne} = getSelfState(getState());
-  if (await showDiaLogOne(diaLogOne,{})) {
+const orderAction = () => async (dispatch, getState) => {
+  const {order} = getSelfState(getState());
+
+  if (await showDiaLog(order,[])) {
 
   }
 };
 
-const dgyhzhAction = () => async (dispatch, getState) => {
-  if (await showConfirm()) {
+const payAction = () => async (dispatch, getState) => {
+  const {pay} = getSelfState(getState());
+
+  if (await showPayDiaLog(pay,[],'1231233')) {
 
   }
 };
 
-const frxmAction = () => async (dispatch, getState) => {
-  const {diaLogTwo} = getSelfState(getState());
-  if (await showDiaLogOne(diaLogTwo,{})) {
+
+const inputAction = () => async (dispatch, getState) => {
+  const {input} = getSelfState(getState());
+  if (await showDiaLogOne(input,{})) {
 
   }
 };
+
+const applicationAction = () => async (dispatch, getState) => {
+  const {application} = getSelfState(getState());
+  if (await showApplication(application,{a:'1'})) {
+
+  }
+};
+
 
 const toolbarActions = {
-  zzjgdm:zzjgdmAction,
-  dgyhzh:dgyhzhAction,
-  frxm:frxmAction
+  order:orderAction,
+  pay:payAction,
+  input:inputAction,
+  application:applicationAction
 };
 
 const clickActionCreator = (key) => {

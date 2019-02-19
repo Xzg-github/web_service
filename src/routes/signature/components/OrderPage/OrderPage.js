@@ -62,14 +62,13 @@ class OrderPage extends React.Component {
 
   toTable = () => {
     const {tableCols, tableItems, sortInfo, filterInfo, buttons,hasUnreadTable} = this.props;
-    let item = tableItems.slice(0,200);
     const extra = buttons.length ? 0 : -32;
     const props = {
       hasUnreadTable,
       sortInfo,
       filterInfo,
       cols: tableCols,
-      items: item,
+      items: tableItems,
       checkbox:true,
       callback: getObject(this.props, TABLE_EVENTS),
       maxHeight: `calc(100vh - ${this.state.height + 219 + extra}px)`

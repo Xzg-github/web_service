@@ -1,13 +1,13 @@
 import { connect } from 'react-redux';
-import OrderPage from './components/OrderPage';
+import OrderPage from '../../components/OrderPage/OrderPage';
 import {EnhanceLoading} from '../../../../components/Enhance';
 import helper,{getObject, swapItems} from '../../../../common/common';
 import {Action} from '../../../../action-reducer/action';
 import {getPathValue} from '../../../../action-reducer/helper';
-import showDiaLogOne from './ShowDiaLog/DialogContainer';
-import showConfirm from './ShowDiaLog/ConfirmContainer';
+import showDiaLog from './ShowDiaLog/AddDialogContainer';
 
-const TAB_KEY = 'one';
+
+const TAB_KEY = 'three';
 const STATE_PATH =  ['enterprise_account_management'];
 
 
@@ -24,7 +24,6 @@ const initActionCreator = () => async (dispatch, getState) => {
   try {
     dispatch(action.assign({
       ...state,
-      value:{},
       status: 'page',
     }, TAB_KEY));
 
@@ -34,30 +33,16 @@ const initActionCreator = () => async (dispatch, getState) => {
   }
 };
 
-const zzjgdmAction = () => async (dispatch, getState) => {
-  const {diaLogOne} = getSelfState(getState());
-  if (await showDiaLogOne(diaLogOne,{})) {
+const addAction = () => async (dispatch, getState) => {
+  const {controls} = getSelfState(getState());
 
-  }
-};
-
-const dgyhzhAction = () => async (dispatch, getState) => {
-  if (await showConfirm()) {
-
-  }
-};
-
-const frxmAction = () => async (dispatch, getState) => {
-  const {diaLogTwo} = getSelfState(getState());
-  if (await showDiaLogOne(diaLogTwo,{})) {
+  if (await showDiaLog(controls,{},'新增')) {
 
   }
 };
 
 const toolbarActions = {
-  zzjgdm:zzjgdmAction,
-  dgyhzh:dgyhzhAction,
-  frxm:frxmAction
+  add:addAction
 };
 
 const clickActionCreator = (key) => {
