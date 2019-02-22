@@ -18,7 +18,8 @@ const children = [
     require('./account_management/enterprise_certification').default,
     require('./account_management/personal_certification').default,
     require('./account_management/personal_account_management').default,
-    require('./business_account').default
+    require('./business_account').default,
+    require('./file_management/businessArchives').default
 ];
 
 export default RouterHelper(prefix, title, children);

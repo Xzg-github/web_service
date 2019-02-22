@@ -500,7 +500,8 @@ export {
   deepCopy,
   getRouteKey,
   getPageTitle,
-  setPageTitle
+  setPageTitle,
+  download
 };
 
 export default helper;

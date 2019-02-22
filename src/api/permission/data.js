@@ -19,6 +19,7 @@ const data = {
       contacts: '联系人',
       signature_group: '签署群组',
       template_management: '模板管理',
+      businessArchives: '企业档案',
 
 
       enterprise_certification: '企业认证',
