@@ -111,9 +111,6 @@ class Header extends React.Component {
       <Menu className={s.menu} onClick={this.onMenuItemClick}>
         <MenuItemGroup title={this.state.username} />
         <MenuDivider />
-        <MenuItem key='person'>个人信息</MenuItem>
-        <MenuItem key='mode'>导入模板</MenuItem>
-        <MenuItem key='modify'>修改密码</MenuItem>
         <MenuItem key='revoke'>注销</MenuItem>
       </Menu>
     );
