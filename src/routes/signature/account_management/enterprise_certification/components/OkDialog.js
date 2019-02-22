@@ -59,7 +59,7 @@ class OkDialog extends React.Component {
       <ModalWithDrag {...this.modalProps()}>
         <div className={s.box}>
           <div>{LABELS.map((item, index) => <div key={index}>{`${item.title}:`}</div>)}</div>
-          <div>{LABELS.map((item, index) => <div key={index}>{value[item.key]}</div>)}</div>
+          <div>{LABELS.map((item, index) => <div key={index}>{value[item.key] ? value[item.key]  : '无'}</div>)}</div>
         </div>
         <p>是否确认提交的所有资料无误并提交法大大审核？</p>
       </ModalWithDrag>

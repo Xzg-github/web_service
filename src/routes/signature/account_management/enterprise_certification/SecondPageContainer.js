@@ -18,11 +18,14 @@ const getSelfState = (rootState) => {
 
 const initActionCreator = () => async (dispatch, getState) => {
   const state = getSelfState(getState());
+  const {srcObj = {},value={}} = state;
 
   dispatch(action.assign({status: 'loading'}, TAB_KEY));
   try {
     dispatch(action.assign({
       ...state,
+      srcObj,
+      value,
       status: 'page',
     }, TAB_KEY));
 
