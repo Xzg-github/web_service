@@ -138,14 +138,13 @@ const createEditPageContainer = (action, getSelfState) => {
     const url = '/api/signature/signature_center/groups';
     const json = await fetchJson(url, 'post');
     if(json.returnCode !== 0) return showError(json.returnMsg);
-    const selectItems = value.signPartyList;
+    const selectItems = json.result;
     const filterItems = json.result;
-    console.log(filterItems.data)
     const okFunc = (addItems = []) => {
-      const newItems = addItems.concat(selectItems);
+      const newItems = addItems.concat(value.signPartyList);
       dispatch(action.assign({signPartyList: newItems}, 'value'))
     };
-    buildAddState(groupConfig, selectItems, filterItems.data, true, dispatch, okFunc);
+    buildAddState(groupConfig, selectItems.data, filterItems.data, true, dispatch, okFunc);
     showPopup(AddDialogContainer)
   };
 

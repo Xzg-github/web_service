@@ -58,4 +58,10 @@ api.post('/groups', async(req, res) => {
   res.send(await fetchJsonByNode(req, url, postOption(req.body)))
 });
 
+//校验企业认证
+api.post('/authentication', async(req, res) => {
+  const url = `${host}/verify/company_verify`;
+  res.send(await fetchJsonByNode(req, url, postOption(req.body)))
+});
+
 export default api;

@@ -13,7 +13,7 @@ class AddDialog extends React.Component {
     const {tableCols, tableItems, maxHeight} = this.props;
     const props = {
       cols: tableCols,
-      items: [],
+      items: tableItems,
       maxHeight,
       callback:  getObject(this.props, TABLE_EVENTS)
     };

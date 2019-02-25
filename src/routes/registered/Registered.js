@@ -15,7 +15,8 @@ const getSelfState = (rootState) => {
 
 const URL_CONFIG = '/api/registered/config';
 const URL_SEND_CODE = '/api/registered/code';
-const URL_SET_NEWPSW = '/api/registered/personal';
+const URL_SET_NEWPSW = '/api/registered/personal';    //个人注册
+const URL_COMPANY = '/api/registered/company';       //企业注册
 
 //初始化
 const initActionCreator = () => async (dispatch) => {
@@ -42,7 +43,7 @@ const sendVarifyCode = () => async (dispatch, getState) => {
     dispatch(action.assign({timer: t}));
   }, 1000);
   const params = {
-    type: activeKey === 'phoneNumber' ? 'phoneNumber' : 'email'? 'email': 'company',
+    type: activeKey === 'phoneNumber' ? 'phoneNumber' : 'email'? 'email': 'companyEmail',
     recipient: value[activeKey]
   };
   const {returnCode, result, returnMsg} = await helper.fetchJson(URL_SEND_CODE, helper.postOption(params));
@@ -78,15 +79,19 @@ const okActionCreator = (key) => async (dispatch, getState) => {
   if(timer === 0) return helper.showError('请重新发送验证码');
   execWithLoading( async() => {
     const params = {
-      registerType: activeKey === 'phoneNumber' ? 'phone_number' : 'email'? 'email': 'company',
+      registerType: activeKey === 'phoneNumber' ? 'phone_number' : 'email'? 'email': 'companyEmail',
       accountPassword: value.accountPassword,
       phoneNumber: value.phoneNumber,
       email:value.email,
       verifyCode: value[`${activeKey}_code`],
       belongCompanyCode: value.belongCompanyCode,
-      belongCompanyName: value.belongCompanyName
+      belongCompanyName: value.belongCompanyName,
+      companyName: value.companyName,
+      contactName: value.contactName,
+      contactPhone: value.contactPhone,
+      companyEmail: value.companyEmail,
     };
-    const {returnCode, result, returnMsg} = await helper.fetchJson(URL_SET_NEWPSW, helper.postOption(params));
+    const {returnCode, result, returnMsg} = await helper.fetchJson(activeKey === 'companyEmail'? URL_COMPANY:URL_SET_NEWPSW, helper.postOption(params));debugger
     if (returnCode === 0) {
       helper.showSuccessMsg('注册成功，返回登录页进行登录');
       dispatch(action.assign({value: {}}));

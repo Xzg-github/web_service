@@ -33,8 +33,7 @@ const buildState = async(config, items,edit) => {
     edit,
     previewVisible: false,
     previewImage: '',
-    msg,
-    srcImg:null
+    msg
   };
 };
 
@@ -87,11 +86,9 @@ const changeActionCreator = ({file, fileList}) => (dispatch,getState) => {
   reader.readAsDataURL(file);
   reader.onload =  (result) => {
     srcImg = result.target.result;
-    file.thumbUrl = srcImg
-    const newList = [file];
-    dispatch(action.assign({fileList:newList,srcImg:srcImg}))
   };
-
+  const newList = [file];
+  dispatch(action.assign({fileList:newList}))
 };
 
 const removeActionCreator = (file) => async (dispatch,getState) => {

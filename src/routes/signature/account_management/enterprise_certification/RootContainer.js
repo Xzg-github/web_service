@@ -33,7 +33,12 @@ const getSelfState = (rootState) => {
 
 const initActionCreator = () => async (dispatch, getState) => {
   try {
-    const defaultTabs = [{key: 'one', title: '1.填写企业信息', close: false}];
+    const defaultTabs = [
+      {key: 'one', title: '1.填写企业信息', close: false},
+      {key: 'two', title: '1.填写企业信息', close: false},
+      {key: 'three', title: '1.填写企业信息', close: false},
+      {key: 'four', title: '1.填写企业信息', close: false},
+      ];
     dispatch(action.assign({status: 'loading'}));
     //初始化数据
     const { one ,two } = helper.getJsonResult(await helper.fetchJson(URL_CONFIG));
