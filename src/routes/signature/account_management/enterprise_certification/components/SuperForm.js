@@ -15,7 +15,7 @@ const TYPE = [
   'text',
   'search',
   'select',
-  'radioGroup',
+  'Checkbox',
   'number',
   'date',
   'textArea',
@@ -363,7 +363,6 @@ class SuperForm extends React.Component {
       validateStatus: status
     };
     const {checkable,onCheckItem,onClick,readonly} = this.props;
-    console.log(readonly);
 
     return (
       <Col span={span * factor} key={control.key}>

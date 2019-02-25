@@ -12,6 +12,9 @@ import helper from '../../../../common/common';
 
 
 import FirstPageContainer from './FirstPageContainer';
+import SecondPageContainer from './SecondPageContainer';
+import ThirdPageContainer from './ThirdPageContainer';
+import FourthPageContainer from './FourthPageContainer';
 
 
 const STATE_PATH = ['enterprise_account_management'];
@@ -29,14 +32,17 @@ const initActionCreator = () => async (dispatch, getState) => {
   try {
     dispatch(action.assign({status: 'loading'}));
     //初始化数据
-    const { tabs,one } = helper.getJsonResult(await helper.fetchJson(URL_CONFIG));
+    const { tabs,one,two,three,four } = helper.getJsonResult(await helper.fetchJson(URL_CONFIG));
 
     //页面数据
     dispatch(action.assign({
       status: 'page',
       activeKey:'one',
       tabs,
-      one
+      one,
+      two,
+      three,
+      four
     }));
 
   }catch (e){
@@ -65,11 +71,11 @@ const getComponent = (activeKey) => {
   if (activeKey === 'one') {
     return FirstPageContainer;
   }else if(activeKey === 'two'){
-    return null;
+    return SecondPageContainer;
   }else if(activeKey === 'three'){
-    return null
+    return ThirdPageContainer
   }else if(activeKey === 'four'){
-    return null
+    return FourthPageContainer
   }
 
 };
