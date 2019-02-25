@@ -44,6 +44,7 @@ const rootReducer = combineReducers({
     signature_group: create('signature_group',false),
     template_management: create('template_management',false),
     businessArchives: create('businessArchives', false),
+    price_management: create('price_management', false),
     //账号管理
     enterprise_certification: create('enterprise_certification',false),
     enterprise_account_management: create('enterprise_account_management'),

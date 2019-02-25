@@ -20,6 +20,7 @@ const data = {
       signature_group: '签署群组',
       template_management: '模板管理',
       businessArchives: '企业档案',
+      price_management: '价格管理',
 
 
       enterprise_certification: '企业认证',
