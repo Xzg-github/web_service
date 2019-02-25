@@ -16,4 +16,10 @@ api.post('/personal', async (req, res) => {
   res.send(await fetchJsonByNode(req, url, postOption(req.body, 'post')));
 });
 
+//企业注册
+api.post('/company', async (req, res) => {
+  const url = `${host}/register/register_company_account`;
+  res.send(await fetchJsonByNode(req, url, postOption(req.body, 'post')))
+});
+
 export default api;

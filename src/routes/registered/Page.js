@@ -65,7 +65,7 @@ class Page extends React.Component {
         return this.byEmail();
       case 'phoneNumber':
         return this.byMobile();
-      case 'company':
+      case 'companyEmail':
         return this.byCompany()
     }
   };
