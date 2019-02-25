@@ -10,6 +10,22 @@ import showConfirm from './ShowDiaLog/ConfirmContainer';
 const TAB_KEY = 'one';
 const STATE_PATH =  ['personal_account_management'];
 
+const URL_LIST = '/api/signature/account_management/personal_account_management/person';
+
+
+function getCookie(cookieName) {
+  let strCookie = document.cookie;
+  let arrCookie = strCookie.split("; ");
+  for(let i = 0; i < arrCookie.length; i++){
+    let arr = arrCookie[i].split("=");
+    if(cookieName == arr[0]){
+      return arr[1];
+    }
+  }
+  return "";
+}
+
+
 
 const action = new Action(STATE_PATH);
 
@@ -22,9 +38,12 @@ const initActionCreator = () => async (dispatch, getState) => {
 
   dispatch(action.assign({status: 'loading'}, TAB_KEY));
   try {
+    let accountId =  getCookie('accountId');
+    const result =  helper.getJsonResult(await helper.fetchJson(`${URL_LIST}/${accountId}`));
+    result.grzh = result.registerType === 'phone_number' ? result.phoneNumber : '';
     dispatch(action.assign({
       ...state,
-      value:{},
+      value:{...result,password:'******'},
       status: 'page',
     }, TAB_KEY));
 
@@ -34,7 +53,7 @@ const initActionCreator = () => async (dispatch, getState) => {
   }
 };
 
-const zzjgdmAction = () => async (dispatch, getState) => {
+const passwordAction = () => async (dispatch, getState) => {
   const {diaLogOne} = getSelfState(getState());
   if (await showDiaLogOne(diaLogOne,{})) {
 
@@ -55,7 +74,7 @@ const frxmAction = () => async (dispatch, getState) => {
 };
 
 const toolbarActions = {
-  zzjgdm:zzjgdmAction,
+  password:passwordAction,
   dgyhzh:dgyhzhAction,
   frxm:frxmAction
 };

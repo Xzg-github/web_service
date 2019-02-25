@@ -31,9 +31,10 @@ class OrderPage extends React.Component {
   };
 
   toForm = (props) => {
+    console.log(props);
     return(
       <div>{props.LABELS.map((item, index) =>{
-        return <p key={index}>{`${item.title}:`}&nbsp;&nbsp;{item.type ?this.toIcon(item.key,item):null}</p>
+        return <p key={index}>{`${item.title}:`}&nbsp;&nbsp;{props.value[item.key]}{item.type ?this.toIcon(item.key,item):null}</p>
       })}</div>
     )
   };

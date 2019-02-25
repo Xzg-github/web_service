@@ -10,9 +10,18 @@ api.get('/config', async (req, res) => {
   res.send({returnCode: 0, result: module.default});
 });
 
-// 获取主列表数据
-api.post('/list', async (req, res) => {
-  res.send({returnCode: 0, result: {data:[{a:'123456'}]}});
+// 获取个人详细信息
+api.get('/person/:id', async (req, res) => {
+  const url = `${host}/user/detail/${req.params.id}`;
+  res.send(await fetchJsonByNode(req,url));
 });
+
+
+//修改密码
+api.post('/modify', async (req, res) => {
+  const url = `${host}/user/password/modify`;
+  res.send(await fetchJsonByNode(req,url,postOption(req.body)));
+});
+
 
 export default api;

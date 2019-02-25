@@ -3,6 +3,7 @@ import withStyles from '../../../node_modules/isomorphic-style-loader/lib/withSt
 import s from './OrderTabPage.less';
 import {Search, SuperTable, SuperPagination, SuperToolbar, SuperTab2} from '../../components/index';
 import Card from "../../components/Card/Card";
+import {Alert} from 'antd';
 
 const props = {
   subTabs: PropTypes.array,
@@ -126,9 +127,32 @@ class OrderTabPage extends React.Component {
     return <div style={{marginBottom: '10px'}}><SuperTab2 {...props} /></div>;
   };
 
+
+  toAlert = () => {
+    const {onAuthentication} = this.props;
+    const messageStr = () => {
+      return (
+        <p>
+          您的账号还未完成实名认证，请先认证，以获取专属CA证书、订购套餐、签发文件资格等服务
+          <span className={s.hearder_box} onClick={onAuthentication}>未发起认证</span>
+        </p>
+      )
+
+    };
+    const props = {
+      type:'info',
+      message:messageStr(),
+      showIcon:true,
+    };
+    return (
+      <Alert {...props}/>
+    );
+  };
+
   render = () => {
     return (
       <div className={s.root}>
+        {this.toAlert()}
         <Card>
         {this.toSearch()}
         </Card>

@@ -20,8 +20,8 @@ import FourthPageContainer from './FourthPageContainer';
 const STATE_PATH = ['personal_account_management'];
 const action = new Action(STATE_PATH);
 
-const URL_LIST = '/api/signature/account_management/enterprise_account_management/list';
-const URL_CONFIG = '/api/signature/account_management/enterprise_account_management/config';
+
+const URL_CONFIG = '/api/signature/account_management/personal_account_management/config';
 
 
 const getSelfState = (rootState) => {
