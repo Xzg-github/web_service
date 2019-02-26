@@ -42,9 +42,16 @@ const closeActionCreator = (props) => () => {
 };
 
 
+const addAction = (props) => (dispatch, getState) => {
+  const {tableItems,tabKey} = getSelfState(getState());
+  dispatch(action.add({}, [tabKey,'tableItems'], 0))
+};
+
+
 
 
 const toolbarActions = {
+  add:addAction,
   close: closeActionCreator,
 };
 

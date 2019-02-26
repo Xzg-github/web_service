@@ -34,7 +34,6 @@ class EditPage extends React.Component {
     return  {
       cols: props.cols,
       items: props.tableItems ? props.tableItems: [],
-      checkbox:false,
       callback: getObject(props, TABLE_EVENTS),
       maxHeight: `calc(100vh - 223px)`
     };
@@ -44,6 +43,14 @@ class EditPage extends React.Component {
     return {
       size: 'default',
       buttons: props.buttons,
+      onClick: props.onClick.bind(null, props)
+    };
+  };
+
+  toolbarProps1 = (props) => {
+    return {
+      size: 'small',
+      buttons: props.colsButtons,
       onClick: props.onClick.bind(null, props)
     };
   };
@@ -61,9 +68,12 @@ class EditPage extends React.Component {
         </Indent>
         <Title title='商品明细'/>
         <Indent>
-          <SuperTable {...this.tableProps(props)}/>
+          {props.look ? null : <SuperToolbar {...this.toolbarProps1(props)} />}
+          <SuperTable2 {...this.tableProps(props)}/>
         </Indent>
-        {props.look ? null : <SuperToolbar {...this.toolbarProps(props)} />}
+        <div className={s.footer}>
+          {props.look ? null : <SuperToolbar {...this.toolbarProps(props)} />}
+        </div>
       </Card>
     );
   }

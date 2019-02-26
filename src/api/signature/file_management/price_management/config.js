@@ -44,11 +44,14 @@ const controls = [
 ];
 
 const cols = [
-  {key:'a',title:'费用项目'},
-  {key:'b',title:'价格'},
-  {key:'c',title:'计量单位'},
-  {key:'d',title:'本期总数量'},
-  {key:'e',title:'总金额'},
+  {key:'index',title:'序号',type:'index'},
+];
+
+const colsButtons = [
+  {key:'add' , title: '新增'},
+  {key:'copyAdd' , title: '复制'},
+  {key:'edit' , title: '编辑'},
+  {key:'del' , title: '删除'},
 ];
 
 
@@ -64,6 +67,7 @@ const config = {
   },
   edit:{
     controls,
+    colsButtons,
     buttons:[
       {key:'close',title:'关闭'},
       {key:'save',title:'保存'},
