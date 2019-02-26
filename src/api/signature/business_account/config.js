@@ -32,7 +32,7 @@ const buttons = [
 ];
 
 const customerControls = [
-  { key: 'customerName', title: '客户名称', type: 'select', dictionary: name.CUSTOMER_TYPE},
+  { key: 'customerName', title: '客户名称', type: 'text'},
   { key: 'customerCode', title: '客户编码', type: 'readonly'},
   { key: 'remarks', title: '备注', type: 'textArea', span: 4},
 ];
@@ -44,7 +44,7 @@ const packageTableCols = [
 ];
 
 const orderControls = [
-  {key: 'orderAmount', title: '订购金额', required: true}
+  {key: 'orderAmount', title: '订购金额', required: true, type: 'text'}
 ];
 
 const config = {

@@ -6,6 +6,7 @@ import {buildOrderPageState} from '../../../common/state';
 import createTabPage from "../../../standard-business/createTabPage/index";
 import {EnhanceLoading} from '../../../components/Enhance';
 import OrderContainer from './OrderContainer';
+import EditPageContainer from './EditPageContainer'
 
 const STATE_PATH = ['business_account'];
 const URL_CONFIG = '/api/signature/business_account/config';
@@ -20,7 +21,7 @@ const getSelfState = (rootState) => {
 const initActionCreator = () => async(dispatch) => {
   try{
     dispatch(action.assign({status: 'loading'}));
-    const {index, edit} = helper.getJsonResult( await  helper.fetchJson(URL_CONFIG));
+    const {index, edit, credits, viewQuota} = helper.getJsonResult( await  helper.fetchJson(URL_CONFIG));
     const data = helper.getJsonResult( await helper.fetchJson(URL_LIST));
     const other = {
       tabs: [{key: 'index', title: '企业账户列表'}],
@@ -28,7 +29,9 @@ const initActionCreator = () => async(dispatch) => {
       currentPage: 1,
       searchData: {},
       status: 'page',
-      editConfig: edit
+      editConfig: edit,
+      creditSettingConfig: credits,
+      viewQuotaConfig: viewQuota
     };
     const payload = buildOrderPageState(data, index, other);
     dispatch(action.create(payload));
@@ -71,7 +74,7 @@ const getComponent = (activeKey) => {
   if(activeKey === 'index'){
     return OrderContainer
   }else{
-    return ''
+    return EditPageContainer
   }
 };
 

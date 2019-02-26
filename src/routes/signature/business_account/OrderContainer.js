@@ -4,7 +4,7 @@ import {Action} from '../../../action-reducer/action';
 import OrderPage from '../../../components/OrderPage';
 import {getPathValue} from '../../../action-reducer/helper';
 
-const URL_LIST = './api/signature/business_account/list';
+const URL_LIST = '/api/signature/business_account/list';
 
 const STATE_PATH = ['business_account'];
 const action = new Action(STATE_PATH);
@@ -61,8 +61,15 @@ const checkAction = (isAll, checked, rowIndex) => {
 };
 
 //订购
-const orderAction = () => {
-
+const orderAction = async (dispatch, getState) => {
+  const {editConfig, tabs} = getSelfState(getState());
+  if(isTabExist(tabs, 'edit')){
+    dispatch(action.assign({activeKey: 'edit'}));
+    return
+  }
+  const add = {...editConfig, value: {}};
+  const tab = {key: 'edit', title: '订购'};
+  dispatch(action.assign({[tab.key]: add, activeKey: tab.key, tabs: tabs.concat(tab) }))
 };
 
 //设置信用额度
@@ -107,5 +114,3 @@ const actionCreators = {
 const Container = connect(mapStateToProps, actionCreators)(OrderPage);
 export default Container;
 export {updateTable};
-
-

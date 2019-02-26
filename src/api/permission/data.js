@@ -12,7 +12,7 @@ const data = {
       enterprise_documents: '企业文件',
       file_management: '档案管理',
       account_management: '账号管理',
-      business_account: '企业中户金额',
+      business_account: '企业账户金额',
 
 
       enterprise_staff: '企业员工',
