@@ -14,6 +14,7 @@ const children = [
     require('./file_management/enterprise_staff').default,
     require('./file_management/signature_group').default,
     require('./file_management/template_management').default,
+    require('./file_management/price_management').default,
     require('./account_management/enterprise_account_management').default,
     require('./account_management/enterprise_certification').default,
     require('./account_management/personal_certification').default,

@@ -26,6 +26,7 @@ const file = [
 //企业档案管理
 const company = [
   {key: 'worker'},   //企业员工
+    {key: 'price_management'} //价格管理
 ];
 
 

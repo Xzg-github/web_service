@@ -50,6 +50,7 @@ const rootReducer = combineReducers({
     //企业档案管理
     worker: create('worker', false),
 
+    price_management: create('price_management', false),
     //账号管理
     enterprise_certification: create('enterprise_certification',false),
     enterprise_account_management: create('enterprise_account_management'),

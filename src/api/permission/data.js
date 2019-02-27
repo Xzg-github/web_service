@@ -23,6 +23,7 @@ const data = {
       businessArchives: '企业档案',
       personalProfile: '个人账号档案',
       businessProject: '业务项目',
+      price_management: '价格管理',
 
 
       enterprise_certification: '企业认证',

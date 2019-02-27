@@ -7,6 +7,7 @@ import { getObject } from '../../../common/common';
 import createOrderTabPageContainer, {buildOrderTabPageCommonState, updateTable} from "../../../standard-business/OrderTabPage/createOrderTabPageContainer";
 import ShowPageContainer,{buildShowState} from "./ShowPageContainer/ShowPageContainer";
 import showPopup from '../../../standard-business/showPopup';
+import showDiaLog from './showDiaLog/AddDialogContainer';
 
 const URL_CONFIG = '/api/signature/signature_center/config';
 const urlList = '/api/signature/signature_center/list';
@@ -134,9 +135,22 @@ const clickActionCreator = (tabKey, key) => {
   }
 };
 
+
+// 认证
+const onAuthenticationActionCreator = () => async(dispatch, getState) => {
+  const controls = [
+    {key:'identNo',title:'组织机构代码或者统一社会信息代码 ',type:'text',required:true},
+    {key:'name',title:'企业名称',type:'text',required:true},
+  ];
+  if (await showDiaLog(controls, {} ,false)) {
+  }
+};
+
+
 const actionCreators = {
   onClick: clickActionCreator,
-  onLink: onLinkActionCreator
+  onLink: onLinkActionCreator,
+  onAuthentication:onAuthenticationActionCreator
 };
 
 export default createOrderTabPageContainer(action, getSelfState, actionCreators);
