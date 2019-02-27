@@ -82,6 +82,18 @@ const config = {
       { key: 'usedAmount', title: '已用金额'},
       { key: 'balance', title: '余额'},
     ]
+  },
+  pay: {
+    tableCols: [
+      { key: 'a', title: '文件签署单价'},
+      { key: 'b', title: '数量'},
+      { key: 'c', title: '订购金额'}
+    ],
+    controls:[
+      { key: 'alipay', title: '支付宝', type: 'radio'},
+      { key: 'weChat', title: '微信', type: 'radio'},
+      { key: 'publicAccounts', title: '对公账户', type: 'radio'}
+    ]
   }
 };
 

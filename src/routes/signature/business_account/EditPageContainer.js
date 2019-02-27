@@ -3,7 +3,9 @@ import {EnhanceLoading} from '../../../components/Enhance';
 import {Action} from '../../../action-reducer/action';
 import {getPathValue} from '../../../action-reducer/helper';
 import helper from '../../../common/common';
-import EditPage from './EditPage'
+import EditPage from './EditPage';
+import showPopup from '../../../standard-business/showPopup';
+import AddDialogContainer, {buildAddState} from './AddDialog/AddDialogContainer';
 
 const STATE_PATH =  ['business_account', 'edit'];
 const PARENT_STATE_PATH = ['business_account'];
@@ -24,7 +26,10 @@ const changeActionCreator = (key, value) => {
 
 //立即支付
 const payActionCreator = (dispatch, getState) => {
-
+  const {payConfig} = getParentState(getState());
+  const item = []
+  buildAddState(payConfig, item, dispatch);
+  showPopup(AddDialogContainer)
 };
 //关闭订购页签
 const closeActionCreator = (dispatch, getState) => {
