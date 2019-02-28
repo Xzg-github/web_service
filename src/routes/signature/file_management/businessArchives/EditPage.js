@@ -58,11 +58,11 @@ class EditPage extends React.Component{
           </div>
           <div className={s.imgContainer} key='institutionCode'>
             <p className={s.imgTitle}><span>*</span>组织代码机构证/多合一营业执照</p>
-            <img className={s.img} src={require('../../../../../public/test.jpg')}/>
+            <img className={s.img} src={url}/>
           </div>
           <div className={s.imgContainer} key='upload'>
             <p className={s.imgTitle}><span>*</span>按要求上传申请表</p>
-            <img className={s.img} src={require('../../../../../public/test.jpg')}/>
+            <img className={s.img} src={url}/>
             <p className={s.step}>步骤一: 请下载《企业认证申请表》</p>
           </div>
         </div>
@@ -71,11 +71,11 @@ class EditPage extends React.Component{
         <div  className={s.business}>
           <div className={s.imgContainer} key= 'representative'>
             <p className={s.imgTitle}><span>*</span>法定代表人身份证正反面复印件</p>
-            <img className={s.img} src={require('../../../../../public/test.jpg')}/>
+            <img className={s.img} src={url}/>
           </div>
           <div className={s.imgContainer} key= 'manager'>
             <p className={s.imgTitle}><span>*</span>账号管理人身份证正反面复印件</p>
-            <img className={s.img} src={require('../../../../../public/test.jpg')}/>
+            <img className={s.img} src={url}/>
           </div>
         </div>
         <div className={s.footer}>{this.toButton()}</div>
