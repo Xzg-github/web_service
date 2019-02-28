@@ -20,13 +20,9 @@ const initActionCreator = () => async (dispatch, getState) => {
   const {editConfig} = getPathValue(getState(), STATE_PATH);
   const {tabKey,value ={}} = getSelfState(getState());
   dispatch(action.assign({status: 'loading'}, tabKey));
-  if(value.list){
-    for(let item of value.list){
-      if(item.registerType === 'phone_number'){
-        item.account = item.phoneNumber;
-      }else if(item.registerType === 'email'){
-        item.account = item.email;
-      }
+  if(value.childDto && value.childDto.length > 0){
+    for(let item of value.childDto){
+      item.account = item.registerType === 'phone_number' ? item.notifyPhone : item.notifyEmail;
     }
   }
 
@@ -34,7 +30,7 @@ const initActionCreator = () => async (dispatch, getState) => {
     dispatch(action.assign({
       ...editConfig,
       value,
-      tableItems:value.list ? value.list : [],
+      tableItems:value.childDto ? value.childDto : [],
       status: 'page',
       options: {},
     }, tabKey));
@@ -89,14 +85,13 @@ const downActionCreator = (props) => (dispatch,getState) => {
 const addActionCreator = (props) => async(dispatch,getState) => {
   const {chooseGoodsConfig,tabKey,tableItems} = props;
   const items = await showStaffDialog(chooseGoodsConfig);
-  const copyItems = JSON.parse(JSON.stringify(tableItems))
+  const copyItems = JSON.parse(JSON.stringify(tableItems));
   if (items.length > 0) {
     for(let item of items){
       let isItmes = copyItems.filter(i => {
         let id = i.userAccountId ? i.userAccountId :i.id;
-        return id === item.id;
+        return id === item.userAccountId;
       });
-
       if(isItmes.length == 0){
 
         copyItems.push(item)
@@ -113,14 +108,21 @@ const okActionCreator = (props) => async (dispatch,getState) => {
     dispatch(action.assign({valid: true},tabKey));
     return;
   }
-  value.ids = [];
-  /*userAccountId 有就取userAccountId 没有就id
-  * */
-  for(let items of tableItems){
-    value.ids.push(items.userAccountId ? items.userAccountId : items.id);
-  }
+  let childDto = [];
+  for(let [index,elem] of new Map( tableItems.map( ( item, i ) => [ i, item ] ) )){
+    let i = {
+      userAccountId:elem.userAccountId,
+      signGroupMemberSeq:index
+    };
+    if(elem.id){
+      i.memberId = elem.id
+    }
+    childDto.push(i)
+  };
+
+
   let body = {
-    ids:value.ids,
+    childDto,
     signGroupName:value.signGroupName,
     signGroupNote:value.signGroupNote,
   };

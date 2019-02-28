@@ -54,14 +54,8 @@ const searchActionTor = () => async (dispatch, getState) => {
     return
   }
   for(let item of result){
-    if(item.registerType === 'phone_number'){
-      item.account = item.phoneNumber;
-    }else if(item.registerType === 'email'){
-      item.account = item.email;
-    }
+    item.account = item.registerType === 'phone_number' ? item.notifyPhone : item.notifyEmail;
   }
-
-
   dispatch(action.assign({tableItems:result}))
 };
 

@@ -23,8 +23,11 @@ api.post('/list', async (req, res) => {
 
 // 联系人列表
 api.post('/searchList', async (req, res) => {
-  const url = `${host}/user/detailByPhoneOrEmailOrName/${req.body.filter}`;
-  res.send(await fetchJsonByNode(req,url));
+  const body = {
+    param:req.body.filter
+  };
+  const url = `${host}/sign_group/select_member_info`;
+  res.send(await fetchJsonByNode(req,url,postOption(body)));
 });
 
 

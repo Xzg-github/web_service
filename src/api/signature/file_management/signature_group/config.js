@@ -9,9 +9,11 @@ const buttons = [
 
 const tableCols = [
   {key:'signGroupName',title:'群组名称'},
-  {key:'signGroupNumber',title:'组员人数'},
-  {key:'signGroupPeople',title:'组员'},
+  {key:'companyContactMemberNum',title:'组员人数'},
+  {key:'companyContactMemberName',title:'组员'},
   {key:'signGroupNote',title:'备注'},
+  {key:'insertTime',title:'创建时间'},
+  {key:'insertUser',title:'创建人员'},
 ];
 
 const controls = [

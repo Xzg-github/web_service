@@ -12,6 +12,7 @@ const STATE_PATH =  ['signature_group'];
 
 const URL_LIST = '/api/signature/file_management/signature_group/list';
 const URL_DEL = '/api/signature/file_management/signature_group/delete';
+const URL_ONE = '/api/signature/file_management/signature_group/getId';//获取单条
 
 const toTableItems = ({keys, data}) => {
   if (!keys) {
@@ -95,27 +96,46 @@ const editActionCreator = async (dispatch, getState) => {
     helper.showError('请勾选一条记录进行编辑');
     return;
   }else {
+    const url = `${URL_ONE}/${tableItems[index].id}`;
+    const {result,returnCode,returnMsg} = await helper.fetchJson(url);
+    if(returnCode!=0){
+      helper.showError(returnMsg)
+      return
+    }
+
     const tabKey = `edit_${tableItems[index].id}`;
     let title = `编辑_${tableItems[index].signGroupName}`;
     if (helper.isTabExist(tabs, tabKey)) {
       dispatch(action.assign({activeKey: tabKey}));
     } else {
 
-      dispatch(action.assign(buildPageState (tabs,tabKey,title,tableItems[index])));
+      dispatch(action.assign(buildPageState (tabs,tabKey,title,result)));
     }
 
   }
 };
 
+const findCheckedIndex1 = (items) => {
+  const index = items.reduce((result = [], item, index) => {
+    item.checked && result.push(index);
+    return result;
+  }, []);
+  return !index.length ? -1 : index;
+};
 
 const delActionCreator = async (dispatch, getState) => {
   const {tableItems} = getSelfState(getState());
-  const index = helper.findOnlyCheckedIndex(tableItems);
+  const index = findCheckedIndex1(tableItems);
   if (index === -1) {
-    helper.showError('请勾选一条记录进行删除');
+    helper.showError('请勾选记录进行删除');
     return;
   }else {
-    let json = await helper.fetchJson(`${URL_DEL}/${tableItems[index].id}`, 'delete');
+    let ids = [];
+    index.forEach(index => {
+      ids.push(tableItems[index].id)
+    });
+
+    const json = await helper.fetchJson(URL_DEL,helper.postOption(ids));
 
     if(json.returnCode !== 0) {
       helper.showError(json.returnMsg);
