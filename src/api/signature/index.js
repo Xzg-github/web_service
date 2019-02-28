@@ -6,7 +6,9 @@ import apiMonthlyBill from './monthly_bill'
 import apiEnterpriseDocuments from './enterprise_documents'
 import apiFileManagement from './file_management'
 import apiAccountManagement from './account_management'
-import apiBusinessAccount from './business_account'
+import apiBusinessAccount from './business_account';
+import apiBusinessOrder from './businessOrder';
+import apiCompanyFileManagement from './company_file_management'
 
 
 let api = express.Router();
@@ -18,6 +20,8 @@ api.use('/enterprise_documents', apiEnterpriseDocuments);
 api.use('/file_management', apiFileManagement);
 api.use('/business_account', apiBusinessAccount);
 api.use('/account_management', apiAccountManagement);
+api.use('/businessOrder', apiBusinessOrder);
+api.use('/company_file_management', apiCompanyFileManagement);
 
 
 export default api;
