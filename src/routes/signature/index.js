@@ -14,13 +14,17 @@ const children = [
     require('./file_management/enterprise_staff').default,
     require('./file_management/signature_group').default,
     require('./file_management/template_management').default,
+    require('./file_management/price_management').default,
     require('./account_management/enterprise_account_management').default,
     require('./account_management/enterprise_certification').default,
     require('./account_management/personal_certification').default,
     require('./account_management/personal_account_management').default,
     require('./business_account').default,
     require('./file_management/businessArchives').default,
-    require('./businessOrder').default
+    require('./businessOrder').default,
+    require('./file_management/personalProfile').default,
+    require('./company_file_management/worker').default,
+    require('./file_management/businessProject').default,
 ];
 
 export default RouterHelper(prefix, title, children);

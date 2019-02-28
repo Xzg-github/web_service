@@ -64,8 +64,11 @@ const changeActionCreator = (keyValue,key) => async(dispatch, getState) => {
 const nextActionCreator = () => async(dispatch, getState) => {
   dispatch(action.assign({loading:true}));
   const {value} = getSelfState(getState());
-  const body = {...value};
-  delete body.userAccountState;
+  const body = {
+    id:value.accountId,
+    idNumber:value.idNumber,
+    realName:value.realName
+  };
   const {returnCode,returnMsg} = await helper.fetchJson(URL_NEXT,helper.postOption(body));
   if(returnCode!==0){
     helper.showError(returnMsg);

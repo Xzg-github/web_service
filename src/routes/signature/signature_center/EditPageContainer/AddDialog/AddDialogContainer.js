@@ -35,7 +35,6 @@ const changeActionCreator = (event) => (dispatch, getState) =>{
   dispatch(action.assign({tableItems: newTableItems}));
 };
 const okActionCreator = ({okFunc}) => async() => {
-  console.log(okFunc)
   okFunc();
 };
 

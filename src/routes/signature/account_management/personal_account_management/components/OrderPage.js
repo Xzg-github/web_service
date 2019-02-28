@@ -31,7 +31,6 @@ class OrderPage extends React.Component {
   };
 
   toForm = (props) => {
-    console.log(props);
     return(
       <div>{props.LABELS.map((item, index) =>{
         return <p key={index}>{`${item.title}:`}&nbsp;&nbsp;{props.value[item.key]}{item.type ?this.toIcon(item.key,item):null}</p>
@@ -43,8 +42,8 @@ class OrderPage extends React.Component {
   remind = (props) => {
     const propsInput = {
       style: { width: '100px' },
-      value: props.value['dayNumber'],
-      onChange:(value) => props.onChange('dayNumber',value)
+      value: props.value['daysOfAdvanceNotice'],
+      onChange:(value) => props.onChange('daysOfAdvanceNotice',value)
     };
     return (
       <div>
@@ -54,9 +53,15 @@ class OrderPage extends React.Component {
   };
 
   check = (props) => {
+    const chekckProps = {
+      checkedChildren:'开',
+      unCheckedChildren:'关',
+    };
     return(
       <div>{props.checkItems.map((item, index) =>{
-        return <p key={index}>{`${item.title}:`}<Switch checkedChildren="开" unCheckedChildren="关" /></p>
+        return <p key={index}>{`${item.title}:`}<Switch {...chekckProps}
+                                                        onChange={(checked)=>{props.onChange(item.key,checked)}}
+                                                        checked={props.value[item.key]}/></p>
       })}</div>
     )
   };

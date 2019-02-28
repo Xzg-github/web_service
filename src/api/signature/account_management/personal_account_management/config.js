@@ -16,12 +16,12 @@ const oneControls = [
 const LABELS = [
   //{key: 'qymc', title: '账号头像',type:'avatar'},
   {key: 'grzh', title: '个人账号'},
-  {key: 'password', title: '登录密码',type:'edit'},
+  {key: 'accountPassword', title: '登录密码',type:'edit'},
   {key: 'realName', title: '真实姓名'},
   {key: 'idNumber', title: '身份账号'},
-  {key: 'phoneNumber', title: '手机号码'},
-  {key: 'frxm', title: '电子邮件'},
-  {key: 'frsfzh', title: '归属企业'},
+  {key: 'notifyPhone', title: '手机号码'},
+  {key: 'notifyEmail', title: '电子邮件'},
+  {key: 'companyName', title: '归属企业'},
 ];
 
 const two_buttons = [
@@ -175,8 +175,8 @@ const config = {
     controls:oneControls,
     LABELS,
     checkItems:[
-      {key: 'frsfzh', title: '邮件通知'},
-      {key: 'zhglrxm', title: '短信通知'},
+      {key: 'isNotifiedByEmail', title: '邮件通知'},
+      {key: 'isNotifiedByPhone', title: '短信通知'},
     ],
     diaLogOne:{
       title:'修改密码',

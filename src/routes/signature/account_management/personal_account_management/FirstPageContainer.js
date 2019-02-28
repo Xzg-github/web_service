@@ -5,12 +5,15 @@ import helper,{getObject, swapItems} from '../../../../common/common';
 import {Action} from '../../../../action-reducer/action';
 import {getPathValue} from '../../../../action-reducer/helper';
 import showDiaLogOne from './ShowDiaLog/DialogContainer';
-import showConfirm from './ShowDiaLog/ConfirmContainer';
+
 
 const TAB_KEY = 'one';
 const STATE_PATH =  ['personal_account_management'];
 
 const URL_LIST = '/api/signature/account_management/personal_account_management/person';
+const URL_DAYS = '/api/signature/account_management/personal_account_management/updateDays';
+const URL_EMAIL = '/api/signature/account_management/personal_account_management/email';
+const URL_PHONE = '/api/signature/account_management/personal_account_management/phone';
 
 
 function getCookie(cookieName) {
@@ -40,10 +43,12 @@ const initActionCreator = () => async (dispatch, getState) => {
   try {
     let accountId =  getCookie('accountId');
     const result =  helper.getJsonResult(await helper.fetchJson(`${URL_LIST}/${accountId}`));
-    result.grzh = result.registerType === 'phone_number' ? result.phoneNumber : '';
+    result.grzh = result.registerType === 'phone_number' ? result.notifyPhone : result.notifyEmail;
+    result.isNotifiedByEmail = result.isNotifiedByEmail === 'true' ? true : false;
+    result.isNotifiedByPhone = result.isNotifiedByPhone === 'true' ? true : false;
     dispatch(action.assign({
       ...state,
-      value:{...result,password:'******'},
+      value:{...result,accountPassword:'******'},
       status: 'page',
     }, TAB_KEY));
 
@@ -60,23 +65,9 @@ const passwordAction = () => async (dispatch, getState) => {
   }
 };
 
-const dgyhzhAction = () => async (dispatch, getState) => {
-  if (await showConfirm()) {
-
-  }
-};
-
-const frxmAction = () => async (dispatch, getState) => {
-  const {diaLogTwo} = getSelfState(getState());
-  if (await showDiaLogOne(diaLogTwo,{})) {
-
-  }
-};
 
 const toolbarActions = {
   password:passwordAction,
-  dgyhzh:dgyhzhAction,
-  frxm:frxmAction
 };
 
 const clickActionCreator = (key) => {
@@ -87,8 +78,40 @@ const clickActionCreator = (key) => {
   }
 };
 
-const changeActionCreator = (key, value) => (dispatch,getState) =>{
-  console.log(value);
+const changeActionCreator = (key, value) => async(dispatch,getState) =>{
+  const state = getSelfState(getState());
+  let body;
+  if(key === 'daysOfAdvanceNotice'){
+    body = {
+      id : state.value.id,
+      daysOfAdvanceNotice:value
+    };
+    const {result,returnCode,returnMsg} = await helper.fetchJson(URL_DAYS,helper.postOption(body));
+    if(returnCode !== 0){
+      helper.showError(returnMsg);
+      return
+    }
+  }else  if(key === 'isNotifiedByEmail'){
+    body = {
+      accountSecureId : state.value.accountSecureId,
+      isNotified:value+''
+    };
+    const {result,returnCode,returnMsg} = await helper.fetchJson(URL_EMAIL,helper.postOption(body));
+    if(returnCode !== 0){
+      helper.showError(returnMsg);
+      return
+    }
+  }else  if(key === 'isNotifiedByPhone'){
+    body = {
+      accountSecureId : state.value.accountSecureId,
+      isNotified:value+''
+    };
+    const {result,returnCode,returnMsg} = await helper.fetchJson(URL_PHONE,helper.postOption(body));
+    if(returnCode !== 0){
+      helper.showError(returnMsg);
+      return
+    }
+  }
   dispatch(action.assign({[key]: value}, [TAB_KEY,'value']));
 };
 
