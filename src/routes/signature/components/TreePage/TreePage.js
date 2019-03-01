@@ -48,7 +48,7 @@ class TreePage extends React.Component {
       value: this.props.inputValue || '',
       placeholder: this.props.placeholder,
       onChange: this.onInputChange,
-      onSearch: this.props.onClick.bind(null, 'search')
+      onSearch: this.props.onClick.bind(null, 'searchTree')
     }
   };
 
