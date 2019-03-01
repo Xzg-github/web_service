@@ -60,9 +60,7 @@ const recordActionCreator = async (dispatch, getState) => {
   const checkedItemIndex = helper.findOnlyCheckedIndex(tableItems);
   if (checkedItemIndex === -1) return showError('请选择一条记录');
   //依据id获取详细数据
-  const {returnCode, returnMsg,result} = helper.getJsonResult(
-    await fetchJson(URL_DETAIL, postOption(tableItems[checkedItemIndex]))
-  );
+  const {returnCode, returnMsg,result} = await fetchJson(URL_DETAIL, postOption(tableItems[checkedItemIndex]))
   if (returnCode !== 0) return showError(returnMsg);
   const tabKey = `id_${tableItems[checkedItemIndex].id}}`;
   if (helper.isTabExist(tabs, tabKey)) {
@@ -70,7 +68,7 @@ const recordActionCreator = async (dispatch, getState) => {
   } else {
     const payload = {
       activeKey: tabKey,
-      tabs: [...tabs, {key: tabKey, title: tableItems[checkedItemIndex]['orderNumberorderNumber']}],
+      tabs: [...tabs, {key: tabKey, title: tableItems[checkedItemIndex]['orderNumber']}],
       [tabKey]: {
         ...editPageConfig, value: result
       }
@@ -122,6 +120,22 @@ const formSearchActionCreator = (key, filter, config) => async (dispatch, getSta
 
 //展示详细
 const linkActionCreator = (key, rowIndex, item) => async (dispatch, getState) => {
+  const {tabs, editPageConfig} = getSelfState(getState());
+  const {returnCode, returnMsg,result} = await fetchJson(URL_DETAIL, postOption(item))
+  if (returnCode !== 0) return showError(returnMsg);
+  const tabKey = `id_${item.id}}`;
+  if (helper.isTabExist(tabs, tabKey)) {
+    dispatch(action.assign({activeKey: tabKey}));
+  } else {
+    const payload = {
+      activeKey: tabKey,
+      tabs: [...tabs, {key: tabKey, title: item['orderNumber']}],
+      [tabKey]: {
+        ...editPageConfig, value: result
+      }
+    }
+    dispatch(action.assign(payload));
+  }
 };
 
 const actionCreators = {
