@@ -1,7 +1,7 @@
 import React, {PropTypes} from 'react';
 import {Card, Title, Indent, SuperForm, SuperToolbar} from '../../../../components';
 import withStyles from 'isomorphic-style-loader/lib/withStyles';
-import s from './EditPage.less'
+import s from './EditPage.less';
 
 class EditPage extends React.Component{
   static propTypes = {

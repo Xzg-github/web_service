@@ -27,5 +27,10 @@ api.post('/audit', async (req, res) => {
   res.send({returnCode: 0, returnMsg: '操作成功'});
 });
 
+//获取消费记录
+api.post('/detail', async (req, res) => {
+  res.send({returnCode: 0, returnMsg: '操作成功'})
+});
+
 
 export default api;
