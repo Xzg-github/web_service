@@ -26,14 +26,13 @@ const LABELS = [
 
 const two_buttons = [
   {key:'add',title:'新增',bsStyle:'primary'},
-  {key:'edit',title:'编辑'},
   {key:'del',title:'删除'},
 ];
 
 
 
 const two_controls = [
-  {key:'b',title:'签章名称',type:'text',required:true},
+  {key:'signSealName',title:'签章名称',type:'text',required:true},
 ];
 
 

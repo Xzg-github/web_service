@@ -27,14 +27,17 @@ class SecondPage extends React.Component {
     return <SuperToolbar {...props} />;
   };
 
-  toUpload = () => {
+  toUpload = (item) => {
 
     const props = {
       onCheck:this.props.onCheck,
       onRadio:this.props.onRadio,
-      index:'a',
+      result:item,
+      key:item.id,
+      index:item.id,
       checkValue:this.props.checkValue,
-      radioValue:this.props.radioValue
+      radioValue:this.props.radioValue,
+      imgUrl:item.signSealImgBase64
     };
     return <UploadBox {...props} />;
   };
@@ -46,12 +49,11 @@ class SecondPage extends React.Component {
         <Card>
           {this.props.buttons.length > 0 ? this.toToolbar() : null}
           <div className={s.divBox}>
-            {this.toUpload()}
-            {this.toUpload()}
-            {this.toUpload()}
-            {this.toUpload()}
-            {this.toUpload()}
-            {this.toUpload()}
+            {
+              props.uploadList.map((item,index) =>{
+                return this.toUpload(item)
+              })
+            }
           </div>
 
         </Card>

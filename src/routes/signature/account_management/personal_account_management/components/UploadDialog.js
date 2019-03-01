@@ -18,8 +18,12 @@ const RadioGroup = Radio.Group;
 class UploadDialog extends React.Component {
   static propTypes = {
     onCheck:PropTypes.func,
+    onRadio:PropTypes.func,
     index:PropTypes.string,
-    checkValue:PropTypes.object
+    checkValue:PropTypes.object,
+    radioValue:PropTypes.object,
+    result:PropTypes.object,
+    imgUrl:PropTypes.string,
   };
 
 
@@ -30,13 +34,13 @@ class UploadDialog extends React.Component {
 
 
   render() {
-    const { checkValue,index,onCheck,onRadio,radioValue } = this.props;
+    const { checkValue,index,onCheck,onRadio,radioValue ,imgUrl} = this.props;
     return (
       <div className={s.root}>
         <div className={s.box}>
           <Checkbox className={s.checkbox} checked={checkValue[index]} onChange={(e)=>onCheck(e.target.checked,index)}/>
           <div className={s.boxTop}>
-            <img src={ require('../../../../../../public/default_picture.png')} alt=""/>
+            <img src={imgUrl?imgUrl: require('../../../../../../public/default_picture.png')} alt=""/>
           </div>
           <div className={s.boxBottom}>
             <RadioGroup value={radioValue[index]} onChange={(e)=>onRadio(e.target.checked,index)}>

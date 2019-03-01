@@ -38,7 +38,7 @@ const okActionCreator = () => async (dispatch, getState) => {
     helper.showError(returnMsg);
     return
   }
-  window.open(result);
+  window.open(returnMsg);
 };
 
 const closeActionCreator = () => (dispatch) => {

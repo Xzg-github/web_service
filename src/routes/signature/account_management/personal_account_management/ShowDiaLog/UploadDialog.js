@@ -28,8 +28,9 @@ class UploadDialog extends React.Component {
     const { fileList=[], onChange, onRemove, onPreview ,isLook} = this.props;
     const props = {
       name: 'file',
+      listType:'picture-card',
       action: '/api/proxy/zuul/archiver_service/file/upload/document',
-      fileList:[],
+      fileList,
       onChange,
       onRemove:isLook ? false : onRemove,
       onPreview,
@@ -38,11 +39,9 @@ class UploadDialog extends React.Component {
     };
 
     return (
-        <Upload {...props}>
-          <Button>
-            +
-          </Button>
-        </Upload >
+      <Upload {...props}>
+        {(fileList.length < 1 && !isLook) && this.toUploadIcon()}
+      </Upload >
     );
   };
 
@@ -124,10 +123,8 @@ class UploadDialog extends React.Component {
       <ModalWithDrag {...this.getProps()}>
         {this.Alert()}
         {this.toForm()}
-        <div className={s.lable}>
-          {this.toLabel()}
-          {this.toUpload()}
-        </div>
+        {this.toLabel()}
+        {this.toUpload()}
         {this.toPreviewDialog()}
       </ModalWithDrag>
     );

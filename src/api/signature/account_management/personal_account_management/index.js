@@ -41,5 +41,31 @@ api.post('/phone', async (req, res) => {
   res.send(await fetchJsonByNode(req,url,postOption(req.body)));
 });
 
+//two
+//获取页面信息
+api.get('/sign', async (req, res) => {
+  const {accountId} = req.cookies;
+  const url = `${host}/sign_seal/list_sign_seal/${accountId}`;
+  res.send(await fetchJsonByNode(req,url));
+});
+
+//新增
+api.post('/addSign', async (req, res) => {
+  const url = `${host}/sign_seal/edit_sign_seal_name`;
+  res.send(await fetchJsonByNode(req,url,postOption(req.body)));
+});
+
+//设置默认签证
+api.get('/default/:id', async (req, res) => {
+  const url = `${host}/sign_seal/edit_is_defalut_seal/${req.params.id}/1`;
+  res.send(await fetchJsonByNode(req,url));
+});
+
+//删除
+api.delete('/delSign/:id', async (req, res) => {
+  const url = `${host}/sign_seal/delete_sign_seal/${req.params.id}`;
+  res.send(await fetchJsonByNode(req,url,'delete'));
+});
+
 
 export default api;

@@ -3,8 +3,12 @@ import UploadDialog from './UploadDialog';
 import {Action} from '../../../../../action-reducer/action';
 import showPopup from '../../../../../standard-business/showPopup';
 import helper from '../../../../../common/common';
+import {getCookie} from '../../personal_certification/RootContainer';
+import execWithLoading from '../../../../../standard-business/execWithLoading';
 
 const action = new Action(['temp'], false);
+
+const URL_ADD = '/api/signature/account_management/personal_account_management/addSign';//新增
 
 const msg = [
   '背景透明签名制作过程参考：',
@@ -33,25 +37,48 @@ const buildState = async(config, items,edit) => {
     edit,
     previewVisible: false,
     previewImage: '',
-    msg
+    msg,
+    srcImg:null
   };
 };
 
 const okActionCreator = () => async (dispatch, getState) => {
-  const {fileList=[]} = getSelfState(getState());
+  const {fileList=[],value,controls} = getSelfState(getState());
+  if (!helper.validValue(controls, value)) {
+    dispatch(action.assign({valid: true}));
+    return;
+  }
+  let accountId =  getCookie('accountId');
   const formData = new FormData();
   fileList.forEach((file) => {
     formData.append('file', file);
   });
 
-  fetch('/api/proxy/zuul/archiver_service/file/upload/document',{
-    method: 'post',
-    body: formData,
-  }).then(function (res) {
-    return res.json()
-  }).then(function (json) {
-    console.log(json);
-  })
+  execWithLoading(async () => {
+    fetch(`/api/proxy/sign_seal/upload_sign_seal/${accountId}`,{
+      method: 'post',
+      body: formData,
+    }).then(function (res) {
+      return res.json()
+    }).then(async function (json) {
+      if(json.returnCode !==0){
+        helper.showError(json.returnMsg);
+        return
+      }
+      const body = {
+        id:json.result,
+        signSealName:value.signSealName
+      };
+      const {result,returnCode,returnMsg} = await helper.fetchJson(URL_ADD,helper.postOption(body))
+      if(returnCode !=0){
+        helper.showError(returnMsg);
+        return
+      }
+      helper.showSuccessMsg('新增成功')
+      dispatch(action.assign({visible: false, ok: true}));
+    })
+  });
+
 };
 
 const closeActionCreator = () => (dispatch) => {
@@ -86,9 +113,11 @@ const changeActionCreator = ({file, fileList}) => (dispatch,getState) => {
   reader.readAsDataURL(file);
   reader.onload =  (result) => {
     srcImg = result.target.result;
+    file.thumbUrl = srcImg
+    const newList = [file];
+    dispatch(action.assign({fileList:newList,srcImg:srcImg}))
   };
-  const newList = [file];
-  dispatch(action.assign({fileList:newList}))
+
 };
 
 const removeActionCreator = (file) => async (dispatch,getState) => {
@@ -115,8 +144,13 @@ const mapStateToProps = (state) => {
   return getSelfState(state);
 };
 
+const formChangeActionCreator = (key, value) => {
+  return action.assign({[key]: value}, 'value');
+};
+
 const actionCreators = {
   onChange: changeActionCreator,
+  onFormChange:formChangeActionCreator,
   onRemove: removeActionCreator,
   onClick: clickActionCreator,
   onExitValid: exitValidActionCreator,

@@ -14,7 +14,7 @@ import helper from '../../../../common/common';
 import FirstPageContainer from './FirstPageContainer';
 import ThirdPageContainer from './ThirdPageContainer';
 
-function getCookie(cookieName) {
+export const getCookie = (cookieName) =>{
   let strCookie = document.cookie;
   let arrCookie = strCookie.split("; ");
   for(let i = 0; i < arrCookie.length; i++){
