@@ -27,7 +27,7 @@ const changeActionCreator = (key, value) => {
 //立即支付
 const payActionCreator = (dispatch, getState) => {
   const {payConfig} = getParentState(getState());
-  const item = []
+  const item = [];
   buildAddState(payConfig, item, dispatch);
   showPopup(AddDialogContainer)
 };

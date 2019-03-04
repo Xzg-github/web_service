@@ -62,11 +62,11 @@ const editButton = [
 ];
 
 const editConfig = {
-  businessInfo, managerInfo, businessTitle: '企业信息', managerTitle: '管理人信息', editButton
+  businessInfo, managerInfo, businessTitle: '个人信息', managerTitle: '管理人信息', editButton
 };
 
 const tabs = [
-  {key: 'index', title: '企业档案列表', close: false}
+  {key: 'index', title: '个人档案列表', close: false}
 ];
 
 const config = {

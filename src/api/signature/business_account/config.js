@@ -65,7 +65,7 @@ const config = {
   },
   credits: {
     controls:[
-      { key: 'creditSetting', title: '信用额度设置', type: 'radio'}
+      { key: 'creditSetting', title: '是否允许透支', type: 'select', options: isOptions}
     ]
   },
   viewQuota: {
@@ -89,11 +89,12 @@ const config = {
       { key: 'b', title: '数量'},
       { key: 'c', title: '订购金额'}
     ],
-    controls:[
-      { key: 'alipay', title: '支付宝', type: 'radio'},
-      { key: 'weChat', title: '微信', type: 'radio'},
-      { key: 'publicAccounts', title: '对公账户', type: 'radio'}
-    ]
+    tabs:[
+      { key: 'alipay', title: '支付宝'},
+      { key: 'weChat', title: '微信'},
+      { key: 'publicAccounts', title: '对公账户'}
+    ],
+    tabActiveKey: 'alipay',
   }
 };
 

@@ -12,12 +12,12 @@ api.get('/config', async (req, res) => {
 
 // OrderPage Table数据
 api.post('/list', async (req, res) => {
-  res.send({returnCode: 0, result: {data:[{a:'123456'}]}});
+  res.send({returnCode: 0, result: {data:[{statusType:'waitIdentification',account:'123456'}]}});
 });
 
 // EditPage 页面数据
-api.post('/detail', async (res, req) => {
-  res.send({returnCode: 0, result: {data:[{a:'123456'}]}});
+api.post('/detail', async (req, res) => {
+  res.send({returnCode: 0, result: {data:[{statusType:'123456',account: '123456'}]}});
 });
 
 export default api;

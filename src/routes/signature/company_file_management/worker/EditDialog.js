@@ -5,11 +5,10 @@ import {Card} from 'antd';
 const Meta = Card.Meta;
 
 const MESSAGE = [
-  {key: 'account', title: '注册账号'},
-  {key: 'name', title: '真实姓名'},
-  {key: 'id', title: '身份证号'},
-  {key: 'email', title: '电子邮件'},
-  {key: 'number', title: '手机号码'},
+  {key: 'idNumber', title: '身份证号'},
+  {key: 'realName', title: '真实姓名'},
+  {key: 'notifyEmail', title: '电子邮件'},
+  {key: 'notifyPhone', title: '手机号码'},
 ];
 
 class SetDialog extends React.Component {
@@ -37,6 +36,7 @@ class SetDialog extends React.Component {
       width: 600,
       onOk: this.onClick.bind(null, 'ok'),
       onCancel: this.onClick.bind(null, 'close'),
+      onRefuse: this.onClick.bind(null, 'refuse'),
       afterClose: this.props.afterClose
     };
   };
@@ -48,12 +48,27 @@ class SetDialog extends React.Component {
     }
   };
 
-
   render() {
+    const url = 'http://img.mp.itc.cn/upload/20160906/9ef83821c2ae4d31b4341553f9d88a7f_th.jpg';
+    const {items} = this.props;
     return (
       <ModalWithDrag {...this.modalProps()}>
         <Title title="审核信息"/>
-        <div>{MESSAGE.map((item, index) => <div key={index}>{`${item.title}:`}</div>)}</div>
+        <div style={{overflow: 'hidden'}}>
+          <div style={{float: 'left'}}>{MESSAGE.map((item, index) => <div key={index}>{`${item.title}:`}</div>)}</div>
+          <div style={{float: 'left'}}>{MESSAGE.map((item, index)=><div key={index} data-no={!items[item.key]}>{items[item.key] || '无'}</div>)}</div>
+        </div>
+        <Title title="身份证信息"/>
+        <div>
+          <div>
+            <div>身份证正面</div>
+            <img src={url}/>
+          </div>
+          <div>
+            <div>身份证反面</div>
+            <img src={url}/>
+          </div>
+        </div>
       </ModalWithDrag>
     );
   }

@@ -3,7 +3,10 @@ import {search2} from '../../../common/search';
 import {Action} from '../../../action-reducer/action';
 import OrderPage from '../../../components/OrderPage';
 import {getPathValue} from '../../../action-reducer/helper';
-
+import showPopup from '../../../standard-business/showPopup';
+import helper from '../../../common/common';
+import AddDialogContainer, {buildAddState} from './Credit/AddDialogContainer';
+import ViewDialogContainer,{buildViewState} from './View/ViewDialogContainer';
 const URL_LIST = '/api/signature/business_account/list';
 
 const STATE_PATH = ['business_account'];
@@ -62,7 +65,12 @@ const checkAction = (isAll, checked, rowIndex) => {
 
 //订购
 const orderAction = async (dispatch, getState) => {
-  const {editConfig, tabs} = getSelfState(getState());
+  const {editConfig, tabs, tableItems} = getSelfState(getState());
+  const items = tableItems.filter(item => item.checked);
+  if(items.length !==1){
+    helper.showError('请勾选一条记录');
+    return
+  }
   if(isTabExist(tabs, 'edit')){
     dispatch(action.assign({activeKey: 'edit'}));
     return
@@ -73,13 +81,27 @@ const orderAction = async (dispatch, getState) => {
 };
 
 //设置信用额度
-const creditSettingAction = ( ) => {
-
+const creditSettingAction = async (dispatch, getState) => {
+  const {creditSettingConfig, tableItems} = getSelfState(getState());
+  const items = tableItems.filter(item => item.checked);
+  if(items.length !==1){
+    helper.showError('请勾选一条');
+    return
+  }
+  buildAddState(creditSettingConfig,  dispatch);
+  showPopup(AddDialogContainer)
 };
 
 //查看订购记录
-const viewQuotaAction = () => {
-
+const viewQuotaAction = async(dispatch, getState) => {
+  const {viewQuotaConfig, tableItems} = getSelfState(getState());
+  const item = tableItems.filter(item => item.checked);
+  if(item.length !==1){
+    helper.showError('请勾选一条');
+    return
+  }
+  buildViewState(viewQuotaConfig, item, dispatch);
+  showPopup(ViewDialogContainer)
 };
 
 const mapStateToProps = (state) => {

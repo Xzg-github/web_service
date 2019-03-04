@@ -1,7 +1,7 @@
 import React from 'react';
 import withStyles from 'isomorphic-style-loader/lib/withStyles';
 import { getObject } from '../../../../common/common';
-import {SuperTable, ModalWithDrag, Title} from '../../../../components';
+import {SuperTable, ModalWithDrag, Title, SuperTab2} from '../../../../components';
 import s from './AddDialog.less';
 
 const TABLE_EVENTS = ['onCheck', 'onDoubleClick'];
@@ -17,6 +17,23 @@ class AddDialog extends React.Component {
       callback:  getObject(this.props, TABLE_EVENTS)
     };
     return <SuperTable {...props}/>
+  };
+
+  toTabs = () => {
+    const {tabs, tabActiveKey, onTabChange} = this.props;
+    const props = {tabs, activeKey: tabActiveKey, onTabChange};
+    return <SuperTab2 {...props}/>;
+  };
+
+  toShow = () => {
+    const {tabActiveKey} = this.props;
+    if(tabActiveKey === 'alipay'){
+      return <div>支付宝</div>
+    }else if(tabActiveKey === 'weChat'){
+      return <div>微信</div>
+    }else{
+      return <div>银行长账号</div>
+    }
   };
 
   getWidth = () => {
@@ -52,6 +69,8 @@ class AddDialog extends React.Component {
         <ModalWithDrag {...this.getProps()}>
           <Title title="套餐列表" />
           {this.toTable()}
+          {this.toTabs()}
+          {this.toShow()}
         </ModalWithDrag>
       </div>
     );

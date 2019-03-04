@@ -6,11 +6,13 @@ import helper from '../../../../common/common';
 import {buildOrderPageState} from '../../../../common/state';
 import {search, search2} from '../../../../common/search';
 import showDialog from './EdiltDialogContainer';
+import {toFormValue} from "../../../../common/check";
 
 
 const action = new Action(['businessProject'], false);
 const URL_CONFIG = '/api/signature/file_management/businessProject/config';
 const URL_LIST = '/api/signature/file_management/businessProject/list';
+const URL_DEL = '/api/signature/file_management/businessProject/del';
 
 const getSelfState = (state) => {
   return state.businessProject || {};
@@ -62,6 +64,12 @@ const pageSizeActionCreator = (pageSize, currentPage) => async (dispatch, getSta
   return search2(dispatch, action, URL_LIST, currentPage, pageSize, searchDataBak, newState);
 };
 
+//刷新表格
+const updateTable = async (dispatch, getState) => {
+  const {currentPage, pageSize, searchDataBak={}} = getSelfState(getState());
+  return search2(dispatch, action, URL_LIST, currentPage, pageSize, toFormValue(searchDataBak));
+};
+
 const addActionCreator = () => async (dispatch, getState) => {
   const { editConfig } = getSelfState(getState());
   if (await showDialog(editConfig, {} ,false)) {
@@ -80,12 +88,31 @@ const editActionCreator = () => async (dispatch, getState) => {
   }
 };
 
+//批量删除
+const delActionCreator = () => async(dispatch, getState) => {
+  const {tableItems} = getSelfState(getState());
+  let idList=[];
+  tableItems.map((val,key)=> {if(val.checked){idList.push(val.id)}});
+  if (idList.length===0) {
+    helper.showError('请勾选记录');
+    return;
+  }
+  const {returnCode, returnMsg} = await helper.fetchJson(URL_DEL, helper.postOption(idList, 'delete'));
+  if (returnCode === 0) {
+    helper.showSuccessMsg('操作成功');
+    return updateTable(dispatch, getState);
+  }else {
+    helper.showError(returnMsg);
+  }
+};
+
 
 const clickActionCreators = {
   reset: resetActionCreator,
   search: searchActionCreator,
   add:addActionCreator,
-  edit:editActionCreator
+  edit:editActionCreator,
+  del: delActionCreator,
 };
 
 const clickActionCreator = (key) => {
