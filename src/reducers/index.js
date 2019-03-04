@@ -34,6 +34,7 @@ const rootReducer = combineReducers({
     monthly_bill: create('monthly_bill',false),
     business_account: create('business_account'),
     registered: create('registered', false),
+    businessOrder: create('businessOrder', false),
 
     enterprise_documents: create('enterprise_documents',false),
     enterprise_documents_edit:  createReducer(['enterprise_documents_edit']),

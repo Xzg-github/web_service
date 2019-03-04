@@ -7,6 +7,10 @@ import Tree from '../../../../common/tree';
 
 const action = new Action(['temp'], false);
 
+const URL_TREE_LIST = '/api/signature/file_management/contacts/tree' ;//获取树
+const URL_ADD = '/api/signature/file_management/contacts/addGroup' ;//新增树
+const URL_EDIT = '/api/signature/file_management/contacts/editGroup' ;//编辑树
+const URL_DEL = '/api/signature/file_management/contacts/delGropp' ;//删除树
 
 const getSelfState = (state) => {
   return state.temp || {};
@@ -36,54 +40,16 @@ const checkActionCreator = (isAll, checked, rowIndex) => {
 };
 
 const addActionCreator = () => async (dispatch, getState) => {
-  const {tree,select,parents,handleTree} = getSelfState(getState());
-
-  if(!select){
-    return
+  try {
+    //获取树结构为 {title:'',children:[]}
+    const treeData = helper.getJsonResult(await helper.fetchJson(URL_TREE_LIST));
+    treeData.push({edit:'add'});
+    //生成树结构
+    const newTree = Tree.createWithInsertRoot(treeData,'全部文件', {guid: 'root', districtType:0});
+    dispatch(action.assign({tree:newTree}));
+  }catch (e){
+    helper.showError(e.message)
   }
-  //最多新增3层，根据父节点判断是否大于3层
-  const parent = Number(tree[select].parent.split('-')[0]);
-  for(let key in tree){
-    if(tree[key].edit === 'add'){
-      helper.showError('当前有正在新增的，不能继续新增');
-      return
-    }
-  }
-
-  console.log(tree);
-  return
-
-  // if(parent >= 2){
-  //   helper.showError('最多创建3层树状结构');
-  //   return
-  // }
-  //
-  // let newHandleTree = helper.deepCopy(handleTree);
-  //
-  // if(select !== '1-0'){
-  //   for(let treeData of newHandleTree){
-  //     if(treeData.title === tree[select].title){
-  //       !treeData.children && (treeData.children = []);
-  //       treeData.children.push({edit:'add'})
-  //     }
-  //   }
-  // }else {
-  //   newHandleTree.push({edit:'add'})
-  // }
-   //生成树结构
-  const newTree = Tree.createWithInsertRoot(newHandleTree,'全部文件', {guid: 'root', districtType:0});
-  let treeKey,treeParent;
-  //展开树
-  for(let key in newTree){
-    if(newTree[key].edit === 'add'){
-      treeKey = newTree[key].key;
-      treeParent = newTree[key].parent;
-    }else if(typeof newTree[key] === 'object'){
-      newTree[key].disabled = true;
-    }
-  }
-  dispatch(action.assign({tree:newTree,handleTree:newHandleTree,select:treeKey}));
-  dispatch( action.assign({[treeParent]: true}, 'expand'))
 };
 
 const delActionCreator = () => async (dispatch, getState) => {
@@ -91,8 +57,8 @@ const delActionCreator = () => async (dispatch, getState) => {
   const newTree = helper.deepCopy(tree);
   const data = newTree[select];
   if(select === '1-0'){
-   helper.showError('根节点不能删除');
-   return
+    helper.showError('根节点不能删除');
+    return
   }else if(data.children && data.children.length > 0 ){
     helper.showError('存在子节点不能删除');
     return
@@ -106,7 +72,7 @@ const delActionCreator = () => async (dispatch, getState) => {
     }
   }
 
-  dispatch(action.assign({tree:newTree}))
+  dispatch(action.assign({tree:newTree,value:{del:tree[select]}}))
 };
 
 const editActionCreator = () => async (dispatch, getState) => {
@@ -128,7 +94,7 @@ const editActionCreator = () => async (dispatch, getState) => {
 };
 
 const closeActionCreator = () => (dispatch) => {
-  dispatch(action.assign({visible: false, ok: false}));
+  dispatch(action.assign({visible: false, ok: true}));
 };
 
 const clickActionCreators = {
@@ -160,57 +126,62 @@ const onChangeActionCreator = (keyValue,keyName) => async (dispatch, getState) =
 };
 
 const onCancelActionCreator = (key) => async (dispatch, getState) => {
-  const {tree,value,handleTree} = getSelfState(getState());
-  console.log(handleTree);
-  const newTree = helper.deepCopy(tree);
-  for(let key in newTree){
-    //全部改为可以点击
-    typeof newTree[key] === 'object' && (newTree[key].disabled = false);
-    //删除edit 为add
-    if(newTree[key].edit === 'add'){
-      newTree[key].edit = false;
-      let parent = newTree[newTree[key].parent];
-      parent.children = parent.children.filter(item => item !== key);
-      delete newTree[key]
-    }else if(newTree[key].edit){
-      newTree[key].edit = false;
-    }
-  }
+  const treeData = helper.getJsonResult(await helper.fetchJson(URL_TREE_LIST));
+  //生成树结构
+  const newTree = Tree.createWithInsertRoot(treeData,'全部文件', {guid: 'root', districtType:0});
   dispatch(action.assign({tree:newTree,value:{}}))
 };
 
+function Trim(str)
+{
+  return str.replace(/(^\s*)|(\s*$)/g, "");
+}
+
 const onOkActionCreator = (key) => async (dispatch, getState) => {
-  const {tree,value} = getSelfState(getState());
-  const newTree = helper.deepCopy(tree);
-  let result;
-  switch (newTree[key].edit){
+  const {tree,value,select} = getSelfState(getState());
+  let body = {};
+  for(let v in value){
+    body.companyContactGroupName = value[v];
+  }
+  //校验是否为空
+  if(JSON.stringify(body) == "{}" || !body.companyContactGroupName){
+    helper.showError('不能为空');
+    return
+  }
+
+  let url,postBody;
+  switch (tree[key].edit){
     case 'add':{
+      postBody = helper.postOption(body) ;
+      url = URL_ADD;
       break;
     }
     case 'edit':{
+      body.id = tree[select].value;
+      console.log(body);
+      postBody = helper.postOption(body,'put') ;
+      url = URL_EDIT;
       break;
     }
     case 'del':{
+      const id =  body.companyContactGroupName.value;
+      url = `${URL_DEL}/${id}`;
+      postBody = 'delete';
       break;
     }
     default:
       return
   }
-
-  for(let key in newTree){
-    //全部改为可以点击
-    typeof newTree[key] === 'object' && (newTree[key].disabled = false);
-    //删除edit 为add
-    if(newTree[key].edit === 'add'){
-      newTree[key].edit = false;
-      let parent = newTree[newTree[key].parent];
-      parent.children = parent.children.filter(item => item !== key);
-      delete newTree[key]
-    }else if(newTree[key].edit){
-      newTree[key].edit = false;
-    }
+  const {returnCode,returnMsg} = await helper.fetchJson(url,postBody);
+  if(returnCode!==0){
+    helper.showError(returnMsg);
+    return
   }
-  dispatch(action.assign({tree:newTree,value:{},select:null}))
+  //获取树结构为 {title:'',children:[]}
+  const treeData = helper.getJsonResult(await helper.fetchJson(URL_TREE_LIST));
+  //生成树结构
+  const newTree = Tree.createWithInsertRoot(treeData,'全部文件', {guid: 'root', districtType:0});
+  dispatch(action.assign({tree:newTree,value:{}}));
 };
 
 const clickActionCreator = (key) => {
