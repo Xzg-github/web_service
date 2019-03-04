@@ -7,7 +7,8 @@ import {Action} from '../../../action-reducer/action';
 import helper from '../../../common/common';
 import {search} from '../../../common/search';
 import {buildOrderPageState} from '../../../common/state';
-import OrderPageContainer from "./OrderPageContainer";
+import OrderPageContainer from './OrderPageContainer';
+import EditPageConatiner from './EditPageContainer';
 
 const STATE_PATH = ['businessOrder'];
 const action = new Action(STATE_PATH);
@@ -64,6 +65,6 @@ const mapStateToProps = (state) => {
   return getSelfState(state)
 };
 
-const UIComponent = EnhanceLoading(createCommonTabPage(OrderPageContainer));
+const UIComponent = EnhanceLoading(createCommonTabPage(OrderPageContainer, EditPageConatiner));
 
 export default connect(mapStateToProps, actionCreators)(UIComponent);

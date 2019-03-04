@@ -13,7 +13,7 @@ api.get('/config', async (req, res) => {
 // OrderPage Table数据
 api.post('/list', async (req, res) => {
   res.send({returnCode: 0, result: {data:[
-        {statusType:'waitIdentification', orderNumber: '123456'}]}
+        {statusType:'waitIdentification', orderNumber: '123456', id: '1231231312'}]}
   });
 });
 
@@ -27,5 +27,14 @@ api.post('/audit', async (req, res) => {
   res.send({returnCode: 0, returnMsg: '操作成功'});
 });
 
+//获取消费记录
+api.post('/detail', async (req, res) => {
+  res.send({returnCode: 0, returnMsg: '操作成功', result: {
+    table1: [], table2: []
+    }
+  })
+});
+
+//获取消费明细
 
 export default api;

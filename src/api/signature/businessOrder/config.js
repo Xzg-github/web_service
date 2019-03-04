@@ -55,7 +55,7 @@ const baseInfo = [
 const consumptionStatisticsInfo = [
   {key: 'operationProject', title: '业务项目'},
   {key: 'amountTotal', title: '数量合计'},
-  {key: 'amountTotal', title: '金额合计'}
+  {key: 'sumTotal', title: '金额合计'}
 ];
 
 const consumptionDetail = [

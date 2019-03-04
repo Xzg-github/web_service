@@ -6,12 +6,14 @@ import {toFormValue} from "../../../common/check";
 import {search2} from "../../../common/search";
 import {fetchJson, genTabKey, getObject, postOption, showError} from "../../../common/common";
 import showEditDialog from './EditDialogContainer';
+import helper from "../../../common/common";
 
 const STATE_PATH = ['businessOrder'];
 const action = new Action(STATE_PATH);
 
 const URL_LIST = '/api/signature/businessOrder/list';
 const URL_AUDIT = '/api/signature/businessOrder/audit';
+const URL_DETAIL = '/api/signature/businessOrder/detail';
 
 const getSelfState = (rootstate) => {
   return getPathValue(rootstate, STATE_PATH);
@@ -53,11 +55,34 @@ const auditActionCreator = async (dispatch, getState) => {
   return returnCode === 0 ? updateTable(dispatch, getState) : showError(returnMsg);
 };
 
+const recordActionCreator = async (dispatch, getState) => {
+  const {editPageConfig, tabs, tableItems} = getSelfState(getState());
+  const checkedItemIndex = helper.findOnlyCheckedIndex(tableItems);
+  if (checkedItemIndex === -1) return showError('请选择一条记录');
+  //依据id获取详细数据
+  const {returnCode, returnMsg,result} = await fetchJson(URL_DETAIL, postOption(tableItems[checkedItemIndex]))
+  if (returnCode !== 0) return showError(returnMsg);
+  const tabKey = `id_${tableItems[checkedItemIndex].id}}`;
+  if (helper.isTabExist(tabs, tabKey)) {
+    dispatch(action.assign({activeKey: tabKey}));
+  } else {
+    const payload = {
+      activeKey: tabKey,
+      tabs: [...tabs, {key: tabKey, title: tableItems[checkedItemIndex]['orderNumber']}],
+      [tabKey]: {
+        ...editPageConfig, value: result
+      }
+    }
+    dispatch(action.assign(payload));
+  }
+};
+
 const toolbarActions = {
   reset: resetActionCreator,
   search: searchActionCreator,
   receipt: receiptActionCreator,
-  audit: auditActionCreator
+  audit: auditActionCreator,
+  record: recordActionCreator
 };
 
 const clickActionCreator = (key) => {
@@ -95,6 +120,22 @@ const formSearchActionCreator = (key, filter, config) => async (dispatch, getSta
 
 //展示详细
 const linkActionCreator = (key, rowIndex, item) => async (dispatch, getState) => {
+  const {tabs, editPageConfig} = getSelfState(getState());
+  const {returnCode, returnMsg,result} = await fetchJson(URL_DETAIL, postOption(item))
+  if (returnCode !== 0) return showError(returnMsg);
+  const tabKey = `id_${item.id}}`;
+  if (helper.isTabExist(tabs, tabKey)) {
+    dispatch(action.assign({activeKey: tabKey}));
+  } else {
+    const payload = {
+      activeKey: tabKey,
+      tabs: [...tabs, {key: tabKey, title: item['orderNumber']}],
+      [tabKey]: {
+        ...editPageConfig, value: result
+      }
+    }
+    dispatch(action.assign(payload));
+  }
 };
 
 const actionCreators = {
