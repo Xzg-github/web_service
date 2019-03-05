@@ -88,7 +88,7 @@ const linkActionCreator = (key, rowIndex, item) => async (dispatch, getState) =>
   const tabKey = genTabKey('look', tabs);
   const newTabs = tabs.find(tab => tab.key === tabKey)
     ? tabs
-    : tabs.concat([{key: tabKey, title: item['customerOrder']}]);
+    : tabs.concat([{key: tabKey, title: item['account']}]);
   const payload = {
     [tabKey]: {...editConfig, value: result},
     activeKey: tabKey,

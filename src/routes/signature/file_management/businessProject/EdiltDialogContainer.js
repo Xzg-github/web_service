@@ -2,13 +2,13 @@ import {connect} from 'react-redux';
 import EditDialog from './EditDialog';
 import {Action} from '../../../../action-reducer/action';
 import showPopup from '../../../../standard-business/showPopup';
-import helper from '../../../../common/common';
+import helper, {postOption, showError, validValue, fetchJson} from '../../../../common/common';
 
-const action = new Action(['temp'], false);
-const URL_SET = '/api/config/commodity_price/batch_set_price';
+const action = new Action(['businessProject'], false);
+const URL_ADD =  '/api/signature/file_management/businessProject/add';
 
 const getSelfState = (state) => {
-  return state.temp || {};
+  return state.businessProject || {};
 };
 
 const buildState = (config, items,edit) => {
@@ -25,8 +25,18 @@ const changeActionCreator = (key, value) => {
 };
 
 const okActionCreator = () => async (dispatch, getState) => {
-  const state = getSelfState(getState());
-
+  const {value, controls} = getSelfState(getState());
+  if(!validValue(controls, value)){
+    dispatch(action.assign({valid: true}));
+    return;
+  }
+  const {returnCode, returnMsg} = await fetchJson(URL_ADD, postOption(value, 'post'));
+  if(returnCode !== 0){
+    showError(returnMsg);
+    return
+  }
+  helper.showSuccessMsg('保存成功');
+  dispatch(action.assign({visible: false, ok: false}));
 };
 
 const closeActionCreator = () => (dispatch) => {

@@ -2,7 +2,6 @@ import { connect } from 'react-redux';
 import AddDialog from './AddDialog';
 import {Action} from '../../../../action-reducer/action';
 import {getPathValue} from '../../../../action-reducer/helper';
-import {postOption, fetchJson, showSuccessMsg, showError} from '../../../../common/common';
 
 const STATE_PATH = ['temp'];
 const action = new Action(STATE_PATH);
@@ -11,17 +10,12 @@ const getSelfState = (rootState) => {
   return getPathValue(rootState, STATE_PATH);
 };
 
-export const buildAddState = (config, items=[], dispatch) => {
+export const buildViewState = (config, items = [], dispatch) => {
   dispatch(action.create({
     ...config,
     visible: true,
     tableItems: items
   }));
-};
-
-//Tab切换
-const tabChangeActionCreator = (tabActiveKey) => async (dispatch, getState) => {
-  dispatch(action.assign({tabActiveKey}));
 };
 
 const okActionCreator = ({onClose}) => async(dispatch, getState) => {
@@ -39,7 +33,6 @@ const mapStateToProps = (state) => {
 const actionCreators = {
   onOk: okActionCreator,
   onCancel:cancelActionCreator,
-  onTabChange: tabChangeActionCreator
 };
 
 const container = connect(mapStateToProps, actionCreators)(AddDialog);

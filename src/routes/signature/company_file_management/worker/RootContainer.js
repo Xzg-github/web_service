@@ -2,15 +2,17 @@ import {connect} from 'react-redux';
 import OrderPage from '../../../../components/OrderPage';
 import {EnhanceLoading} from '../../../../components/Enhance';
 import {Action} from '../../../../action-reducer/action';
-import helper from '../../../../common/common';
+import helper, {showError} from '../../../../common/common';
 import {buildOrderPageState} from '../../../../common/state';
 import {search, search2} from '../../../../common/search';
 import showDialog from './EdiltDialogContainer';
+import {toFormValue} from "../../../../common/check";
 
 
 const action = new Action(['worker'], false);
 const URL_CONFIG = '/api/signature/company_file_management/worker/config';
 const URL_LIST = '/api/signature/company_file_management/worker/list';
+const URL_STATUS = '/api/signature/company_file_management/worker/status';
 
 const getSelfState = (state) => {
   return state.worker || {};
@@ -23,7 +25,6 @@ const initActionCreator = () => async (dispatch) => {
     const list = helper.getJsonResult(await search(URL_LIST, 0, config.pageSize, {}));
     const payload = buildOrderPageState(list, config.index);
     payload.status = 'page';
-    payload.editConfig = config.edit;
     payload.searchDataBak = payload.searchData;
     dispatch(action.assign(payload));
   } catch (e) {
@@ -83,20 +84,57 @@ const editActionCreator = () => async (dispatch, getState) => {
 
 //审核
 const examineActionCreator = ()=> async(dispatch, getState) => {
-  const { editConfig } = getSelfState(getState());
-  if (await showDialog(editConfig, {} ,false)) {
+  const { tableItems } = getSelfState(getState());
+  const items = tableItems.filter(item => item.checked);
+  if(items.length !== 1){
+    helper.showError('请勾选一条记录');
+    return
+  }
+  if (await showDialog( items[0] ,false)) {
     refresh(dispatch, state);
   }
 };
 
+//刷新表格
+const updateTable = async (dispatch, getState) => {
+  const {currentPage, pageSize, searchDataBak={}} = getSelfState(getState());
+  return search2(dispatch, action, URL_LIST, currentPage, pageSize, toFormValue(searchDataBak));
+};
+
 //启用
 const enableActionCreator = () => async(dispatch, getState) => {
-
+  const {tableItems} = getSelfState(getState());
+  const items = tableItems.filter(item => item.checked);
+  if(items.length === 0){
+    showError('请勾选一条记录');
+    return
+  }
+  const id = items[0].id;
+  const {returnCode,returnMsg} = await helper.fetchJson(URL_STATUS, helper.postOption({id, userAccountState: '3'}, 'post'));
+  if(returnCode === 0){
+    helper.showSuccessMsg('启用成功');
+    return updateTable(dispatch, getState)
+  }else{
+    showError(returnMsg)
+  }
 };
 
 //禁用
 const disableActionCreator = () => async (dispatch, getState) => {
-
+  const {tableItems} = getSelfState(getState());
+  const items = tableItems.filter(item => item.checked);
+  if(items.length === 0){
+    showError('请勾选一条记录');
+    return
+  }
+  const id = items[0].id;
+  const {returnCode,returnMsg} = await helper.fetchJson(URL_STATUS, helper.postOption({id, userAccountState: '0'}, 'post'));
+  if(returnCode === 0){
+    helper.showSuccessMsg('禁用成功');
+    return updateTable(dispatch, getState)
+  }else{
+    showError(returnMsg)
+  }
 };
 
 

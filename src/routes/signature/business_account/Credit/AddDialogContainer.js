@@ -11,17 +11,16 @@ const getSelfState = (rootState) => {
   return getPathValue(rootState, STATE_PATH);
 };
 
-export const buildAddState = (config, items=[], dispatch) => {
+export const buildAddState = (config, dispatch) => {
   dispatch(action.create({
     ...config,
     visible: true,
-    tableItems: items
   }));
 };
 
-//Tab切换
-const tabChangeActionCreator = (tabActiveKey) => async (dispatch, getState) => {
-  dispatch(action.assign({tabActiveKey}));
+//输入值修改
+const changeActionCreator = (key, value) => {
+  return (action.assign({[key]: value}, 'value'));
 };
 
 const okActionCreator = ({onClose}) => async(dispatch, getState) => {
@@ -39,7 +38,7 @@ const mapStateToProps = (state) => {
 const actionCreators = {
   onOk: okActionCreator,
   onCancel:cancelActionCreator,
-  onTabChange: tabChangeActionCreator
+  onChange: changeActionCreator
 };
 
 const container = connect(mapStateToProps, actionCreators)(AddDialog);

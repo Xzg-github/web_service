@@ -24,7 +24,7 @@ const initActionCreator = () => async(dispatch) => {
     const {index, edit, credits, viewQuota, pay} = helper.getJsonResult( await  helper.fetchJson(URL_CONFIG));
     const data = helper.getJsonResult( await helper.fetchJson(URL_LIST));
     const other = {
-      tabs: [{key: 'index', title: '企业账户列表'}],
+      tabs: [{key: 'index', title: '企业账户列表', close: false}],
       activeKey: 'index',
       currentPage: 1,
       searchData: {},
@@ -32,7 +32,7 @@ const initActionCreator = () => async(dispatch) => {
       editConfig: edit,
       creditSettingConfig: credits,
       viewQuotaConfig: viewQuota,
-      payConfig: pay
+      payConfig: pay,
     };
     const payload = buildOrderPageState(data, index, other);
     dispatch(action.create(payload));
