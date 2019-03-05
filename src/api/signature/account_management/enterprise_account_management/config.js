@@ -14,15 +14,14 @@ const oneControls = [
 
 
 const LABELS = [
-  {key: 'qymc', title: '账号头像',type:'avatar'},
-  {key: 'yyzzzch', title: '企业账号',type:'button',btn:'查看证书'},
-  {key: 'zzjgdm', title: '登录密码',type:'edit'},
-  {key: 'dgyhzh', title: '企业名称',type:'button',btn:'企业信息变更'},
-  {key: 'dgyhmc', title: '法人姓名'},
+  {key: 'grzh', title: '企业账号',type:'button',btn:'查看证书'},
+  {key: 'accountPassword', title: '登录密码',type:'edit'},
+  {key: 'companyName', title: '企业名称',type:'button',btn:'企业信息变更'},
+  {key: 'companyContact', title: '法人姓名'},
   {key: 'dgyykhzh', title: '身份账号'},
-  {key: 'frxm', title: '手机号码',type:'edit'},
-  {key: 'frsfzh', title: '收件地址',type:'edit'},
-  {key: 'zhglrxm', title: '企业电话',type:'edit'},
+  {key: 'notifyPhone', title: '手机号码'},
+  {key: 'frsfzh', title: '收件地址'},
+  {key: 'companyContactPhone', title: '企业电话'},
 ];
 
 const two_buttons = [
@@ -176,16 +175,16 @@ const config = {
     controls:oneControls,
     LABELS,
     checkItems:[
-      {key: 'frsfzh', title: '邮件通知'},
-      {key: 'zhglrxm', title: '短信通知'},
+      {key: 'isNotifiedByEmail', title: '邮件通知'},
+      {key: 'isNotifiedByPhone', title: '短信通知'},
     ],
     diaLogOne:{
       title:'修改密码',
       controls:[
-        {key: 'a', title: '旧密码',type:'text',required:true},
-        {key: 'b', title: '新密码',type:'text',required:true},
-        {key: 'c', title: '验证码通知方式',type:'select',options:[{value:'1',title:'邮件'},{value:'2',title:'短信'}],required:true},
-        {key: 'd', title: '验证码',type:'text',required:true, btn:{title:"获取验证码",key:'obtain'}},
+        {key: 'oldPassword', title: '旧密码',type:'text',required:true},
+        {key: 'newPassword', title: '新密码',type:'text',required:true},
+        {key: 'codeType', title: '验证码通知方式',type:'select',options:[{value:'0',title:'邮件'},{value:'1',title:'短信'}],required:true},
+        {key: 'code', title: '验证码',type:'text',required:true, btn:{title:"获取验证码",key:'obtain'}},
       ]
     },
     diaLogTwo:{

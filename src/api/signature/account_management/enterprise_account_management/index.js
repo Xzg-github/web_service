@@ -11,8 +11,9 @@ api.get('/config', async (req, res) => {
 });
 
 // 获取主列表数据
-api.post('/list', async (req, res) => {
-  res.send({returnCode: 0, result: {data:[{a:'123456'}]}});
+api.get('/oneList/:id', async (req, res) => {
+  const url = `${host}/company_account/detail/${req.params.id}`;
+  res.send(await fetchJsonByNode(req,url));
 });
 
 export default api;

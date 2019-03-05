@@ -83,6 +83,8 @@ const getComponent = (activeKey) => {
     return OrderPageContainer;
   }else if(activeKey.indexOf('add_') === 0){
     return EditPageContainer;
+  }else if(activeKey.indexOf('edit_') === 0){
+    return EditPageContainer
   }
 };
 

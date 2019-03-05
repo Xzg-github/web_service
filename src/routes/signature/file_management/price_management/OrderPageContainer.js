@@ -10,6 +10,9 @@ import { exportExcelFunc, commonExport } from '../../../../common/exportExcelSet
 const TAB_KEY = 'index';
 const STATE_PATH =  ['price_management'];
 
+const URL_LIST = '/api/signature/file_management/price_management/list';
+const URL_DISABLE = '/api/signature/file_management/price_management/disable';
+const URL_DEL = '/api/signature/file_management/price_management/del';
 
 const action = new Action(STATE_PATH);
 
@@ -18,12 +21,13 @@ const getSelfState = (rootState) => {
 };
 
 // 页面的初始状态
-const buildPageState = (tabs, tabKey, title,value={}) => {
+const buildPageState = (tabs, tabKey, title,value={},edit) => {
   const {id} = value;
   return {
     activeKey: tabKey,
     tabs: tabs.concat({key: tabKey, title: title}),
-    [tabKey]: {tabKey,id,updateTable},
+    [tabKey]: {tabKey,id,updateTable,edit
+    },
   };
 };
 
@@ -49,13 +53,85 @@ const addAction = async (dispatch, getState) => {
   const {tabs} = getPathValue(getState(), STATE_PATH);
   const tabKey = helper.genTabKey('add', tabs);
   const title =  '新增';
-  dispatch(action.assign(buildPageState (tabs, tabKey,title)));
+  dispatch(action.assign(buildPageState (tabs, tabKey,title,{},false)));
+};
+
+const findCheckedIndex1 = (items) => {
+  const index = items.reduce((result = [], item, index) => {
+    item.checked && result.push(index);
+    return result;
+  }, []);
+  return !index.length ? -1 : index;
+};
+
+
+const delAction= async (dispatch, getState) => {
+  const {tableItems} = getSelfState(getState());
+  const index = findCheckedIndex1(tableItems);
+  if (index === -1) {
+    helper.showError('请勾选一条记录进行删除');
+    return;
+  }
+  let item = [];
+  index.forEach(index => {
+    item.push(tableItems[index].id)
+  });
+  const {result,returnCode,returnMsg} = await helper.fetchJson(`${URL_DEL}`,helper.postOption(item,'delete'));
+  if(returnCode !== 0 ){
+    helper.showError(returnMsg);
+    retrun
+  }
+  helper.showSuccessMsg(returnMsg)
+  return updateTable(dispatch, getState)
+
+};
+
+
+const disableAction = async (dispatch, getState) => {
+  const {tableItems} = getSelfState(getState());
+  const index = findCheckedIndex1(tableItems);
+  if (index === -1) {
+    helper.showError('请勾选一条记录进行失效');
+    return;
+  }
+  let item = [];
+  index.forEach(index => {
+    item.push(tableItems[index].id)
+  });
+  const {result,returnCode,returnMsg} = await helper.fetchJson(`${URL_DISABLE}/status_disabled`,helper.postOption(item,'put'));
+  if(returnCode !== 0 ){
+    helper.showError(returnMsg);
+    return
+  }
+  helper.showSuccessMsg(returnMsg)
+  return updateTable(dispatch, getState)
+
+};
+
+
+const editAction = async (dispatch, getState) => {
+  const {tableItems} = getSelfState(getState());
+  const {tabs} = getPathValue(getState(), STATE_PATH);
+  const index = helper.findOnlyCheckedIndex(tableItems);
+  if (index === -1) {
+    helper.showError('请勾选一条记录进行编辑');
+    return;
+  }
+  const tabKey = `edit_${tableItems[index].id}`;
+  const title =  '编辑';
+  if (helper.isTabExist(tabs, tabKey)) {
+    dispatch(action.assign({activeKey: tabKey}));
+  }
+  dispatch(action.assign(buildPageState (tabs, tabKey,title,tableItems[index],true)));
 };
 
 
 
 const toolbarActions = {
   add:addAction,
+  edit:editAction,
+  disable:disableAction,
+  del:delAction,
   search: searchClickActionCreator,
   reset: resetActionCreator,};
 

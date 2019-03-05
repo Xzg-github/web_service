@@ -67,7 +67,7 @@ const passwordAction = () => async (dispatch, getState) => {
 
 
 const toolbarActions = {
-  password:passwordAction,
+  accountPassword:passwordAction,
 };
 
 const clickActionCreator = (key) => {

@@ -19,7 +19,6 @@ const getSelfState = (rootState) => {
 
 const initActionCreator = () => async (dispatch, getState) => {
   const state = getSelfState(getState());
-  console.log(state);
   dispatch(action.assign({status: 'loading'}, TAB_KEY));
   try {
     dispatch(action.assign({

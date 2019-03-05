@@ -20,15 +20,10 @@ const file = [
     {key: 'template_management'}, //模板管理
     {key: 'businessArchives'},   //企业档案
     {key: 'personalProfile'},    //个人账号档案
+    {key: 'price_management'}, //价格管理
+    {key: 'worker'},   //企业员工
     {key: 'businessProject'}     //业务项目
 ];
-
-//企业档案管理
-const company = [
-  {key: 'worker'},   //企业员工
-    {key: 'price_management'} //价格管理
-];
-
 
 //账号管理
 const account = [
@@ -45,7 +40,6 @@ const signature = [
     {key:'monthly_bill', icon: 'pld-picture'},             //月账单
     {key:'enterprise_documents', icon: 'pld-picture'},             //企业文件
     {key:'file_management', icon: 'pld-picture',children:file},             //档案管理
-    {key: 'company_file_management', icon: 'pld-picture', children: company}, //企业档案管理
     {key:'account_management', icon: 'pld-picture',children:account},           //账号管理
     {key: 'business_account', icon: 'pld-picture'},       //企业账户金额
     {key: 'businessOrder', icon: 'pld-picture'}           //企业订单
