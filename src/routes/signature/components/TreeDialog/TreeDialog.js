@@ -4,7 +4,7 @@ import SuperTree from './SuperTree'
 import {Button} from 'antd'
 import { getObject } from '../../../../common/common';
 
-const TREE_PROPS = ['tree', 'expand', 'select','value', 'searchValue', 'onExpand', 'onSelect','onChange','onCancel','onOk'];
+const TREE_PROPS = ['tree', 'expand', 'select','value', 'searchValue', 'onExpand', 'onSelect','onChange','onCancel','onOk','expandedKeys'];
 
 class TreeDialog extends React.Component {
   static propTypes = {
@@ -58,9 +58,10 @@ class TreeDialog extends React.Component {
 
 
   render() {
+    const {footer} = this.props;
     return (
       <ModalWithDrag {...this.modalProps()}>
-        <SuperToolbar {...this.toolbarProps()} />
+        {!footer&&<SuperToolbar {...this.toolbarProps()} />}
         <SuperTree {...this.getTreeProps()} />
       </ModalWithDrag>
     );
