@@ -24,6 +24,19 @@ import {updateTable} from '../../../../standard-business/OrderTabPage/createOrde
  * }
  */
 
+
+export const getCookie = (cookieName) =>{
+  let strCookie = document.cookie;
+  let arrCookie = strCookie.split("; ");
+  for(let i = 0; i < arrCookie.length; i++){
+    let arr = arrCookie[i].split("=");
+    if(cookieName === arr[0]){
+      return arr[1];
+    }
+  }
+  return "";
+};
+
 const createEditPageContainer = (action, getSelfState) => {
   const buildEditState = async ({id, closeFunc,}) => {
     try{
@@ -31,11 +44,9 @@ const createEditPageContainer = (action, getSelfState) => {
       const editConfig = getJsonResult(await fetchJson(url));
       let data = {signExpirationTime:moment().format('YYYY-MM-DD HH:mm:ss'), signPartyList: []};  //获取当前时间
       if(id){
-        const url = '/api/signature/signature_center/list';
-        const list = getJsonResult(await fetchJson(url, 'post'));
-        for(let item of list.data){
-          if(item.id === id){data = item}
-        }
+        const URL_LIST_ONE = '/api/signature/signature_center/getOne';
+        const list = getJsonResult(await fetchJson(`${URL_LIST_ONE}/${id}`,'get'));
+          data = list;
       }
       return {
         ...editConfig,
@@ -152,15 +163,13 @@ const createEditPageContainer = (action, getSelfState) => {
   const upDatePage = (guid) => async (dispatch, getState) => {
     showSuccessMsg('保存成功');
     const selfState = getSelfState(getState());
-    const url = '/api/signature/signature_center/list';
-    const list = getJsonResult(await fetchJson(url, 'post'));
+    const URL_LIST_ONE = '/api/signature/signature_center/getOne';
+    const list = getJsonResult(await fetchJson(`${URL_LIST_ONE}/${guid}`,'get'));
     if(!list){
       return showError(`刷新页面数据失败`)
     }
     let data;
-    for(let item of list.data){
-      if(item.id === guid){data = item}
-    }
+    data = list;
     const buttons4 = [
       {key: 'save', title: '保存'},
       {key: 'next',title: '签署', bsStyle: 'primary'}
@@ -187,15 +196,24 @@ const createEditPageContainer = (action, getSelfState) => {
       dispatch(action.assign({valid: true}));
       return
     }
-    if(!validArray(tableCols, value.signPartyList.filter(item => !item.hide))){   //判断表格必填
+/*    if(!validArray(tableCols, value.signPartyList.filter(item => !item.hide))){   //判断表格必填
       dispatch(action.assign({valid: true, from: false}));
       return
-    }
+    }*/
     if(value.signPartyList.length === 0){
       showError('至少添加一个签署方');
       return
     }
     const URL_SAVE = `/api/signature/signature_center/save`;
+    let signAccountId = getCookie('accountId');
+    let token = getCookie('token');
+    let list = value.signPartyList;
+    if(value.signOrderStrategy === '1' || value.signOrderStrategy === 1){
+      list.unshift({signAccountId, sequence: 1});
+    }else{
+      list.unshift({signAccountId});
+    }
+
     const postData = {
       signContractId: value.signContractId,
       id: value.id,
@@ -205,7 +223,7 @@ const createEditPageContainer = (action, getSelfState) => {
       signExpirationTime: value.signExpirationTime,
       signFinishTime: value.signFinishTime,
       signOrderStrategy: value.signOrderStrategy,
-      signPartyList: value.signPartyList,
+      signPartyList: list,
       signWay: value.signWay,
       signFileSubject: value.signFileSubject
       };
@@ -223,11 +241,11 @@ const createEditPageContainer = (action, getSelfState) => {
   let id = value.id;
    const URL_SEND =  '/api/signature/signature_center/send';   //发送
   const URL_SIGN =  '/api/signature/signature_center/sign';   //签署
-   const result = await helper.fetchJson(URL_SEND, helper.postOption(value));
-   if (result.returnCode !== 0) return helper.showError(result.returnMsg);
-   const {returnCode, returnMsg } = await helper.fetchJson(URL_SIGN, helper.postOption(id));
+   const result1 = await helper.fetchJson(URL_SEND, helper.postOption(value));
+   if (result1.returnCode !== 0) return helper.showError(result1.returnMsg);
+   const {returnCode, returnMsg, result } = await helper.fetchJson(URL_SIGN, helper.postOption(id));
    if (returnCode !== 0) return helper.showError(returnMsg);
-   window.open(returnMsg)
+   window.open(result)
  } ;
 
  //发送

@@ -15,11 +15,11 @@ api.get('/editConfig', async (req, res) => {
   res.send({returnCode: 0, result: module.default});
 });
 
-/*//获取主列表数据
-api.get('/list', async (req, res) => {
-  const module = await require('./data');
-  res.send(module.default);
-});*/
+//根据Id获取编辑信息
+api.get('/getOne/:guid', async (req, res) => {
+  const url = `${host}/sign_center/detail_by_id/${req.params.guid}`;
+  res.send(await fetchJsonByNode(req, url));
+});
 
 //获取列表数据
 api.post('/list', async (req, res) => {
@@ -47,7 +47,7 @@ api.post('/send', async(req, res) => {
 });
 
 //删除
-api.post('/del', async(req, res) => {
+api.post('/delete', async(req, res) => {
   const url = `${host}/sign_center/delete_sign_file`;
   res.send(await fetchJsonByNode(req, url, postOption(req.body)))
 });

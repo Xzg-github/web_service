@@ -91,7 +91,7 @@ const okActionCreator = (key) => async (dispatch, getState) => {
       contactPhone: value.contactPhone,
       companyEmail: value.companyEmail,
     };
-    const {returnCode, result, returnMsg} = await helper.fetchJson(activeKey === 'companyEmail'? URL_COMPANY:URL_SET_NEWPSW, helper.postOption(params));debugger
+    const {returnCode, result, returnMsg} = await helper.fetchJson(activeKey === 'companyEmail'? URL_COMPANY:URL_SET_NEWPSW, helper.postOption(params));
     if (returnCode === 0) {
       helper.showSuccessMsg('注册成功，返回登录页进行登录');
       dispatch(action.assign({value: {}}));

@@ -13,7 +13,7 @@ const isOptions1 = [
 
 const filters = [
   {key: 'signFileSubject', title: '文件主题', type: 'text'},
-  {key: 'sponsor', title: '发起人', type: 'text'},
+  {key: 'launchAccountId', title: '发起人', type: 'text'},
   {key: 'signStartTime', title: '发起时间', type: 'date', rule: {type: '<', key: 'insertTimeEnd'}},
   {key: 'insertTimeEnd', title: '至', type: 'date', rule: {type: '>', key: 'signStartTime'}},
   {key: 'signState', title: '状态', type: 'select', dictionary: 'order_type'},

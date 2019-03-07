@@ -46,6 +46,17 @@ const tableButtons = [
 const tableCols = [
   { key: 'checked', title: '', type: 'checkbox'},
   { key: 'index', title: '序号', type: 'index'},
+  { key: 'sequence', title: '签署顺序',type: 'number'},
+  { key: 'signPartyName', title: '姓名/机构',type: 'text', required: true},
+  { key: 'signPartyEmail', title: '邮箱', type: 'text'},
+  { key: 'signPartyPhoneNumber', title: '手机号码',type: 'text'},
+  //{ key: 'whether', title: '允许增加签署方', type: 'select', options: isOptions},
+  //{ key: 'identity', title: '签署身份', type: 'select', options: isOptions1}
+];
+
+const tableCols2 = [
+  { key: 'checked', title: '', type: 'checkbox'},
+  { key: 'index', title: '序号', type: 'index'},
   { key: 'signPartyName', title: '姓名/机构',type: 'text', required: true},
   { key: 'signPartyEmail', title: '邮箱', type: 'text'},
   { key: 'signPartyPhoneNumber', title: '手机号码',type: 'text'},
@@ -65,6 +76,7 @@ const editConfig = {
   controls2: controls2,
   buttons2:tableButtons,
   tableCols,
+  tableCols2,
   buttons3: footerButtons,
   contactConfig: {
     title: '从联系人中添加',
