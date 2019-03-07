@@ -102,9 +102,10 @@ class UploadDialog extends React.Component {
   };
 
   toPreviewDialog = () => {
-    const {previewImage, onClosePreview, previewVisible=false} = this.props;
+    const {previewImage, onClosePreview, previewVisible=falsem,confirmLoading} = this.props;
     const props = {
       title: '预览',
+      confirmLoading,
       onCancel: onClosePreview,
       visible: previewVisible,
       maskClosable: true,

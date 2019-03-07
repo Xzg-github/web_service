@@ -38,7 +38,8 @@ const buildState = async(config, items,edit) => {
     previewVisible: false,
     previewImage: '',
     msg,
-    srcImg:null
+    srcImg:null,
+    confirmLoading:false
   };
 };
 
@@ -48,6 +49,7 @@ const okActionCreator = () => async (dispatch, getState) => {
     dispatch(action.assign({valid: true}));
     return;
   }
+  dispatch(action.assign({confirmLoading:true}))
   let accountId =  getCookie('accountId');
   const formData = new FormData();
   fileList.forEach((file) => {
@@ -74,6 +76,7 @@ const okActionCreator = () => async (dispatch, getState) => {
         helper.showError(returnMsg);
         return
       }
+      dispatch(action.assign({confirmLoading:false}))
       helper.showSuccessMsg('新增成功')
       dispatch(action.assign({visible: false, ok: true}));
     })

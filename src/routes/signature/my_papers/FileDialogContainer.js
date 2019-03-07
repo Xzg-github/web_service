@@ -107,7 +107,6 @@ const closeActionCreator = () => (dispatch) => {
 
 const okActionCreator = () => async(dispatch,getState) => {
   const {select,ids,tree} = getSelfState(getState());
-  console.log(ids);
   if(select === '1-0'){
     helper.showError('当前节点不能移动')
     return

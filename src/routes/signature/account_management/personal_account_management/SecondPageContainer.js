@@ -78,15 +78,28 @@ const addAction = () => async (dispatch, getState) => {
 };
 
 const delAction = () => async (dispatch, getState) => {
-  const {checkValue} = getSelfState(getState());
+  const {checkValue,radioValue} = getSelfState(getState());
   let ids = [];
+  let radios = [];
+
   for(let v in checkValue){
     ids.push(v)
+  }
+  for(let v in radioValue){
+    radioValue[v] && (radios.push(v))
   }
   if(ids.length > 1){
     helper.showError('请勾选一个');
     return
   }
+
+
+  if(ids[0] === radios[0]){
+    helper.showError('默认签章不能删除');
+    return
+  }
+
+
   const url = `${URL_DEL}/${ids[0]}`;
   const {result,returnCode,returnMsg} = await helper.fetchJson(url,'delete');
   if(returnCode!=0){
@@ -128,6 +141,7 @@ const radioActionCreator = (radio,key) => async(dispatch,getState) =>{
     return
   }
   helper.showSuccessMsg(returnMsg);
+  dispatch(action.assign({[key]: radio}, [TAB_KEY,'radioValue']))
   return updateTable(dispatch,getState)
 
 };

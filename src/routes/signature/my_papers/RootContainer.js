@@ -23,6 +23,8 @@ const getSelfState = (rootState) => {
   return getPathValue(rootState, STATE_PATH);
 };
 
+
+
 //刷新表格
 const updateTable = async(dispatch,getState)  =>{
   const {currentPage, pageSize, searchData} = getSelfState(getState());
@@ -142,7 +144,7 @@ const moveAction = () =>  async (dispatch, getState) => {
   const {editConfig,tree,handleTree,tableItems} = getSelfState(getState());
   const index = findCheckedIndex1(tableItems);
   if (index === -1) {
-    helper.showError('请勾选一条记录进行删除');
+    helper.showError('请勾选一条记录进行移动');
     return;
   }
   let item = [];
@@ -170,7 +172,7 @@ const downloadAction = () =>  async (dispatch, getState) => {
   const {editConfig,tree,handleTree,tableItems} = getSelfState(getState());
   const index = helper.findOnlyCheckedIndex(tableItems);
   if (index === -1) {
-    helper.showError('请勾选一条记录进行编辑');
+    helper.showError('请勾选一条记录进行下载');
     return;
   }
   const id = tableItems[index].id;
