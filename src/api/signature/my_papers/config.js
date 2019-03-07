@@ -6,20 +6,20 @@ const isYesOrNo = [
 ];
 
 const filters = [
-  {key:'a',title:'文件主题',type:"text"},
-  {key:'b',title:'发起人',type:"text"},
-  {key:'c',title:'发起时间',type:"date"},
-  {key:'d',title:'至',type:"date"},
-  {key:'e',title:'是否抄送',type:"select",options:isYesOrNo},
-  {key:'f',title:'系统编号',type:'text'}
+  {key:'signFileSubject',title:'文件主题',type:"text"},
+  {key:'insertUser',title:'发起人',type:"text"},
+  {key:'signStartTimeFrom',title:'发起时间',type:"date"},
+  {key:'signStartTimeTo',title:'至',type:"date"},
+  {key:'isAddCcSide',title:'是否抄送',type:"select",options:isYesOrNo},
+  {key:'signFileSerialNumber',title:'系统编号',type:'text'}
 ];
 
 const tableCols = [
-  {key:'a',title:'系统编号',link:true},
-  {key:'b',title:'文件主题',link:true},
-  {key:'c',title:'发起人'},
-  {key:'d',title:'发起时间'},
-  {key:'e',title:'是否抄送'},
+  {key:'signFileSerialNumber',title:'系统编号',link:true},
+  {key:'signFileSubject',title:'文件主题',link:true},
+  {key:'insertUser',title:'发起人'},
+  {key:'signStartTime',title:'发起时间'},
+  {key:'isAddCcSide',title:'是否抄送',options:isYesOrNo},
 ];
 
 const buttons = [

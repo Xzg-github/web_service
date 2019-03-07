@@ -77,7 +77,6 @@ app.get('*', async (req, res, next) => {
     }
 
     if(req.path === '/code'){
-      console.log(req.query.accountId);
       res.cookie('token', req.query.token);
       res.cookie('accountId', req.query.accountId);
       res.redirect(302, '/fadada');
