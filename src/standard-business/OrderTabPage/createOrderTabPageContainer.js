@@ -110,6 +110,9 @@ const createOrderTabPageContainer = (action, getSelfState, actionCreatorsEx={}) 
     const selfState = getSelfState(getState());
     const {isRefresh, searchDataBak={}, pageSize, subTabs, subActiveKey, fixedFilters = {}} = selfState;
       fixedFilters.signState = subActiveKey;
+    if(subActiveKey === 'all'){
+      delete fixedFilters.signState
+    }
       const newState = {isRefresh: {...selfState.isRefresh, [key]: false}};
       return mySearch(dispatch, action, selfState, 1, pageSize[key], fixedFilters, newState);
   };

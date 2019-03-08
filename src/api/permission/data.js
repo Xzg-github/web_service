@@ -17,7 +17,6 @@ const data = {
       businessOrder: '企业订单',
 
       worker: '企业员工',
-      enterprise_staff: '企业员工',
       contacts: '联系人',
       signature_group: '签署群组',
       template_management: '模板管理',
