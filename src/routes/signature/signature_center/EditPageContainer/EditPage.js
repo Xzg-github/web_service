@@ -42,7 +42,7 @@ class EditPage extends React.Component {
   toButtons3 = (buttons) => {
     const {buttons3} = this.props;
     const props = {buttons: buttons3, size: 'default', callback: getObject(this.props, TOOLBAR_EVENTS )};
-    return <SuperToolbar {...props}/>
+    return <div style={{textAlign: 'center'}}><SuperToolbar {...props}/></div>
   };
 
   toForm1 = () => {
@@ -58,11 +58,16 @@ class EditPage extends React.Component {
   };
 
   toTable = () => {
-    const {tableCols, value, onExitValid, valid} = this.props;
+    const {tableCols, tableCols2, value, onExitValid, valid} = this.props;
     const {onContentChange, onCheck} = getObject(this.props, ['onContentChange', 'onCheck']);
     const events1 = { onContentChange, onCheck, onExitValid };
     const props = {cols: tableCols, items: value.signPartyList, callback: events1, valid};
-    return <SuperTable2 {...props}/>
+    const props2 = {cols: tableCols2, items: value.signPartyList, callback: events1, valid};
+    if(value.signOrderStrategy === '1' || value.signOrderStrategy === 1){
+      return <SuperTable2 {...props}/>
+    }else{
+      return <SuperTable2 {...props2}/>
+    }
   };
 
   render(){

@@ -61,7 +61,7 @@ const editAction = (tabKey) => async (dispatch, getState) => {
 //删除
 const delAction = (tabKey) => async (dispatch, getState) => {
   const {tableItems} = getSelfState(getState());
-  const URL_DEL =  `/api/signature/signature_center/del`;
+  const URL_DEL =  '/api/signature/signature_center/delete';
   const ids = tableItems[tabKey].filter(item => item.checked === true).map(item => item.id);
   if(ids.length < 1) return helper.showError('请先勾选要删除的记录');
   const {returnCode, returnMsg} = await helper.fetchJson(URL_DEL, helper.postOption(ids, 'delete'));
@@ -76,9 +76,9 @@ const signatureAction = (tabKey) => async (dispatch, getState) =>{
   if(checkedItems.length !== 1)return helper.showError('请勾选一条记录');
   const id = checkedItems[0].id;
   const URL_SIGN =  '/api/signature/signature_center/sign';
-  const {returnCode, returnMsg } = await helper.fetchJson(URL_SIGN, helper.postOption(id));
+  const {returnCode, returnMsg, result } = await helper.fetchJson(URL_SIGN, helper.postOption(id));
   if (returnCode !== 0) return helper.showError(returnMsg);
-  window.open(returnMsg)
+  window.open(result)
 };
 
 // link详情查看

@@ -105,7 +105,7 @@ class Login extends React.Component {
                 <img src="/customerService.jpg" className={s.customerService} />
               </div>
               <div className={s.r_side}>
-                <h1 role='title'>ePLD供应链管理系统</h1>
+                <h1 role='title'>电子合同管理系统</h1>
                   <Form onSubmit={this.onLogin}>
                     <Form.Item>
                       {this.toInput('email', 'user', {placeholder: '邮箱/手机号'})}
