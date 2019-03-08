@@ -65,4 +65,11 @@ api.delete('/delPerson/:id', async (req, res) => {
   res.send(await fetchJsonByNode(req,url,postOption(req.body,'delete')))
 });
 
+//分组群组下拉
+api.get('/dropGroup',async(req,res) => {
+  const url = `${host}/company_contact_group/drop_list`;
+  res.send(await fetchJsonByNode(req,url))
+});
+
+
 export default api;

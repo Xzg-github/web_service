@@ -19,6 +19,7 @@ const URL_LIST = '/api/signature/file_management/contacts/list';
 const URL_CONFIG = '/api/signature/file_management/contacts/config';
 const URL_TREE_LIST = '/api/signature/file_management/contacts/tree';
 const URL_DEL = '/api/signature/file_management/contacts/delPerson'; //删除员工
+const URL_DROP = '/api/signature/file_management/contacts/dropGroup'; //分组下拉
 
 const getSelfState = (rootState) => {
   return getPathValue(rootState, STATE_PATH);
@@ -124,12 +125,11 @@ const searchTreeAction = () =>  (dispatch, getState) => {
 
 const addActionCreator = () => async (dispatch, getState) => {
   const { addConfig,searchData } = getSelfState(getState());
-  let body = {
-    companyContactGroupId:searchData.companyContactGroupId,
-  };
-  if(!searchData.companyContactGroupId){
-    return
+  let body = {};
+  if(searchData.companyContactGroupId){
+    body.companyContactGroupId = searchData.companyContactGroupId
   }
+
   if (await showDialog(addConfig, {...body} ,false)) {
     await updateTable(dispatch,getState)
   }
@@ -275,6 +275,26 @@ const pageSizeActionCreator = (pageSize, currentPage) => async (dispatch, getSta
 };
 
 
+const onSearchActionCreator = (key, title) => async (dispatch, getState) => {
+  const {filters} = getSelfState(getState());
+  let data, options, body;
+  switch (key) {
+    case 'companyContactGroupId': {
+
+      data = await helper.fetchJson(URL_DROP);
+      if (data.returnCode != 0) {
+        return;
+      }
+      break;
+    }
+    default:
+      return;
+  }
+  options = data.result ;
+  const index = filters.findIndex(item => item.key == key);
+  dispatch(action.update({options}, 'filters', index));
+};
+
 
 const actionCreators = {
   onInit: initActionCreator,
@@ -285,6 +305,7 @@ const actionCreators = {
   onSelect: selectActionCreator,
   onPageNumberChange: pageNumberActionCreator,
   onChange: changeActionCreator,
+  onSearch:onSearchActionCreator,
   onPageSizeChange: pageSizeActionCreator,
 };
 

@@ -152,11 +152,7 @@ const moveAction = () =>  async (dispatch, getState) => {
     item.push(tableItems[index].id)
   });
   if (await showTreeDialog(editConfig,tree,handleTree,'移动文件夹',true,item)) {
-    const treeData = helper.getJsonResult(await helper.fetchJson(URL_TREE_LIST));
-    //生成树结构
-    const newTree = Tree.createWithInsertRoot(treeData,'全部文件', {guid: 'root', districtType:0});
-    dispatch(action.assign({tree:newTree,select:'1-0'}));
-    selectActionCreator('1-0')
+    return updateTable(dispatch,getState)
   }
 };
 

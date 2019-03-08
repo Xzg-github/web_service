@@ -8,14 +8,20 @@ import {toFormValue} from '../../../../common/check';
 const action = new Action(['temp'], false);
 
 const URL_ADD = '/api/signature/file_management/contacts/addPerson';
+const URL_DROP = '/api/signature/file_management/contacts/dropGroup'; //分组下拉
 
 const getSelfState = (state) => {
   return state.temp || {};
 };
 
 const buildState = (config, items,edit) => {
+  const controls = helper.deepCopy(config.controls);
+  if(!items.companyContactGroupId){
+    controls[4].type ='search'
+  }
   return {
     ...config,
+    controls,
     title: edit ? '编辑' : '新增',
     visible: true,
     value: items,
@@ -27,11 +33,35 @@ const changeActionCreator = (key, value) => {
   return action.assign({[key]: value}, 'value');
 };
 
+const checkPhone= (phone) => {
+  if(!(/^(((13[0-9]{1})|(15[0-9]{1})|(18[0-9]{1}))+\d{8})$/.test(phone))){
+    return false;
+  }else {
+    return true
+  }
+};
+
+const checkMail= (mail) => {
+  if(!(/^[a-zA-Z0-9_.-]+@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*\.[a-zA-Z0-9]{2,6}$/.test(mail))){
+    return false;
+  }else {
+    return true
+  }
+};
+
 const okActionCreator = () => async (dispatch, getState) => {
   const state = getSelfState(getState());
   if (!helper.validValue(state.controls, state.value)) {
     dispatch(action.assign({valid: true}));
     return;
+  }
+  if(!checkPhone(state.value.companyContactPhoneNumber)){
+    helper.showError('手机号码格式不正确')
+    return
+  }
+  if(!checkMail(state.value.companyContactEmail)){
+    helper.showError('邮箱格式不正确')
+    return
   }
   const body = helper.postOption(helper.convert(state.value),state.edit?'put':'post');
   const {result,returnCode,returnMsg} = await helper.fetchJson(URL_ADD,body);
@@ -67,9 +97,31 @@ const mapStateToProps = (state) => {
   return getSelfState(state);
 };
 
+const onSearchActionCreator = (key, title) => async (dispatch, getState) => {
+  const {controls} = getSelfState(getState());
+  let data, options, body;
+  switch (key) {
+    case 'companyContactGroupId': {
+
+      data = await helper.fetchJson(URL_DROP);
+      if (data.returnCode != 0) {
+        return;
+      }
+      break;
+    }
+    default:
+      return;
+  }
+  options = data.result ;
+  const index = controls.findIndex(item => item.key == key);
+  dispatch(action.update({options}, 'controls', index));
+};
+
+
 const actionCreators = {
   onChange: changeActionCreator,
   onClick: clickActionCreator,
+  onSearch:onSearchActionCreator,
   onExitValid: exitValidActionCreator
 };
 

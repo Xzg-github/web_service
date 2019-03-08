@@ -38,6 +38,7 @@ class SetDialog extends React.Component {
       valid: this.props.valid,
       options: this.props.options,
       onChange: this.props.onChange,
+      onSearch:this.props.onSearch,
       onExitValid: this.props.onExitValid
     };
   };
