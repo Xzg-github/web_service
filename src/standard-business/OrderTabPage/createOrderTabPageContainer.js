@@ -108,11 +108,10 @@ const createOrderTabPageContainer = (action, getSelfState, actionCreatorsEx={}) 
   const tabChangeActionCreator = (key) => async (dispatch, getState) => {
     dispatch(action.assign({subActiveKey: key}));
     const selfState = getSelfState(getState());
-    const {isRefresh, searchDataBak={}, pageSize} = selfState;
-    if (isRefresh[key]) {
+    const {isRefresh, searchDataBak={}, pageSize, subTabs, subActiveKey, fixedFilters = {}} = selfState;
+      fixedFilters.signState = subActiveKey;
       const newState = {isRefresh: {...selfState.isRefresh, [key]: false}};
-      return mySearch(dispatch, action, selfState, 1, pageSize[key], searchDataBak, newState);
-    }
+      return mySearch(dispatch, action, selfState, 1, pageSize[key], fixedFilters, newState);
   };
 
   const mapStateToProps = (state) => {
