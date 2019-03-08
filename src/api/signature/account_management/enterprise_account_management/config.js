@@ -14,7 +14,7 @@ const oneControls = [
 
 
 const LABELS = [
-  {key: 'grzh', title: '企业账号',type:'button',btn:'查看证书'},
+  {key: 'grzh', title: '企业账号'},
   {key: 'accountPassword', title: '登录密码',type:'edit'},
   {key: 'companyName', title: '企业名称',type:'button',btn:'企业信息变更'},
   {key: 'companyContact', title: '法人姓名'},
@@ -33,7 +33,7 @@ const two_buttons = [
 
 
 const two_controls = [
-  {key:'b',title:'签章名称',type:'text',required:true},
+  {key:'signSealName',title:'签章名称',type:'text',required:true},
 ];
 
 

@@ -5,13 +5,14 @@ import helper,{getObject, swapItems} from '../../../../common/common';
 import {Action} from '../../../../action-reducer/action';
 import {getPathValue} from '../../../../action-reducer/helper';
 import showDiaLogOne from './ShowDiaLog/DialogContainer';
+import {showDiaLog} from '../../signature_center/showDiaLog/AddDialogContainer';
 
 
 const TAB_KEY = 'one';
 const STATE_PATH =  ['enterprise_account_management'];
 
 const URL_LIST = '/api/signature/account_management/enterprise_account_management/oneList';
-const URL_DAYS = '/api/signature/account_management/personal_account_management/updateDays';
+const URL_DAYS = '/api/signature/account_management/enterprise_account_management/updateDays';
 const URL_EMAIL = '/api/signature/account_management/personal_account_management/email';
 const URL_PHONE = '/api/signature/account_management/personal_account_management/phone';
 
@@ -43,7 +44,7 @@ const initActionCreator = () => async (dispatch, getState) => {
   try {
     let accountId =  getCookie('accountId');
     const result =  helper.getJsonResult(await helper.fetchJson(`${URL_LIST}/${accountId}`));
-    result.grzh = result.registerType === 'phone_number' ? result.notifyPhone : result.notifyEmail;
+    result.grzh = result.registerType === 'phone_number' ? result.phone : result.email;
     result.isNotifiedByEmail = result.isNotifiedByEmail === 'true' ? true : false;
     result.isNotifiedByPhone = result.isNotifiedByPhone === 'true' ? true : false;
     dispatch(action.assign({
@@ -65,9 +66,19 @@ const passwordAction = () => async (dispatch, getState) => {
   }
 };
 
+const companyNameAction = () => async (dispatch, getState) => {
+  const controls = [
+    {key:'identNo',title:'组织机构代码或者统一社会信息代码 ',type:'text',required:true},
+    {key:'name',title:'企业名称',type:'text',required:true},
+  ];
+  if (await showDiaLog(controls, {} ,false)) {
+  }
+};
+
 
 const toolbarActions = {
   accountPassword:passwordAction,
+  companyName:companyNameAction
 };
 
 const clickActionCreator = (key) => {

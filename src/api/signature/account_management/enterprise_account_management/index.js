@@ -16,4 +16,11 @@ api.get('/oneList/:id', async (req, res) => {
   res.send(await fetchJsonByNode(req,url));
 });
 
+//修改天数
+api.post('/updateDays', async (req, res) => {
+  const url = `${host}/company_account/update_days_of_advance_notice`;
+  res.send(await fetchJsonByNode(req,url,postOption(req.body)));
+});
+
+
 export default api;
