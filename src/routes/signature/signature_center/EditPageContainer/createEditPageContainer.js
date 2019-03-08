@@ -240,12 +240,20 @@ const createEditPageContainer = (action, getSelfState) => {
   const {value} = getSelfState(getState());
   let id = value.id;
    const URL_SEND =  '/api/signature/signature_center/send';   //发送
-  const URL_SIGN =  '/api/signature/signature_center/sign';   //签署
-   const result1 = await helper.fetchJson(URL_SEND, helper.postOption(value));
-   if (result1.returnCode !== 0) return helper.showError(result1.returnMsg);
-   const {returnCode, returnMsg, result } = await helper.fetchJson(URL_SIGN, helper.postOption(id));
-   if (returnCode !== 0) return helper.showError(returnMsg);
-   window.open(result)
+   const URL_SIGN =  '/api/signature/signature_center/sign';   //签署
+   if(value.signOrderStrategy === '1' || value.signOrderStrategy === 1){
+     const {returnCode, returnMsg, result } = await helper.fetchJson(URL_SIGN, helper.postOption(id)); //先签署后发送
+     if (returnCode !== 0) return helper.showError(returnMsg);
+     const result1 = await helper.fetchJson(URL_SEND, helper.postOption(value));
+     if (result1.returnCode !== 0) return helper.showError(result1.returnMsg);
+     window.open(result);
+   }else{
+     const result1 = await helper.fetchJson(URL_SEND, helper.postOption(value));  //先发送后签署
+     if (result1.returnCode !== 0) return helper.showError(result1.returnMsg);
+     const {returnCode, returnMsg, result } = await helper.fetchJson(URL_SIGN, helper.postOption(id));
+     if (returnCode !== 0) return helper.showError(returnMsg);
+     window.open(result);
+   }
  } ;
 
  //发送

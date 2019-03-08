@@ -9,8 +9,8 @@ const isOptions1 = [
 ];
 
 const isWay = [
-  {value: 1, title: '签署文件'},
-  {value: 0, title: '发起文件'}
+  {value: 1, title: '签署文件（每人都需签署）'},
+  {value: 0, title: '发起文件（仅需对方签署）'}
 ];
 
 const isStrategy = [
@@ -50,8 +50,8 @@ const tableCols = [
   { key: 'signPartyName', title: '姓名/机构',type: 'text', required: true},
   { key: 'signPartyEmail', title: '邮箱', type: 'text'},
   { key: 'signPartyPhoneNumber', title: '手机号码',type: 'text'},
-  //{ key: 'whether', title: '允许增加签署方', type: 'select', options: isOptions},
-  //{ key: 'identity', title: '签署身份', type: 'select', options: isOptions1}
+  { key: 'isAllowAddSignatories', title: '允许增加签署方', type: 'select', options: isOptions},
+  { key: 'signIdentity', title: '签署身份', type: 'select', options: isOptions1}
 ];
 
 const tableCols2 = [
@@ -60,8 +60,8 @@ const tableCols2 = [
   { key: 'signPartyName', title: '姓名/机构',type: 'text', required: true},
   { key: 'signPartyEmail', title: '邮箱', type: 'text'},
   { key: 'signPartyPhoneNumber', title: '手机号码',type: 'text'},
-  //{ key: 'whether', title: '允许增加签署方', type: 'select', options: isOptions},
-  //{ key: 'identity', title: '签署身份', type: 'select', options: isOptions1}
+  { key: 'isAllowAddSignatories', title: '允许增加签署方', type: 'select', options: isOptions},
+  { key: 'signIdentity', title: '签署身份', type: 'select', options: isOptions1}
 ];
 
 const footerButtons = [
