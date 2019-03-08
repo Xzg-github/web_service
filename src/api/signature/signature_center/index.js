@@ -28,6 +28,33 @@ api.post('/list', async (req, res) => {
   res.send(await fetchJsonByNode(req, url, postOption({...filter, ...other})));
 });
 
+//获取全部tabs列表数据
+api.post('/tabslist', async (req, res) => {
+  const url = `${host}/sign_center/search_sign_file`;
+  const states = ['mySigned','hisSign','draft',false];
+  let body = {
+    itemFrom:0,
+    itemTo:65536
+  };
+  const count = [];
+  for(let state of states){
+    if(state){
+      body.signState = state;
+    }else {
+      delete body.signState
+    }
+    let json = await fetchJsonByNode(req,url,postOption(body));
+    if(json.returnCode !== 0 ){
+      res.send({returnCode:-1,returnMsg:'获取数据失败'});
+      return
+    }
+    count.push(json.result.returnTotalItems)
+  }
+  res.send({returnCode:0,returnMsg:'操作成功',result:count});
+
+});
+
+
 //保存
 api.post('/save', async(req, res) => {
   const url = `${host}/sign_center/save_sign`;

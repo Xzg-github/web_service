@@ -46,9 +46,9 @@ const config = {
   tabs: [{ key: 'index', title: '签署中心列表', close: false}],
   subTabs: [
     {key: 'mySign', title:'待我签', status: 'mySigned'},
-/*    {key: 'hisSign', title:'待他人签', status: 'hisSigned'},
+    {key: 'hisSign', title:'待他人签', status: 'hisSigned'},
     {key: 'draft', title: '草稿', status: 'draft'},
-    {key: 'all', title: '所有', status: 'orders'}*/
+    {key: 'all', title: '所有', status: 'orders'}
   ],
   activeKey: 'index',
   subActiveKey: 'mySign',

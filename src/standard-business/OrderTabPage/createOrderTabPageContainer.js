@@ -148,6 +148,8 @@ const createOrderTabPageContainer = (action, getSelfState, actionCreatorsEx={}) 
  *       statusNames - [可选] 需要获取的来自状态字典的表单状态下拉的表单类型值数组
 * 返回：成功返回初始化状态，失败返回空
 * */
+
+const URL_TABSLIST = '/api/signature/signature_center/tabslist';
 const buildOrderTabPageCommonState = async (urlConfig, urlList, statusNames=[]) => {
   try {
     //获取并完善config
@@ -159,12 +161,18 @@ const buildOrderTabPageCommonState = async (urlConfig, urlList, statusNames=[]) 
     setDictionary2(dic, config.filters, config.tableCols);*/
     //获取列表数据
     const {subActiveKey, subTabs, isTotal, initPageSize, fixedFilters={}, searchDataBak={}, buttons} = config;
+    for(let tab of subTabs){
+      if(tab.key === subActiveKey){
+        fixedFilters.signState = tab.status;
+      }
+    }
     const body = {
       itemFrom: 0,
       itemTo: initPageSize,
-      ...fixedFilters[subActiveKey],
+      ...fixedFilters,
       ...searchDataBak
     };
+    const json = helper.getJsonResult(await helper.fetchJson(URL_TABSLIST,'post'));
     const data = helper.getJsonResult(await helper.fetchJson(urlList, helper.postOption(body)));
     if (!data.tags && data.tabTotal) { //转成统一结构
       data.tags = Object.keys(data.tabTotal).map(item => ({tag: item, count: data.tabTotal[item]}));
@@ -198,6 +206,7 @@ const buildOrderTabPageCommonState = async (urlConfig, urlList, statusNames=[]) 
       isRefresh,
       tableItems,
       buttons,
+      tabsNumber:json,
       tableCols: helper.initTableCols(helper.getRouteKey(), config.tableCols),
       sortInfo: {},
       filterInfo: {},
