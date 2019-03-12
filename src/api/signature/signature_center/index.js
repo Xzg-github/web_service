@@ -1,9 +1,10 @@
 import express from 'express';
 import {postOption, fetchJsonByNode} from '../../../common/common';
-import {host} from '../../gloablConfig';
+import {host,fadadaServiceName} from '../../gloablConfig';
 
 let api = express.Router();
-const service = `${host}/fadada-service`;
+const service = `${host}/${fadadaServiceName}`;
+
 
 // 获取UI标签
 api.get('/config', async (req, res) => {
@@ -95,7 +96,7 @@ api.post('/authentication', async(req, res) => {
 //校验企业是否已经认证
 api.get('/authenticationList', async(req, res) => {
   const {accountId} = req.cookies;
-  const url = `${service}/company_account/detail/${accountId}`;
+  const url = `${service}/company_account/detail`;
   res.send(await fetchJsonByNode(req, url))
 });
 

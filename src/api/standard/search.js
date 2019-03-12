@@ -1,4 +1,4 @@
-import {host, maxSearchCount} from '../gloablConfig';
+import {host, maxSearchCount,fadadaServiceName} from '../gloablConfig';
 import {fetchJsonByNode, postOption} from '../../common/common';
 
 const handlers = {};

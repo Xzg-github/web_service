@@ -1,8 +1,8 @@
 import express from 'express';
 import {fetchJson, fetchJsonByNode, postOption} from '../../common/common';
-import {host, privilege} from '../gloablConfig';
+import {host, privilege,fadadaServiceName} from '../gloablConfig';
 let api = express.Router();
-const service = `${host}/fadada-service`;
+const service = `${host}/${fadadaServiceName}`;
 
 api.post('/', async (req, res) => {
   const url = `${service}/user/webank_face_verify`;

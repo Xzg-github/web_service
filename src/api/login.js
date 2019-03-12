@@ -1,13 +1,13 @@
 import express from 'express';
 import {fetchJson, fetchJsonByNode, postOption} from '../common/common';
-import {host, privilege} from './gloablConfig';
+import {host, privilege,fadadaServiceName} from './gloablConfig';
 let api = express.Router();
 
 const WEEK = 7 * 24 * 3600 * 1000;
 
 api.post('/', async (req, res) => {
   if (privilege) {
-    const url = `${host}/fadada-service/login/login`;
+    const url = `${host}/${fadadaServiceName}/login/login`;
     const json = await fetchJsonByNode(req,url, postOption(req.body));
     if (json.returnCode === 0) {
       res.cookie('username', req.body.account, {maxAge: WEEK});

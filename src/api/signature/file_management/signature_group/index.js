@@ -1,9 +1,9 @@
 import express from 'express';
 import {postOption, fetchJsonByNode} from '../../../../common/common';
-import {host} from '../../../gloablConfig';
+import {host,fadadaServiceName} from '../../../gloablConfig';
 
 let api = express.Router();
-const service = `${host}/fadada-service`;
+const service = `${host}/${fadadaServiceName}`;
 
 // 获取UI标签
 api.get('/config', async (req, res) => {

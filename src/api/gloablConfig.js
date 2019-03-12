@@ -33,6 +33,7 @@ const maxSearchCount = 20;
 
 
 // node转发请求所用的地址
+//let hostname = '192.168.202.33';
 let hostname = '10.10.10.76';
 let trackMapUrl;
 const readConfig = () => {
@@ -48,8 +49,12 @@ const readConfig = () => {
 
 readConfig();
 
+//const port = '9002';
 const port = '5555';
+const fadadaServiceName = 'fadada-service';
+//const fadadaServiceName = '';
 const host = `http://${hostname}:${port}`;
+
 
 //跟踪管理-轨迹信息的扩展页面地址
 const trackMapUrlEx = trackMapUrl ? trackMapUrl : `http://${hostname}:9108/trace/map/showMapFrame?apiId=get&truckNumbers=auto&systemId=epld&orderGuid=`;
@@ -65,6 +70,7 @@ export {
   host,
   hostname,
   port,
+  fadadaServiceName,
   privilege,
   maxSearchCount,
   trackMapUrlEx
