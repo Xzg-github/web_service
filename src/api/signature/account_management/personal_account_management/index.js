@@ -68,5 +68,16 @@ api.delete('/delSign/:id', async (req, res) => {
   res.send(await fetchJsonByNode(req,url,'delete'));
 });
 
+//获取企业名称
+api.get('/companyAccount/:id', async (req, res) => {
+  const url = `${service}/company_account/name_by_company_order/${req.params.id}`;
+  res.send(await fetchJsonByNode(req,url));
+});
+
+//更新企业
+api.post('/company', async (req, res) => {
+  const url = `${service}/user_account/bind_company_belong`;
+  res.send(await fetchJsonByNode(req,url,postOption(req.body)));
+});
 
 export default api;

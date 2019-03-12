@@ -16,12 +16,12 @@ const oneControls = [
 const LABELS = [
   //{key: 'qymc', title: '账号头像',type:'avatar'},
   {key: 'grzh', title: '个人账号'},
-  {key: 'accountPassword', title: '登录密码',type:'edit'},
+  //{key: 'accountPassword', title: '登录密码',type:'edit'},
   {key: 'realName', title: '真实姓名'},
   {key: 'idNumber', title: '身份账号'},
   {key: 'notifyPhone', title: '手机号码'},
   {key: 'notifyEmail', title: '电子邮件'},
-  {key: 'companyName', title: '归属企业'},
+  {key: 'companyName', title: '归属企业',type:'edit'},
 ];
 
 const two_buttons = [
@@ -201,6 +201,13 @@ const config = {
         {key: 'b', title: '新密码',type:'text',required:true},
         {key: 'c', title: '验证码通知方式',type:'select',options:[{value:'1',title:'邮件'},{value:'2',title:'短信'}],required:true},
         {key: 'd', title: '验证码',type:'text',required:true, btn:{title:"获取验证码",key:'obtain'}},
+      ]
+    },
+    diaLogFour:{
+      title:'绑定所属企业',
+      controls:[
+        {key: 'companyOrder', title: '所属企业编号',type:'text',required:true, btn:{title:"获取企业信息",key:'get'}},
+        {key: 'companyName', title: '所属企业名称',type:'readonly'},
       ]
     }
   },

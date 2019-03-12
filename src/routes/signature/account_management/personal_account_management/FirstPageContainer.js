@@ -5,6 +5,7 @@ import helper,{getObject, swapItems} from '../../../../common/common';
 import {Action} from '../../../../action-reducer/action';
 import {getPathValue} from '../../../../action-reducer/helper';
 import showDiaLogOne from './ShowDiaLog/DialogContainer';
+import showDiaLogFour from './ShowDiaLog/FourDialogContainer';
 
 
 const TAB_KEY = 'one';
@@ -28,6 +29,14 @@ function getCookie(cookieName) {
   return "";
 }
 
+const updateTable = async(dispatch,getState)  =>{
+  let accountId =  getCookie('accountId');
+  const result =  helper.getJsonResult(await helper.fetchJson(`${URL_LIST}/${accountId}`));
+  result.grzh = result.registerType === 'phone_number' ? result.notifyPhone : result.notifyEmail;
+  result.isNotifiedByEmail = result.isNotifiedByEmail === 'true' ? true : false;
+  result.isNotifiedByPhone = result.isNotifiedByPhone === 'true' ? true : false;
+  dispatch(action.assign({value: {...result}}))
+};
 
 
 const action = new Action(STATE_PATH);
@@ -65,9 +74,18 @@ const passwordAction = () => async (dispatch, getState) => {
   }
 };
 
+const companyNameAction = () => async (dispatch, getState) => {
+  const {diaLogFour,value} = getSelfState(getState());
+
+  if (await showDiaLogFour(diaLogFour,{id:value.id})) {
+    return updateTable(dispatch, getState)
+  }
+};
+
 
 const toolbarActions = {
   accountPassword:passwordAction,
+  companyName:companyNameAction
 };
 
 const clickActionCreator = (key) => {

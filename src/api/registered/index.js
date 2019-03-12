@@ -4,6 +4,8 @@ import {host} from '../gloablConfig';
 
 let api = express.Router();
 
+const service = `${host}/fadada-service`;
+
 // 获取UI标签
 api.get('/config', async (req, res) => {
   const module = await require('./config');
@@ -12,13 +14,13 @@ api.get('/config', async (req, res) => {
 
 //注册
 api.post('/personal', async (req, res) => {
-  const url = `${host}/register/register_personal_account`;
+  const url = `${service}/register/register_personal_account`;
   res.send(await fetchJsonByNode(req, url, postOption(req.body, 'post')));
 });
 
 //企业注册
 api.post('/company', async (req, res) => {
-  const url = `${host}/register/register_company_account`;
+  const url = `${service}/register/register_company_account`;
   res.send(await fetchJsonByNode(req, url, postOption(req.body, 'post')))
 });
 

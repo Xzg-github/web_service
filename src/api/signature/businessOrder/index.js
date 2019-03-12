@@ -3,6 +3,7 @@ import {postOption, fetchJsonByNode} from "../../../common/common";
 import {host} from "../../gloablConfig";
 
 let api = express.Router();
+const service = `${host}/fadada-service`;
 
 // 获取配置信息
 api.get('/config', async (req, res) => {

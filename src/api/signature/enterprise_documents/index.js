@@ -3,6 +3,7 @@ import {postOption, fetchJsonByNode} from '../../../common/common';
 import {host} from '../../gloablConfig';
 
 let api = express.Router();
+const service = `${host}/fadada-service`;
 
 // 获取UI标签
 api.get('/config', async (req, res) => {
@@ -26,7 +27,7 @@ api.post('/searchList', async (req, res) => {
   const body = {
     param:req.body.filter
   };
-  const url = `${host}/sign_group/select_member_info`;
+  const url = `${service}/sign_group/select_member_info`;
   res.send(await fetchJsonByNode(req,url,postOption(body)));
 });
 

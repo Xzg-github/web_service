@@ -202,6 +202,10 @@ const buildOrderTabPageCommonState = async (urlConfig, urlList, statusNames=[]) 
     isRefresh[subActiveKey] = false;
     //判断认证
     const res = helper.getJsonResult(await helper.fetchJson(URL_AUTHENTICATION));
+    let isAuthentication = false;
+    if(res && res.companyAccountState){
+      isAuthentication = res.companyAccountState == 3 ? true: false;
+    }
     return {
       searchData:{},
       searchDataBak: {},
@@ -218,7 +222,7 @@ const buildOrderTabPageCommonState = async (urlConfig, urlList, statusNames=[]) 
       sortInfo: {},
       filterInfo: {},
       status: 'page',
-      isAuthentication:res.companyAccountState == 3 ? true: false,
+      isAuthentication
     };
   } catch (e) {
     helper.showError(e.message);
