@@ -1,6 +1,6 @@
 import React, {PropTypes} from 'react';
 import {ModalWithDrag,Title} from '../../../../../components';
-import SuperForm from '../../enterprise_certification/components/SuperForm'
+import SuperForm from '../../../../../components/SuperForm'
 import {Alert} from 'antd'
 
 class SetDialog extends React.Component {

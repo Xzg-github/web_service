@@ -6,6 +6,7 @@ import helper from '../../../../../common/common';
 
 const action = new Action(['temp'], false);
 
+const URL_ADD = '/api/signature/account_management/enterprise_account_management/addOrder';//获取价格明细
 
 const getSelfState = (state) => {
   return state.temp || {};
@@ -26,6 +27,31 @@ const changeActionCreator = (key, value) => {
 };
 
 const okActionCreator = () => async (dispatch, getState) => {
+  const {value,controls,items} = getSelfState(getState());
+  if (!helper.validValue(controls, value)) {
+    dispatch(action.assign({valid: true}));
+    return;
+  }
+  let isMoney = false;
+  for(let item of items){
+    let money = Number(value.orderMoney);
+    let start = Number(item.startPrice);
+    let end = Number(item.endPrice);
+    if(money > start && money < end){
+      isMoney = true;
+      value.unitPrice = item.price;
+    }
+  }
+  if(!isMoney){
+    helper.showError('请填写价格区间中的金额');
+    return
+  }
+  const {result,returnCode,returnMsg} = await helper.fetchJson(URL_ADD,helper.postOption(value));
+  if(returnCode!==0){
+    helper.showError(returnMsg);
+    return
+  }
+
 
 };
 
@@ -60,14 +86,20 @@ const actionCreators = {
   onExitValid: exitValidActionCreator
 };
 
-export default async (config, items) => {
 
-  const Container = connect(mapStateToProps, actionCreators)(OrderDialog);
-  global.store.dispatch(action.create(buildState(config, items)));
-  await showPopup(Container, {}, true);
+const URL_ITEMS = '/api/signature/account_management/enterprise_account_management/rule';//获取价格明细
+export default async (config) => {
+  try {
+    const Container = connect(mapStateToProps, actionCreators)(OrderDialog);
+    const items = helper.getJsonResult(await helper.fetchJson(URL_ITEMS));
+    global.store.dispatch(action.create(buildState(config, items)));
+    await showPopup(Container, {}, true);
+    const state = getSelfState(global.store.getState());
+    global.store.dispatch(action.create({}));
+    return state.ok;
+  }catch (e){
+    helper.showError(e.message)
+  }
 
-  const state = getSelfState(global.store.getState());
-  global.store.dispatch(action.create({}));
-  return state.ok;
 };
 

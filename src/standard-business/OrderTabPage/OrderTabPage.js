@@ -150,9 +150,10 @@ class OrderTabPage extends React.Component {
   };
 
   render = () => {
+    const {isAuthentication = false} = this.props;
     return (
       <div className={s.root}>
-        {this.toAlert()}
+        {!isAuthentication ? this.toAlert() : null}
         <Card>
         {this.toSearch()}
         </Card>

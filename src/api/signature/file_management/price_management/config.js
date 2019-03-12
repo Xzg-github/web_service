@@ -88,7 +88,7 @@ const cols = [
   {key:'index',title:'序号',type:'index'},
   {key:'businessItemId',title:'业务项目',type:'search',required:true},
   {key:'chargeWay',title:'计费方式',type:'select',options:chargeWayOptions,required:true},
-  {key:'ruleGuid',title:'规则名称 ',type:'readonly'},
+  {key:'ruleName',title:'规则名称 ',type:'readonly'},
   {key:'unitType',title:'单位',type:'select',options:unitOptions,required:true},
   {key:'price',title:'价格(元)',type:'number',props: {real: true, precision: 2}},
   {key:'description',title:'备注 ',type:'text'},

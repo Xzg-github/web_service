@@ -5,7 +5,7 @@ import helper,{getObject, swapItems} from '../../../../common/common';
 import {Action} from '../../../../action-reducer/action';
 import {getPathValue} from '../../../../action-reducer/helper';
 import showDiaLogOne from './ShowDiaLog/DialogContainer';
-import {showDiaLog} from '../../signature_center/showDiaLog/AddDialogContainer';
+import showDiaLog from '../../signature_center/showDiaLog/AddDialogContainer';
 
 
 const TAB_KEY = 'one';

@@ -1,6 +1,6 @@
 import React, {PropTypes} from 'react';
 import {ModalWithDrag,SuperTable,Title} from '../../../../../components';
-import SuperForm from '../../enterprise_certification/components/SuperForm'
+import SuperForm from '../../../../../components/SuperForm'
 
 class SetDialog extends React.Component {
   static propTypes = {

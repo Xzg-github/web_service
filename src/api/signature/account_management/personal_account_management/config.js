@@ -141,7 +141,7 @@ const optionApp = [
 ];
 
 const four_application_controls_title = [
-  {key:'a',title:'请选择开票类型',type:'radioGroup',options:optionApp,required:true},
+  {key:'a',title:'请选择开票类型',type:'select',options:optionApp,required:true},
 ];
 
 const four_application_controls1 = [

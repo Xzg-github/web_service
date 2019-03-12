@@ -149,9 +149,12 @@ const createOrderTabPageContainer = (action, getSelfState, actionCreatorsEx={}) 
  *       urlList - [必需] 获取列表数据的url
  *       statusNames - [可选] 需要获取的来自状态字典的表单状态下拉的表单类型值数组
 * 返回：成功返回初始化状态，失败返回空
+* 判断是否是企业登录还是个人登录，看后端给的状态是否是以认证来决定是否需要展示认证
+* 帐号状态 0：禁用，1：待认证，2：认证失败 3:已认证
 * */
 
 const URL_TABSLIST = '/api/signature/signature_center/tabslist';
+const URL_AUTHENTICATION = '/api/signature/signature_center/authenticationList';//校验认证
 const buildOrderTabPageCommonState = async (urlConfig, urlList, statusNames=[]) => {
   try {
     //获取并完善config
@@ -197,6 +200,8 @@ const buildOrderTabPageCommonState = async (urlConfig, urlList, statusNames=[]) 
     });
     tableItems[subActiveKey] = data.data || [];
     isRefresh[subActiveKey] = false;
+    //判断认证
+    const res = helper.getJsonResult(await helper.fetchJson(URL_AUTHENTICATION));
     return {
       searchData:{},
       searchDataBak: {},
@@ -212,7 +217,8 @@ const buildOrderTabPageCommonState = async (urlConfig, urlList, statusNames=[]) 
       tableCols: helper.initTableCols(helper.getRouteKey(), config.tableCols),
       sortInfo: {},
       filterInfo: {},
-      status: 'page'
+      status: 'page',
+      isAuthentication:res.companyAccountState == 3 ? true: false,
     };
   } catch (e) {
     helper.showError(e.message);

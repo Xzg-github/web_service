@@ -11,13 +11,13 @@ const getSelfState = (state) => {
   return state.temp || {};
 };
 
-const buildState = (config, items) => {
+const buildState = (config, items={}) => {
   return {
     ...config,
     items,
     title:'设置阶梯',
     visible: true,
-    value: {}
+    value: items
   };
 };
 
@@ -45,7 +45,7 @@ const okActionCreator = () => async (dispatch, getState) => {
     return
   }
 
-  if(value.startPrice && value.endPrice && value.startPrice > value.endPrice){
+  if(value.startPrice && value.endPrice && Number(value.startPrice) > Number(value.endPrice)){
     helper.showError('区间下限不能大于区间上限');
     return
   }

@@ -70,10 +70,14 @@ const three_controls = [
   {key:'g',title:'授权签章',type:'select',required:true},
 ];
 
+const statusOptions = [
+  {value:0,title:'未支付'},
+  {value:1,title:'已支付'}
+];
 
 const four_tableCols = [
-  {key:'a',title:'订单状态'},
-  {key:'b',title:'订单编号'},
+  {key:'orderStatus',title:'订单状态',options:statusOptions},
+  {key:'nativeOrderNo',title:'订单编号'},
   {key:'c',title:'订购金额'},
   {key:'h',title:'有效期'},
   {key:'d',title:'订购时间'},
@@ -88,7 +92,7 @@ const four_tableCols = [
 ];
 
 const four_controls = [
-  {key:'b',title:'订购金额',type:'number',required:true},
+  {key:'orderMoney',title:'订购金额',type:'number',required:true},
 ];
 
 const four_buttons = [
@@ -106,10 +110,17 @@ const four_filters = [
   {key:'f',title:'至',type:'date'},
 ];
 
+const unitOptions = [
+  {value:'unitType',title:'次'},
+  {value:'strip',title:'条'},
+];
+
 const four_cols = [
-  {key:'a',title:'订购金额(元)'},
-  {key:'b',title:'文件签署单价(元/份)'},
-  {key:'c',title:'有效期'},
+  {key:'ruleName',title:'套餐名称'},
+  {key:'businessItemId',title:'业务项目'},
+  {key:'price',title:'价格(元)'},
+  {key:'unitType',title:'单位',options:unitOptions},
+  {key:'effectiveType',title:'有效期'},
 ];
 
 
@@ -243,6 +254,9 @@ const config = {
     },
     buttons:four_buttons,
     filters:four_filters,
+    pageSize,
+    pageSizeType,
+    description,
     searchConfig,
     searchData:{},
     tableItems:[]

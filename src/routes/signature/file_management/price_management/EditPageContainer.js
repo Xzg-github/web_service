@@ -28,7 +28,7 @@ const initActionCreator = () => async (dispatch, getState) => {
     if(id){
       const json = helper.getJsonResult(await helper.fetchJson(`${URL_ONE}/${id}`));
       value = json;
-      tableItems = json.detailDtoList;
+      tableItems = json.detailDtoList ? json.detailDtoList  : [];
     }
 
     dispatch(action.assign({
@@ -137,10 +137,14 @@ const setAction = () => async (dispatch, getState) => {
     helper.showError('计费方式为阶梯价格才可设置阶梯');
     return
   }
-  let result = await showDiaLog(diaLog,{});
+  let items = {};
+  if(tableItems[index].priceRule){
+    items = JSON.parse(tableItems[index].priceRule)
+  }
+  let result = await showDiaLog(diaLog,{...items});
   if (result.length > 0) {
     dispatch(action.update({['priceRule']: JSON.stringify(result[0])}, [tabKey,'tableItems'], index));
-    dispatch(action.update({['ruleGuid']: result[0].ruleName}, [tabKey,'tableItems'], index));
+    dispatch(action.update({['ruleName']: result[0].ruleName}, [tabKey,'tableItems'], index));
   }
 };
 

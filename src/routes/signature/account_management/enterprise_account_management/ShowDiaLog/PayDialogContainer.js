@@ -4,11 +4,11 @@ import {Action} from '../../../../../action-reducer/action';
 import showPopup from '../../../../../standard-business/showPopup';
 import helper from '../../../../../common/common';
 
-const action = new Action(['temp'], false);
+const action = new Action(['fadada'], false);
 
 
 const getSelfState = (state) => {
-  return state.temp || {};
+  return state.fadada || {};
 };
 
 const buildState = (config, items=[],title) => {

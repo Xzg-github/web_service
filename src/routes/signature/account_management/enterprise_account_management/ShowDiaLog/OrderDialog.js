@@ -24,7 +24,7 @@ class SetDialog extends React.Component {
       title: this.props.title,
       visible: this.props.visible,
       maskClosable: false,
-      width: 550,
+      width: 650,
       onOk: this.onClick.bind(null, 'ok'),
       onCancel: this.onClick.bind(null, 'close'),
       afterClose: this.props.afterClose
@@ -33,7 +33,6 @@ class SetDialog extends React.Component {
 
   tableProps = () => {
     const {cols, items, sortInfo, filterInfo,hasUnreadTable} = this.props;
-    console.log(items);
     return {
       hasUnreadTable,
       sortInfo,

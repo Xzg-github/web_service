@@ -137,6 +137,7 @@ const clickActionCreator = (tabKey, key) => {
 
 
 // 认证
+//企业登录 弹出modal，个人登录跳转去个人认证
 const onAuthenticationActionCreator = () => async(dispatch, getState) => {
   const controls = [
     {key:'identNo',title:'组织机构代码或者统一社会信息代码 ',type:'text',required:true},
