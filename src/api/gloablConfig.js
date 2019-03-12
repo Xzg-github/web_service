@@ -33,7 +33,7 @@ const maxSearchCount = 20;
 
 
 // node转发请求所用的地址
-let hostname = '10.10.10.76';
+let hostname = '10.10.10.174';
 let trackMapUrl;
 const readConfig = () => {
   try {
@@ -48,7 +48,7 @@ const readConfig = () => {
 
 readConfig();
 
-const port = '8080';
+const port = '9081';
 const host = `http://${hostname}:${port}`;
 
 //跟踪管理-轨迹信息的扩展页面地址
