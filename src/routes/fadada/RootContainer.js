@@ -41,7 +41,7 @@ const initActionCreator = () => async (dispatch, getState) => {
     dispatch(action.assign({status: 'loading'}));
     //初始化数据
     let strCookie =  getCookie('accountId');
-    const json = helper.getJsonResult(await helper.fetchJson(`${URL_USER}/${strCookie}`));
+    const json = helper.getJsonResult(await helper.fetchJson(`${URL_USER}`));
 
     //页面数据
     dispatch(action.assign({
@@ -65,7 +65,6 @@ const nextActionCreator = () => async(dispatch, getState) => {
   dispatch(action.assign({loading:true}));
   const {value} = getSelfState(getState());
   const body = {
-    id:value.accountId,
     idNumber:value.idNumber,
     realName:value.realName
   };

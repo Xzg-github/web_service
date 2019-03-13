@@ -43,18 +43,18 @@ const getSelfState = (rootState) => {
 };
 
 const initActionCreator = () => async (dispatch, getState) => {
-  const state = getSelfState(getState());
-  const jsonResult = helper.getJsonResult(await helper.fetchJson(URL_SIGN));
-  let radioValue = {};
-  for(let json of jsonResult){
-    if(json.isDefaultSeal == 1){
-
-    }
-    radioValue[json.id] = json.isDefaultSeal == 1 ? true:false
-  }
-
   dispatch(action.assign({status: 'loading'}, TAB_KEY));
   try {
+    const state = getSelfState(getState());
+    const jsonResult = helper.getJsonResult(await helper.fetchJson(URL_SIGN));
+    let radioValue = {};
+    for(let json of jsonResult){
+      if(json.isDefaultSeal == 1){
+
+      }
+      radioValue[json.id] = json.isDefaultSeal == 1 ? true:false
+    }
+
     dispatch(action.assign({
       ...state,
       uploadList:jsonResult?jsonResult:[],

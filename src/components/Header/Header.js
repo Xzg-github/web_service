@@ -76,7 +76,8 @@ class Header extends React.Component {
 
   toLogo = (homeUrl) => {
     const props = this.getLinkProps('home', homeUrl || '/', {role: 'logo'});
-    return <Link {...props}><img src="/logo.png" alt='ePLD'/></Link>;
+    //return <Link {...props}><img src="/logo.png" alt='ePLD'/></Link>;
+    return <img src="/logo.png" alt='ePLD'/>;
   };
 
   toItem = ({key, href, title}, index) => {
@@ -124,11 +125,11 @@ class Header extends React.Component {
       onVisibleChange: this.onVisibleChange
     };
     return (
-      <Dropdown {...props}>
+      //<Dropdown {...props}>
         <span role='avatar' data-role='block' data-active={this.state.visible ? true : null}>
           <Avatar icon="user" />
         </span>
-      </Dropdown>
+      //</Dropdown>
     );
   };
 

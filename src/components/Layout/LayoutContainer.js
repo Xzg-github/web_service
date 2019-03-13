@@ -73,7 +73,7 @@ const initActionCreator = () => async (dispatch) => {
   dispatch(action.assign({status: 'loading'}));
   //获取cookie中的当前用户的token
   const token =helper.getToken();
-  const role = await helper.fetchJson(`${ROLE_URL}/${token}`);
+  const role = await helper.fetchJson(`${ROLE_URL}`);
   const {returnCode, returnMsg, result} = await helper.fetchJson(`${PRIVILEGE_URL}/${role.result}`);
   if (returnCode === 0) {
     const tableColsSetting = await getTableColsConfig();

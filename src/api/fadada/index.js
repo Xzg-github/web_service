@@ -10,8 +10,8 @@ api.post('/', async (req, res) => {
 });
 
 
-api.get('/user/:id', async (req, res) => {
-  const url = `${service}/user/detail/${req.params.id}`;
+api.get('/user', async (req, res) => {
+  const url = `${service}/user_account/detail`;
   res.send(await fetchJsonByNode(req, url));
 });
 

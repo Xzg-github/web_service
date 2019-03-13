@@ -149,12 +149,18 @@ const createOrderTabPageContainer = (action, getSelfState, actionCreatorsEx={}) 
  *       urlList - [必需] 获取列表数据的url
  *       statusNames - [可选] 需要获取的来自状态字典的表单状态下拉的表单类型值数组
 * 返回：成功返回初始化状态，失败返回空
+* 根据token判断是否是个人还是企业
 * 判断是否是企业登录还是个人登录，看后端给的状态是否是以认证来决定是否需要展示认证
 * 帐号状态 0：禁用，1：待认证，2：认证失败 3:已认证
+* econtract_admin_role      电子签署平台运营
+  econtract_company_role    电子签署企业账号
+  econtract_personal_role   电子签署个人账号
 * */
 
 const URL_TABSLIST = '/api/signature/signature_center/tabslist';
-const URL_AUTHENTICATION = '/api/signature/signature_center/authenticationList';//校验认证
+const ROLE_URL = '/api/permission/role';//根据token判断是否是个人还是企业
+const URL_AUTHENTICATION = '/api/signature/account_management/enterprise_account_management/oneList';//企业校验认证
+const URL_PERSON = '/api/signature/account_management/personal_account_management/person';//个人
 const buildOrderTabPageCommonState = async (urlConfig, urlList, statusNames=[]) => {
   try {
     //获取并完善config
@@ -200,11 +206,15 @@ const buildOrderTabPageCommonState = async (urlConfig, urlList, statusNames=[]) 
     });
     tableItems[subActiveKey] = data.data || [];
     isRefresh[subActiveKey] = false;
+    //判断是个人还是企业
+    const role = helper.getJsonResult(await helper.fetchJson(`${ROLE_URL}`));
+    const url = role === 'econtract_personal_role' ? URL_PERSON: URL_AUTHENTICATION;
     //判断认证
-    const res = helper.getJsonResult(await helper.fetchJson(URL_AUTHENTICATION));
+    const res = helper.getJsonResult(await helper.fetchJson(url));
+    const state = role === 'econtract_personal_role' ? res.userAccountState: res.companyAccountState
     let isAuthentication = false;
-    if(res && res.companyAccountState){
-      isAuthentication = res.companyAccountState == 3 ? true: false;
+    if(res && state){
+      isAuthentication = res.state == 3 ? true: false;
     }
     return {
       searchData:{},
@@ -222,7 +232,8 @@ const buildOrderTabPageCommonState = async (urlConfig, urlList, statusNames=[]) 
       sortInfo: {},
       filterInfo: {},
       status: 'page',
-      isAuthentication
+      isAuthentication,
+      role
     };
   } catch (e) {
     helper.showError(e.message);

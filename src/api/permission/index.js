@@ -176,8 +176,9 @@ api.post( '/custom_export_table', async (req, res) => {
 });
 
 //依据username获取该用户的角色
-api.get('/role/:token', async (req, res) => {
-  const url = `${service}/authc/${req.params.token}/account`;
+api.get('/role', async (req, res) => {
+  const {token} = req.cookies;
+  const url = `${service}/authc/${token}/account`;
   const {returnCode, result} = await fetchJsonByNode(req, url);
   returnCode === 0 ? res.send({returnCode, result: result['contractRoles']}) : res.send({returnCode: -1});
 })
