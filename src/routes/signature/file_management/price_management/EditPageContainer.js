@@ -111,11 +111,19 @@ const submitAction  = (props) =>async(dispatch, getState) => {
     return;
   }
 
+  for(let item of tableItems) {
+    if(item.chargeWay === 'ladderPrice' && !item.priceRule){
+      helper.showError('阶梯价格必须设置价格区间');
+      return
+    }
+  }
+
   const body = {
     ...value,
     detailDtoList:tableItems.map(item => helper.convert(item)),
-    statusType:'wait_status_effective_completed'
   };
+
+  delete body.statusType
 
   const {result,returnCode,returnMsg} = await helper.fetchJson(URL_UPDATE,helper.postOption(body,edit?'put':'post'));
   if(returnCode !== 0 ){

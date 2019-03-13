@@ -78,9 +78,9 @@ const statusOptions = [
 const four_tableCols = [
   {key:'orderStatus',title:'订单状态',options:statusOptions},
   {key:'nativeOrderNo',title:'订单编号'},
-  {key:'c',title:'订购金额'},
-  {key:'h',title:'有效期'},
-  {key:'d',title:'订购时间'},
+  {key:'orderMoney',title:'订购金额'},
+  {key:'orderTime',title:'有效期'},
+  {key:'dinsertTime',title:'订购时间'},
   {key:'e',title:'支付方式'},
   {key:'f',title:'付款流水号'},
   {key:'g',title:'付款时间'},
@@ -104,10 +104,10 @@ const four_buttons = [
 ];
 
 const four_filters = [
-  {key:'c',title:'订单编号',type:'text'},
-  {key:'d',title:'发票状态',type:'search'},
-  {key:'e',title:'订购时间',type:'date'},
-  {key:'f',title:'至',type:'date'},
+  {key:'nativeOrderNo',title:'订单编号',type:'text'},
+  {key:'orderStatus',title:'订单状态',type:'select',options:statusOptions},
+  {key:'orderTimeFrom',title:'订购时间',type:'date'},
+  {key:'orderTimeTo',title:'至',type:'date'},
 ];
 
 const unitOptions = [
@@ -125,9 +125,9 @@ const four_cols = [
 
 
 const four_pay_cols = [
-  {key:'a',title:'文件签署单价(元/份)'},
-  {key:'b',title:'数量(份)'},
-  {key:'c',title:'订购金额(元)'},
+  {key:'unitPrice',title:'文件签署单价(元/份)'},
+  {key:'number',title:'数量(份)'},
+  {key:'orderMoney',title:'订购金额(元)'},
 ];
 
 const payOption = [
@@ -264,7 +264,7 @@ const config = {
   tabs:[
     {key: 'one', title:'账号设置', close: false},
     {key: 'two', title:'签章管理', close: false},
-    {key: 'three',title:'授权管理', close: false},
+    // {key: 'three',title:'授权管理', close: false},
     {key: 'four', title:'订单管理', close: false},
   ]
 };

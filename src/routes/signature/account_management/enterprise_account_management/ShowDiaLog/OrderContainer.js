@@ -3,6 +3,7 @@ import OrderDialog from './OrderDialog';
 import {Action} from '../../../../../action-reducer/action';
 import showPopup from '../../../../../standard-business/showPopup';
 import helper from '../../../../../common/common';
+import showPayDiaLog from './PayDialogContainer';
 
 const action = new Action(['temp'], false);
 
@@ -12,13 +13,15 @@ const getSelfState = (state) => {
   return state.temp || {};
 };
 
-const buildState = (config, items=[]) => {
+const buildState = (config, items=[],pay) => {
+  console.log(pay);
   return {
     ...config,
     items,
     title:'订购',
     visible: true,
-    value: {}
+    value: {},
+    pay
   };
 };
 
@@ -27,7 +30,7 @@ const changeActionCreator = (key, value) => {
 };
 
 const okActionCreator = () => async (dispatch, getState) => {
-  const {value,controls,items} = getSelfState(getState());
+  const {value,controls,items,pay} = getSelfState(getState());
   if (!helper.validValue(controls, value)) {
     dispatch(action.assign({valid: true}));
     return;
@@ -37,7 +40,7 @@ const okActionCreator = () => async (dispatch, getState) => {
     let money = Number(value.orderMoney);
     let start = Number(item.startPrice);
     let end = Number(item.endPrice);
-    if(money > start && money < end){
+    if(money >= start && money <= end){
       isMoney = true;
       value.unitPrice = item.price;
     }
@@ -51,8 +54,10 @@ const okActionCreator = () => async (dispatch, getState) => {
     helper.showError(returnMsg);
     return
   }
+  result.number = Math.floor(result.orderMoney/result.unitPrice);
+  const res = await showPayDiaLog(pay,[result],result.nativeOrderNo);
 
-
+  dispatch(action.assign({visible: false, ok: true}));
 };
 
 const closeActionCreator = () => (dispatch) => {
@@ -88,11 +93,11 @@ const actionCreators = {
 
 
 const URL_ITEMS = '/api/signature/account_management/enterprise_account_management/rule';//获取价格明细
-export default async (config) => {
+export default async (config,pay) => {
   try {
     const Container = connect(mapStateToProps, actionCreators)(OrderDialog);
     const items = helper.getJsonResult(await helper.fetchJson(URL_ITEMS));
-    global.store.dispatch(action.create(buildState(config, items)));
+    global.store.dispatch(action.create(buildState(config, items,pay)));
     await showPopup(Container, {}, true);
     const state = getSelfState(global.store.getState());
     global.store.dispatch(action.create({}));

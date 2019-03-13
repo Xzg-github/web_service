@@ -17,6 +17,7 @@ const TAB_KEY = 'four';
 const STATE_PATH =  ['enterprise_account_management'];
 
 const URL_LIST = '/api/signature/account_management/enterprise_account_management/list';//获取列表信息
+const URL_PRICE = '/api/signature/account_management/enterprise_account_management/price';//根据id获取价格信息
 
 const action = new Action(STATE_PATH);
 
@@ -62,18 +63,28 @@ const searchClickActionCreator = () => async (dispatch, getState) => {
 
 
 const orderAction = () => async (dispatch, getState) => {
-  const {order} = getSelfState(getState());
-
-  if (await showDiaLog(order,[])) {
-
+  const {order,pay} = getSelfState(getState());
+  if (await showDiaLog(order,pay)) {
+    return updateTable(dispatch, getState)
   }
 };
 
 const payAction = () => async (dispatch, getState) => {
-  const {pay} = getSelfState(getState());
-
-  if (await showPayDiaLog(pay,[],'1231233')) {
-
+  const {pay,tableItems} = getSelfState(getState());
+  const index = helper.findOnlyCheckedIndex(tableItems);
+  if(index === -1){
+    helper.showError('请勾选一条记录');
+    return
+  }
+  const id = tableItems[index].id;
+  const {result,returnCode,returnMsg} = await helper.fetchJson(`${URL_PRICE}/${id}`);
+  if(returnCode!==0){
+    helper.showError(returnMsg);
+    return
+  }
+  result.number = Math.floor(result.orderMoney/result.unitPrice);
+  if (await showPayDiaLog(pay,[result],result.nativeOrderNo)) {
+    return updateTable(dispatch, getState)
   }
 };
 
@@ -135,11 +146,18 @@ const pageSizeActionCreator = (pageSize, currentPage) => async (dispatch, getSta
   return search2(dispatch, action, URL_LIST, currentPage, pageSize, toFormValue(searchDataBak), newState,TAB_KEY);
 };
 
+const checkActionCreator = (isAll, checked, rowIndex) => {
+  const index = isAll ? -1 : rowIndex;
+  return action.update({checked}, [TAB_KEY,'tableItems'], index);
+};
+
+
 
 const actionCreators = {
   onClick: clickActionCreator,
   onChange: changeActionCreator,
   onInit: initActionCreator,
+  onCheck: checkActionCreator,
   onPageNumberChange: pageNumberActionCreator,
   onPageSizeChange: pageSizeActionCreator,
   onExitValid: exitValidActionCreator,

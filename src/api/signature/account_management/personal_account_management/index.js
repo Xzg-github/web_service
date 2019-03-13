@@ -13,7 +13,7 @@ api.get('/config', async (req, res) => {
 
 // 获取个人详细信息
 api.get('/person/:id', async (req, res) => {
-  const url = `${service}/user_account/detail/${req.params.id}`;
+  const url = `${service}/user_account/detail`;
   res.send(await fetchJsonByNode(req,url));
 });
 
