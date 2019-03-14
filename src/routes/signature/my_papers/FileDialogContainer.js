@@ -45,7 +45,7 @@ const addActionCreator = () => async (dispatch, getState) => {
   try {
     const {tree,select,parents,handleTree} = getSelfState(getState());
     const parent = tree[select].parent;
-    if(parent !== '1-0' || parent !== '0-0'){
+    if(parent !== '1-0' && parent !== '0-0'){
       helper.showError('当前节点不予许创建子节点');
       return
     }

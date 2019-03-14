@@ -2,7 +2,7 @@ import express from 'express';
 import {NAV_ITEMS, SIDEBARS} from './config';
 import {fetchJsonByNode, postOption} from '../../common/common';
 import {host, privilege,fadadaServiceName} from '../gloablConfig';
-const service = `${host}/auth-center`;
+const service = `${host}/auth-center-provider`;
 let api = express.Router();
 
 const TYPE_PAGE = 2;
@@ -140,10 +140,17 @@ const convert = (json) => {
 };
 
 // 用户权限
-api.get( '/privilege', async (req, res) => {
+api.get( '/privilege/:role', async (req, res) => {
   try {
     const module = await require('./data');
-    res.send(convert({...module.default}));
+    const result = {
+      returnCode: 0,
+      result: {
+        signature: '文件签署管理',
+        ...module.default.result[req.params.role]
+      }
+    }
+    res.send(convert({...result}));
 
   } catch (e) {
     res.send({returnCode: -1, returnMsg: '数据有误'});
@@ -167,5 +174,13 @@ api.post( '/custom_export_table', async (req, res) => {
   const url = `${host}/integration_service/load/excel_datasource`;
   res.send(await fetchJsonByNode(req, url, postOption(req.body)));
 });
+
+//依据username获取该用户的角色
+api.get('/role', async (req, res) => {
+  const {token} = req.cookies;
+  const url = `${service}/authc/${token}/account`;
+  const {returnCode, result} = await fetchJsonByNode(req, url);
+  returnCode === 0 ? res.send({returnCode, result: result['contractRoles']}) : res.send({returnCode: -1});
+})
 
 export default api;

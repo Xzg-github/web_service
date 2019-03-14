@@ -49,6 +49,10 @@ const okActionCreator = () => async (dispatch, getState) => {
     dispatch(action.assign({valid: true}));
     return;
   }
+  if(fileList.length === 0){
+    helper.showError('请上传文件');
+    return
+  }
   dispatch(action.assign({confirmLoading:true}))
   let accountId =  getCookie('accountId');
   const formData = new FormData();
@@ -57,7 +61,7 @@ const okActionCreator = () => async (dispatch, getState) => {
   });
 
   execWithLoading(async () => {
-    fetch(`/api/proxy/sign_seal/upload_sign_seal/${accountId}`,{
+    fetch(`/api/proxy/fadada-service/sign_seal/upload_sign_seal`,{
       method: 'post',
       body: formData,
     }).then(function (res) {

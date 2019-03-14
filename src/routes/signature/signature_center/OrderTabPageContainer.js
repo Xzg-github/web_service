@@ -8,6 +8,7 @@ import createOrderTabPageContainer, {buildOrderTabPageCommonState, updateTable} 
 import ShowPageContainer,{buildShowState} from "./ShowPageContainer/ShowPageContainer";
 import showPopup from '../../../standard-business/showPopup';
 import showDiaLog from './showDiaLog/AddDialogContainer';
+import {jump} from '../../../components/Link';
 
 const URL_CONFIG = '/api/signature/signature_center/config';
 const urlList = '/api/signature/signature_center/list';
@@ -139,6 +140,12 @@ const clickActionCreator = (tabKey, key) => {
 // 认证
 //企业登录 弹出modal，个人登录跳转去个人认证
 const onAuthenticationActionCreator = () => async(dispatch, getState) => {
+  const {role} = getSelfState(getState());
+
+  if(role === 'econtract_personal_role'){
+    jump('/signature/personal_certification')
+    return
+  }
   const controls = [
     {key:'identNo',title:'组织机构代码或者统一社会信息代码 ',type:'text',required:true},
     {key:'name',title:'企业名称',type:'text',required:true},

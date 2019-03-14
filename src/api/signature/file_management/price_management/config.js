@@ -90,14 +90,12 @@ const cols = [
   {key:'chargeWay',title:'计费方式',type:'select',options:chargeWayOptions,required:true},
   {key:'ruleName',title:'规则名称 ',type:'readonly'},
   {key:'unitType',title:'单位',type:'select',options:unitOptions,required:true},
-  {key:'price',title:'价格(元)',type:'number',props: {real: true, precision: 2}},
+  {key:'price',title:'价格(元)',type:'number',props: {real: true, precision: 2},required:true},
   {key:'description',title:'备注 ',type:'text'},
 ];
 
 const colsButtons = [
   {key:'add' , title: '新增'},
-  {key:'copyAdd' , title: '复制'},
-  {key:'edit' , title: '编辑'},
   {key:'del' , title: '删除'},
   {key:'set' , title: '设置阶梯'},
 ];
@@ -106,8 +104,8 @@ const colsButtons = [
 const diaLogControls = [
   {key:'ruleBasicParameter',title:'规则基准参数',type:'select',options:ruleOptions,required:true},
   {key:'isPurchase',title:'是否选择订购',type:'select',options:yesOrNoOptions,required:true},
-  {key:'startPrice',title:'区间下限(>=)',type:'number'},
-  {key:'endPrice',title:'区间上限(<)',type:'number'},
+  {key:'startPrice',title:'区间下限(>=)',type:'number',props:{zero:true}},
+  {key:'endPrice',title:'区间上限(<)',type:'number',props:{zero:true}},
   {key:'ruleName',title:'阶梯区间名称',type:'text',span:2,required:true},
   {key:'ruleDescribe',title:'价格区间规则',type:'textArea',span:2},
 ];

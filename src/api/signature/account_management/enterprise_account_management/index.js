@@ -14,7 +14,7 @@ api.get('/config', async (req, res) => {
 
 // 获取主列表数据
 api.get('/oneList/:id', async (req, res) => {
-  const url = `${service}/company_account/detail/${req.params.id}`;
+  const url = `${service}/company_account/detail`;
   res.send(await fetchJsonByNode(req,url));
 });
 
@@ -37,7 +37,7 @@ api.post('/list', async (req, res) => {
   const body = {
     ...filter,
     ...other
-  }
+  };
   const url = `${service}/company_order/list`;
   res.send(await fetchJsonByNode(req,url,postOption(body)));
 });
@@ -49,6 +49,12 @@ api.post('/addOrder', async (req, res) => {
     ...req.body,
   };
   res.send(await fetchJsonByNode(req,url,postOption(body)));
+});
+
+//根据id获取价格信息
+api.get('/price/:id', async (req, res) => {
+  const url = `${service}/company_order/${req.params.id}`;
+  res.send(await fetchJsonByNode(req,url));
 });
 
 export default api;

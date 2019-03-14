@@ -35,14 +35,15 @@ const account = [
 
 const signature = [
     {key:'signature_center', icon: 'pld-picture'},     //签署中心
+    {key: 'business_account', icon: 'pld-picture'},       //企业账户金额
+    {key: 'businessOrder', icon: 'pld-picture'}    ,       //企业订单
     {key:'my_papers', icon: 'pld-picture'},            //我的文件
+    {key:'monthly_bill', icon: 'pld-picture'},        //月账单
     {key:'data_statistics', icon: 'pld-picture'},             //数据统计
-    {key:'monthly_bill', icon: 'pld-picture'},             //月账单
     {key:'enterprise_documents', icon: 'pld-picture'},             //企业文件
     {key:'file_management', icon: 'pld-picture',children:file},             //档案管理
     {key:'account_management', icon: 'pld-picture',children:account},           //账号管理
-    {key: 'business_account', icon: 'pld-picture'},       //企业账户金额
-    {key: 'businessOrder', icon: 'pld-picture'}           //企业订单
+
 ];
 
 // 所有侧边栏

@@ -12,8 +12,8 @@ api.get('/config', async (req, res) => {
 });
 
 // 获取个人详细信息
-api.get('/person/:id', async (req, res) => {
-  const url = `${service}/user_account/detail/${req.params.id}`;
+api.get('/person', async (req, res) => {
+  const url = `${service}/user_account/detail`;
   res.send(await fetchJsonByNode(req,url));
 });
 
@@ -45,8 +45,7 @@ api.post('/phone', async (req, res) => {
 //two
 //获取页面信息
 api.get('/sign', async (req, res) => {
-  const {accountId} = req.cookies;
-  const url = `${service}/sign_seal/list_sign_seal/${accountId}`;
+  const url = `${service}/sign_seal/list_sign_seal`;
   res.send(await fetchJsonByNode(req,url));
 });
 

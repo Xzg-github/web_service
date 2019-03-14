@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import {Action} from '../../action-reducer/action';
 import {getPathValue} from '../../action-reducer/helper';
-import helper from '../../common/common';
+import helper, {postOption} from '../../common/common';
 import Layout from './Layout';
 import {EnhanceLoading} from '../Enhance';
 import Link, {jump} from '../Link';
@@ -13,6 +13,7 @@ import showMode from './Mode';
 
 const action = new Action(['layout']);
 const PRIVILEGE_URL = '/api/permission/privilege';
+const ROLE_URL = '/api/permission/role';
 const REVOKE_URL = '/api/login/revoke';
 const TABLE_SETTING_URL = '/api/permission/table_cols_setting';
 
@@ -70,7 +71,10 @@ const connectWsServer = () => {
 
 const initActionCreator = () => async (dispatch) => {
   dispatch(action.assign({status: 'loading'}));
-  const {returnCode, returnMsg, result} = await helper.fetchJson(PRIVILEGE_URL);
+  //获取cookie中的当前用户的token
+  const token =helper.getToken();
+  const role = await helper.fetchJson(`${ROLE_URL}`);
+  const {returnCode, returnMsg, result} = await helper.fetchJson(`${PRIVILEGE_URL}/${role.result}`);
   if (returnCode === 0) {
     const tableColsSetting = await getTableColsConfig();
     const payload = Object.assign(result, splitNavigation(result.navigation), {tableColsSetting, status: 'page'});

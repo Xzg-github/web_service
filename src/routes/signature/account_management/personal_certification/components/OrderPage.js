@@ -22,7 +22,7 @@ class OrderPage extends React.Component {
     let href = widowHref.split('/signature/personal_certification')[0];
 
 
-    const url = `${href}/code?token=${this.props.strCookie}&accountId=${this.props.accountId}`;
+    const url = `${href}/code?token=${this.props.strCookie}`;
 
     const codeProps = {
       value:url,

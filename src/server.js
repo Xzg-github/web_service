@@ -75,7 +75,6 @@ app.get('*', async (req, res, next) => {
       res.send(`<!doctype html>${page}`);
       return;
     }
-    res.cookie('token','5f66f27d-1e56-44ae-8f62-4955efa2c70f%3Ab26bdeb2-5e26-4c73-b1c4-e5f7ebea6187')
 
 
     if(req.path === '/code'){
@@ -83,6 +82,12 @@ app.get('*', async (req, res, next) => {
       res.cookie('accountId', req.query.accountId);
       res.redirect(302, '/fadada');
       return
+    }
+
+    if (req.path === '/signature') {
+      res.cookie('token', req.query.token);
+      res.redirect(302, '/');
+      return;
     }
 
     if (isJumpLogin(req)) {

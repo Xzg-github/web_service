@@ -422,6 +422,15 @@ const getRouteKey = () => {
   }
 };
 
+//获取当前登录的用户名
+const getToken = () => {
+  const usernmae = 'token=';
+  const cookie = document.cookie;
+  const begin = cookie.indexOf(usernmae) + usernmae.length;
+  const end = cookie.indexOf(';', begin);
+  return cookie.substring(begin, end < 0 ? cookie.length : end);
+}
+
 //获取当前页面标题，返回值：组成标题的字符串数组
 const getPageTitle = () => {
   const layoutAction = new Action(['layout']);
@@ -466,6 +475,7 @@ const helper = {
   omit,
   download,
   getRouteKey,
+  getToken,
   getPageTitle,
   setPageTitle
 };
@@ -501,7 +511,8 @@ export {
   getRouteKey,
   getPageTitle,
   setPageTitle,
-  download
+  download,
+  getToken
 };
 
 export default helper;

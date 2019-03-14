@@ -113,9 +113,9 @@ const four_cols = [
 
 
 const four_pay_cols = [
-  {key:'a',title:'文件签署单价(元/份)'},
-  {key:'b',title:'数量(份)'},
-  {key:'c',title:'订购金额(元)'},
+  {key:'unitPrice',title:'文件签署单价(元/份)'},
+  {key:'number',title:'数量(份)'},
+  {key:'orderMoney',title:'订购金额(元)'},
 ];
 
 const payOption = [
@@ -256,8 +256,8 @@ const config = {
   tabs:[
     {key: 'one', title:'账号设置', close: false},
     {key: 'two', title:'签章管理', close: false},
-    {key: 'three',title:'授权管理', close: false},
-    {key: 'four', title:'订单管理', close: false},
+    // {key: 'three',title:'授权管理', close: false},
+    // {key: 'four', title:'订单管理', close: false},
   ]
 };
 

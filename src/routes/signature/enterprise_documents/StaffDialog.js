@@ -22,7 +22,7 @@ class ShareDialog extends React.Component {
       title: this.props.title,
       visible: this.props.visible,
       maskClosable: false,
-      width: 650,
+      width: 750,
       onOk: this.onClick.bind(null, 'ok'),
       onCancel: this.onClick.bind(null, 'close'),
       afterClose: this.props.afterClose
