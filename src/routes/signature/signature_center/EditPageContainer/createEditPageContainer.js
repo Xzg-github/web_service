@@ -82,7 +82,7 @@ const createEditPageContainer = (action, getSelfState) => {
 
   //上传文件
   const uploadAction = async(dispatch, getState) => {
-    const url = `/api/proxy/sign_center/upload_file`;
+    const url = `/api/proxy/fadada-service/sign_center/upload_file`;
     const start = await upload(url);
     if(start){
       execWithLoading(async () => {
@@ -105,8 +105,22 @@ const createEditPageContainer = (action, getSelfState) => {
   };
 
   //输入值修改
-  const changeActionCreator = (key, value) => {
-    return (action.assign({[key]: value}, 'value'));
+  const changeActionCreator = (key, values) => async(dispatch, getState) => {
+    const {value} = getSelfState(getState());
+    let token = getCookie('token');
+    const URL_ACCOUNT = '/api/signature/signature_center/getName';
+    let list = value.signPartyList;
+    if(key === 'signWay'){
+      const {returnCode, returnMsg, result} = await fetchJson(`${URL_ACCOUNT}/${token}`,'get');
+      if(returnCode !== 0){
+        return showError(returnMsg)
+      }
+      const account = result.account;
+      const signPartyName = result.username;
+      list.unshift({account, signPartyName});
+      dispatch(action.assign({signPartyList: list}, 'value'))
+    }
+    dispatch (action.assign({[key]: values}, 'value'));
   };
 
   //表格内容变化
@@ -117,7 +131,7 @@ const createEditPageContainer = (action, getSelfState) => {
 
   //新增行
   const increaseAction = (dispatch) => {
-    dispatch(action.add({}, ['value', 'signPartyList'], 0))
+    dispatch(action.add({}, ['value', 'signPartyList'], 1))
   };
 
   //删除行
@@ -196,23 +210,15 @@ const createEditPageContainer = (action, getSelfState) => {
       dispatch(action.assign({valid: true}));
       return
     }
-/*    if(!validArray(tableCols, value.signPartyList.filter(item => !item.hide))){   //判断表格必填
+    if(!validArray(tableCols, value.signPartyList.filter(item => !item.hide))){   //判断表格必填
       dispatch(action.assign({valid: true, from: false}));
       return
-    }*/
+    }
     if(value.signPartyList.length === 0){
       showError('至少添加一个签署方');
       return
     }
     const URL_SAVE = `/api/signature/signature_center/save`;
-    let signAccountId = getCookie('accountId');
-    let token = getCookie('token');
-    let list = value.signPartyList;
-    if(value.signOrderStrategy === '1' || value.signOrderStrategy === 1){
-      list.unshift({signAccountId, sequence: 1});
-    }else{
-      list.unshift({signAccountId});
-    }
 
     const postData = {
       signContractId: value.signContractId,
@@ -223,7 +229,7 @@ const createEditPageContainer = (action, getSelfState) => {
       signExpirationTime: value.signExpirationTime,
       signFinishTime: value.signFinishTime,
       signOrderStrategy: value.signOrderStrategy,
-      signPartyList: list,
+      signPartyList: value.signPartyList,
       signWay: value.signWay,
       signFileSubject: value.signFileSubject
       };

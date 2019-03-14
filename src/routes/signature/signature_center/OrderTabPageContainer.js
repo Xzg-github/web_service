@@ -61,10 +61,10 @@ const editAction = (tabKey) => async (dispatch, getState) => {
 //删除
 const delAction = (tabKey) => async (dispatch, getState) => {
   const {tableItems} = getSelfState(getState());
-  const URL_DEL =  '/api/signature/signature_center/delete';
+  const URL_DEL =  '/api/signature/signature_center/del';
   const ids = tableItems[tabKey].filter(item => item.checked === true).map(item => item.id);
   if(ids.length < 1) return helper.showError('请先勾选要删除的记录');
-  const {returnCode, returnMsg} = await helper.fetchJson(URL_DEL, helper.postOption(ids, 'delete'));
+  const {returnCode, returnMsg} = await helper.fetchJson(URL_DEL, helper.postOption(ids, 'post'));
   if(returnCode !== 0)return helper.showError(returnMsg);
   return updateTable(dispatch, action, getSelfState(getState()));
 };

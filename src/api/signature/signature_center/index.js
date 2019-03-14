@@ -4,7 +4,7 @@ import {host,fadadaServiceName} from '../../gloablConfig';
 
 let api = express.Router();
 const service = `${host}/${fadadaServiceName}`;
-
+const service1 = `${host}`;
 
 // 获取UI标签
 api.get('/config', async (req, res) => {
@@ -21,6 +21,14 @@ api.get('/editConfig', async (req, res) => {
 api.get('/getOne/:guid', async (req, res) => {
   const url = `${service}/sign_center/detail_by_id/${req.params.guid}`;
   res.send(await fetchJsonByNode(req, url));
+});
+
+//获取用户名
+api.get('/getName/:token', async (req, res) => {
+  console.log(req.params.token);
+  const url = `${service1}/auth-center-provider/authc/${req.params.token}/account`;
+  console.log(url);
+  res.send(await fetchJsonByNode(req, url))
 });
 
 //获取列表数据
@@ -76,7 +84,7 @@ api.post('/send', async(req, res) => {
 });
 
 //删除
-api.post('/delete', async(req, res) => {
+api.post('/del', async(req, res) => {
   const url = `${service}/sign_center/delete_sign_file`;
   res.send(await fetchJsonByNode(req, url, postOption(req.body)))
 });

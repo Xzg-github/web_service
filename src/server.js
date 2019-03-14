@@ -75,7 +75,8 @@ app.get('*', async (req, res, next) => {
       res.send(`<!doctype html>${page}`);
       return;
     }
-    res.cookie('token', '6182c77e-57a2-4f6e-8be2-abcb3b13a341%3Ac943883c-846a-4aaf-bb94-b4feca355183');
+    res.cookie('token','5f66f27d-1e56-44ae-8f62-4955efa2c70f%3Ab26bdeb2-5e26-4c73-b1c4-e5f7ebea6187')
+
 
     if(req.path === '/code'){
       res.cookie('token', req.query.token);
