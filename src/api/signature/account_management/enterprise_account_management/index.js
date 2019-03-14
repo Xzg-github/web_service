@@ -13,7 +13,7 @@ api.get('/config', async (req, res) => {
 });
 
 // 获取主列表数据
-api.get('/oneList/:id', async (req, res) => {
+api.get('/oneList', async (req, res) => {
   const url = `${service}/company_account/detail`;
   res.send(await fetchJsonByNode(req,url));
 });
@@ -49,6 +49,12 @@ api.post('/addOrder', async (req, res) => {
     ...req.body,
   };
   res.send(await fetchJsonByNode(req,url,postOption(body)));
+});
+
+//支付订单
+api.post('/payOrder/:id', async (req, res) => {
+  const url = `${service}/company_order/complete/${req.params.id}`;
+  res.send(await fetchJsonByNode(req,url,postOption(req.body)));
 });
 
 //根据id获取价格信息

@@ -44,12 +44,11 @@ const initActionCreator = () => async (dispatch, getState) => {
     const { tabs ,three} = helper.getJsonResult(await helper.fetchJson(URL_CONFIG));
 
     let strCookie =  getCookie('token');
-    let accountId =  getCookie('accountId');
     //页面数据
     dispatch(action.assign({
       status: 'page',
       activeKey:'one',
-      one:{strCookie,accountId},
+      one:{strCookie},
       tabs,
       three
     }));

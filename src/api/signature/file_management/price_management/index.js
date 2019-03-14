@@ -58,6 +58,13 @@ api.get('/one/:id', async(req,res) => {
   res.send(await fetchJsonByNode(req,url))
 });
 
+//公司名称下拉
+api.post('/dropCompany', async(req,res) => {
+  const url = `${service}/company_account/drop_list`;
+  res.send(await fetchJsonByNode(req,url,postOption(req.body)))
+});
+
+
 
 
 export default api;

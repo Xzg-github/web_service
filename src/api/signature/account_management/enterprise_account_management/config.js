@@ -80,7 +80,7 @@ const four_tableCols = [
   {key:'nativeOrderNo',title:'订单编号'},
   {key:'orderMoney',title:'订购金额'},
   {key:'orderTime',title:'有效期'},
-  {key:'dinsertTime',title:'订购时间'},
+  {key:'insertTime',title:'订购时间'},
   {key:'e',title:'支付方式'},
   {key:'f',title:'付款流水号'},
   {key:'g',title:'付款时间'},

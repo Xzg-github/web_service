@@ -14,7 +14,6 @@ const getSelfState = (state) => {
 };
 
 const buildState = (config, items=[],pay) => {
-  console.log(pay);
   return {
     ...config,
     items,

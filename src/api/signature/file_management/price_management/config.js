@@ -39,7 +39,7 @@ const ruleOptions = [
 ];
 
 const filters = [
-  {key:'companyId',title:'企业名称',type:'select'},
+  {key:'companyId',title:'企业名称',type:'search'},
   {key:'priceType',title:'报价类型',type:'select',options:typeOptions},
   {key:'startTime',title:'生效开始日期',type:'date'},
   {key:'endTime',title:'生效终止日期',type:'date'},

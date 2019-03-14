@@ -30,7 +30,6 @@ function getCookie(cookieName) {
 }
 
 const updateTable = async(dispatch,getState)  =>{
-  let accountId =  getCookie('accountId');
   const result =  helper.getJsonResult(await helper.fetchJson(`${URL_LIST}`));
   result.grzh = result.registerType === 'phone_number' ? result.notifyPhone : result.notifyEmail;
   result.isNotifiedByEmail = result.isNotifiedByEmail === 'true' ? true : false;
@@ -51,7 +50,7 @@ const initActionCreator = () => async (dispatch, getState) => {
   dispatch(action.assign({status: 'loading'}, TAB_KEY));
   try {
     let accountId =  getCookie('accountId');
-    const result =  helper.getJsonResult(await helper.fetchJson(`${URL_LIST}/${accountId}`));
+    const result =  helper.getJsonResult(await helper.fetchJson(`${URL_LIST}`));
     result.grzh = result.registerType === 'phone_number' ? result.notifyPhone : result.notifyEmail;
     result.isNotifiedByEmail = result.isNotifiedByEmail === 'true' ? true : false;
     result.isNotifiedByPhone = result.isNotifiedByPhone === 'true' ? true : false;

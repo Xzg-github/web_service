@@ -95,7 +95,6 @@ api.post('/authentication', async(req, res) => {
 
 //校验企业是否已经认证
 api.get('/authenticationList', async(req, res) => {
-  const {accountId} = req.cookies;
   const url = `${service}/company_account/detail`;
   res.send(await fetchJsonByNode(req, url))
 });
