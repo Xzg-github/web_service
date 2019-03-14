@@ -51,7 +51,7 @@ readConfig();
 
 //const port = '9002';
 const port = '5555';
-const fadadaServiceName = 'fadada-service';
+const fadadaServiceName = 'fadada-service-lam';
 //const fadadaServiceName = '';
 const host = `http://${hostname}:${port}`;
 

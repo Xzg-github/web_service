@@ -26,7 +26,7 @@ api.post('/add', async(req, res) => {
 
 //删除
 api.delete('/del',async(req, res) => {
-  const url = `${service}/business_items`;
+  const url = `${service}/business_items/batch`;
   res.send(await fetchJsonByNode(req, url, postOption(req.body, 'delete')))
 });
 
