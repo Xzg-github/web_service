@@ -4,7 +4,7 @@ import {host} from '../../gloablConfig';
 
 let api = express.Router();
 
-const service = `${host}/fadada-service-yule`;
+const service = `${host}/fadada-service`;
 
 // 获取UI标签
 api.get('/config', async (req, res) => {
