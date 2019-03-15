@@ -8,42 +8,34 @@ const TABLE_EVENTS = ['onCheck', 'onDoubleClick'];
 
 class AddDialog extends React.Component {
 
-  getWidth = () => {
-    const {size} = this.props;
-    if (size === 'small') {
-      return 520;
-    } else if (size === 'middle') {
-      return 700;
-    } else if (size === 'large') {
-      return 910;
-    } else {
-      return 520;
-    }
-  };
 
   getProps = () => {
-    const {title, onOk, onCancel} = this.props;
+    const {onOk, onCancel} = this.props;
     return {
       title: '是否透支额度',
       onOk: onOk.bind(null, this.props),
       onCancel: onCancel.bind(null, this.props),
-      width: this.getWidth(),
+      width: '400px',
       visible: true,
       maskClosable: false,
       okText: '确定',
-      cancelText: '取消'
+      cancelText: '取消',
     };
   };
 
   toFrom = () => {
-    const {controls, value, onChange} = this.props;
+    const {controls, value, onChange, cascade, canShow, valid} = this.props;
     const props = {
-      controls,
+      controls: canShow ? controls.concat(cascade) : controls,
       value,
-      onChange
+      onChange,
+      valid,
+      onExitValid: this.props.onExitValid,
+      colNum:2
     };
     return <SuperForm {...props} />
   };
+
 
   render() {
     return (
