@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react';
 import ReactDOM from 'react-dom';
-import {Button} from 'antd'
+import {Button,Alert} from 'antd'
 import withStyles from 'isomorphic-style-loader/lib/withStyles';
 import s from './OrderPage.less';
 import {Card} from '../../../../../components/index';
@@ -15,6 +15,25 @@ class OrderPage extends React.Component {
     super(props);
   }
 
+  toAlert = () => {
+    const messageStr = () => {
+      return (
+        <p>
+          请用微信扫描下方二维码
+        </p>
+      )
+
+    };
+    const props = {
+      type:'info',
+      message:messageStr(),
+      closable:true,
+    };
+    return (
+      <Alert {...props}/>
+    );
+  };
+
 
 
   render() {
@@ -24,13 +43,18 @@ class OrderPage extends React.Component {
 
     const url = `${href}/code?token=${this.props.strCookie}`;
 
+
+
+
     const codeProps = {
       value:url,
       size:128
     };
+
     return (
       <div className={s.root}>
-        <Card noPadding={true}>
+        <Card>
+          {this.toAlert()}
           <div className={s.box}>
             <div className={s.code}>
               <QRCode {...codeProps}/>
@@ -38,7 +62,7 @@ class OrderPage extends React.Component {
             <div>
               <Button size='large' type={this.props.type} disabled={this.props.disabled} onClick={this.props.verification}>{this.props.text}</Button>
             </div>
-            <p>认证失败？点击进入<span>人工审核>></span></p>
+        {/*    <p>认证失败？点击进入<span>人工审核>></span></p>*/}
           </div>
         </Card>
       </div>
