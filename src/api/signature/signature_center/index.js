@@ -25,9 +25,14 @@ api.get('/getOne/:guid', async (req, res) => {
 
 //获取用户名
 api.get('/getName/:token', async (req, res) => {
-  console.log(req.params.token);
   const url = `${service1}/auth-center-provider/authc/${req.params.token}/account`;
-  console.log(url);
+  res.send(await fetchJsonByNode(req, url))
+});
+
+//提交
+api.get('/sub/:guid', async (req, res) => {
+  const url = `${service}/sign_center/submit/${req.params.guid}`;
+  console.log(url)
   res.send(await fetchJsonByNode(req, url))
 });
 
@@ -35,7 +40,11 @@ api.get('/getName/:token', async (req, res) => {
 api.post('/list', async (req, res) => {
   const url = `${service}/sign_center/search_sign_file`;
   const {filter, ...other} = req.body;
-  res.send(await fetchJsonByNode(req, url, postOption({...filter, ...other})));
+  const body = {
+    ...filter,
+    ...other
+  };
+  res.send(await fetchJsonByNode(req, url, postOption(body)));
 });
 
 //获取全部tabs列表数据
@@ -44,13 +53,13 @@ api.post('/tabslist', async (req, res) => {
   const states = [
     {
       signUser:'me',
-      signState:'wait'
+      fileState:'wait'
     },{
       signUser:'other',
-      signState:'wait'
+      fileState:'wait'
     },{
       signUser:'me',
-      signState:'draft'
+      fileState:'draft'
     },{
     },
   ];

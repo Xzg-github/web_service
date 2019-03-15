@@ -11,7 +11,45 @@ const mySearch = async (dispatch, action, selfState, currentPage, pageSize, filt
   const {subActiveKey, urlList, isTotal, subTabs, fixedFilters={}} = selfState;
   const from = (currentPage - 1) * pageSize;
   const to = from + pageSize;
-  const {returnCode, returnMsg, result} = await search(urlList, from, to, {...filter, ...fixedFilters[subActiveKey]}, false);
+  const states = [
+    {
+      signUser:'me',
+      fileState:'wait'
+    },{
+      signUser:'other',
+      fileState:'wait'
+    },{
+      signUser:'me',
+      fileState:'draft'
+    },{
+    },
+  ];
+  let signUser,fileState;
+  switch (subActiveKey){
+    case 'mySign':{
+        signUser='me';
+      fileState='wait';
+      break;
+    }
+    case 'hisSign':{
+      signUser='other';
+      fileState='wait';
+      break;
+    }
+    case 'draft':{
+      signUser='me';
+      fileState='draft';
+      break;
+    }
+    case 'all':{
+      signUser='';
+      fileState='';
+      break;
+    }
+    default:
+      return
+  }
+  const {returnCode, returnMsg, result} = await search(urlList, from, to, {...filter,signUser,fileState}, false);
   if (returnCode === 0) {
     if (!result.tags && result.tabTotal) { //转成统一结构
       result.tags = Object.keys(result.tabTotal).map(item => ({tag: item, count: result.tabTotal[item]}));
@@ -109,9 +147,9 @@ const createOrderTabPageContainer = (action, getSelfState, actionCreatorsEx={}) 
     dispatch(action.assign({subActiveKey: key}));
     const selfState = getSelfState(getState());
     const {isRefresh, searchDataBak={}, pageSize, subTabs, subActiveKey, fixedFilters = {}} = selfState;
-      fixedFilters.signState = subActiveKey;
+      fixedFilters.fileState = subActiveKey;
     if(subActiveKey === 'all'){
-      delete fixedFilters.signState
+      delete fixedFilters.fileState
     }
       const newState = {isRefresh: {...selfState.isRefresh, [key]: false}};
       return mySearch(dispatch, action, selfState, 1, pageSize[key], fixedFilters, newState);
@@ -174,7 +212,8 @@ const buildOrderTabPageCommonState = async (urlConfig, urlList, statusNames=[]) 
     const {subActiveKey, subTabs, isTotal, initPageSize, fixedFilters={}, searchDataBak={}, buttons} = config;
     for(let tab of subTabs){
       if(tab.key === subActiveKey){
-        fixedFilters.signState = tab.status;
+        fixedFilters.fileState = 'wait';
+        fixedFilters.signUser = 'me';
       }
     }
     const body = {
