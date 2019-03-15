@@ -1,22 +1,23 @@
 import {pageSize, pageSizeType, description, searchConfig} from '../../../gloablConfig';
 
-const statusTypeOptions = [
-  {value: 'waitIdentification', title: '待认证'},
-  {value: 'auditting', title: '审核中'},
-  {value: 'finishIdentification', title: '已认证'},
+const isOptions1 = [
+  {value: 0, title: '禁用'},
+  {value: 1, title: '待认证'},
+  {value: 2, title: '认证失败'},
+  {value: 3, title: '已认证'}
 ];
 
 const filters = [
   {key: 'name', title: '姓名', type: 'text'},
   {key: 'account', title: '注册账号', type: 'text'},
   {key: 'number', title: '手机号码', type: 'text'},
-  {key: 'statusType', title: '状态', type: 'select', options: statusTypeOptions},
+  {key: 'statusType', title: '状态', type: 'select', options: isOptions1},
   {key: 'email', title: '电子邮件', type: 'text'},
   {key: 'customerOrder', title: '归属企业', type: 'text'},
 ];
 
 const tableCols = [
-  {key: 'statusType', title: '账号状态', options: statusTypeOptions},
+  {key: 'statusType', title: '账号状态', options: isOptions1},
   {key: 'account', title: '注册账号', link: true},
   {key: 'ame', title: '姓名'},
   {key: 'idCard', title: '身份证号码'},

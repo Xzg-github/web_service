@@ -112,12 +112,12 @@ const createEditPageContainer = (action, getSelfState) => {
     let list = value.signPartyList;
     if(key === 'signWay'){
       const {returnCode, returnMsg, result} = await fetchJson(`${URL_ACCOUNT}/${token}`,'get');
-      if(returnCode !== 0){
-        return showError(returnMsg)
-      }
+      if(returnCode !== 0) return;
       const account = result.account;
       const signPartyName = result.username;
-      list.unshift({account, signPartyName});
+      if(JSON.stringify(list).indexOf(JSON.stringify(account))===-1){
+        list.unshift({account, signPartyName});
+      }
       dispatch(action.assign({signPartyList: list}, 'value'))
     }
     dispatch (action.assign({[key]: values}, 'value'));
@@ -144,8 +144,11 @@ const createEditPageContainer = (action, getSelfState) => {
   //从联系人中添加
   const contactAction = async (dispatch, getState) => {
     const {contactConfig, tableItems}  = getSelfState(getState());
-    const url = '/api/signature/signature_center/list';
+    const url = '/api/signature/signature_center/name';
     const json = await fetchJson(url, 'post');
+    if(json.returnCode !== 0){
+      return showError('添加失败')
+    }
     if(json.returnCode !== 0) return showError(json.returnMsg);
     const selectItems = json.result;
     const filterItems = json.result;
@@ -182,21 +185,7 @@ const createEditPageContainer = (action, getSelfState) => {
     if(!list){
       return showError(`刷新页面数据失败`)
     }
-    let data;
-    data = list;
-    const buttons4 = [
-      {key: 'save', title: '保存'},
-      {key: 'next',title: '签署', bsStyle: 'primary'}
-    ];
-    const buttons5 = [
-      {key: 'save', title: '保存'},
-      {key: 'send',title: '发送', bsStyle: 'primary'}
-    ];
-    if(data.signWay === "1"){   //签署文件
-      dispatch(action.assign({value: data, buttons3:buttons4}))
-    }else{
-      dispatch(action.assign({value: data, buttons3: buttons5}))
-    }
+    dispatch(action.assign({value: list}))
   };
 
   //保存
@@ -245,21 +234,26 @@ const createEditPageContainer = (action, getSelfState) => {
  const nextAction = async(dispatch, getState) => {
   const {value} = getSelfState(getState());
   let id = value.id;
-   const URL_SEND =  '/api/signature/signature_center/send';   //发送
+   const URL_SAVE = `/api/signature/signature_center/save`;      //保存
+   const URL_SUBMIT = '/api/signature/signature_center/sub';  //提交
    const URL_SIGN =  '/api/signature/signature_center/sign';   //签署
-   if(value.signOrderStrategy === '1' || value.signOrderStrategy === 1){
-     const {returnCode, returnMsg, result } = await helper.fetchJson(URL_SIGN, helper.postOption(id)); //先签署后发送
+
+     const save = await fetchJson(URL_SAVE,postOption(value, 'post'));  //先保存
+     if(save.returnCode !== 0 ){
+       showError(save.returnMsg);
+       return
+     }
+
+     const submit = await fetchJson(`${URL_SUBMIT}/${id}`, 'get');   //再提交
+     if(submit.returnCode !== 0){
+       showError(submit.returnMsg);
+       return
+     }
+
+     const {returnCode, returnMsg, result } = await helper.fetchJson(URL_SIGN, helper.postOption(id)); //签署
      if (returnCode !== 0) return helper.showError(returnMsg);
-     const result1 = await helper.fetchJson(URL_SEND, helper.postOption(value));
-     if (result1.returnCode !== 0) return helper.showError(result1.returnMsg);
      window.open(result);
-   }else{
-     const result1 = await helper.fetchJson(URL_SEND, helper.postOption(value));  //先发送后签署
-     if (result1.returnCode !== 0) return helper.showError(result1.returnMsg);
-     const {returnCode, returnMsg, result } = await helper.fetchJson(URL_SIGN, helper.postOption(id));
-     if (returnCode !== 0) return helper.showError(returnMsg);
-     window.open(result);
-   }
+
  } ;
 
  //发送

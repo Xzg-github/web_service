@@ -39,6 +39,7 @@ const showOrderInfoPage = (dispatch, item, selfState, edit) => {
     };
     const payload = {
       id: item.id,
+      closeFunc
     };
     dispatch(action.add({key, title}, 'tabs'));
     dispatch(action.assign({[key]: payload, activeKey: key}));

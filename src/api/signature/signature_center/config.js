@@ -11,14 +11,20 @@ const isOptions1 = [
   {value: 0, title: '代表企业'}
 ];
 
+const isOptions2 = [
+  {value:'draft', title: '草稿'},
+  {value:'wait', title: '待我签'},
+  {value: 'sign', title: '已签署'}
+];
+
 const filters = [
   {key: 'signFileSubject', title: '文件主题', type: 'text'},
-  {key: 'launchAccountId', title: '发起人', type: 'text'},
-  {key: 'signStartTime', title: '发起时间', type: 'date', rule: {type: '<', key: 'insertTimeEnd'}},
-  {key: 'insertTimeEnd', title: '至', type: 'date', rule: {type: '>', key: 'signStartTime'}},
-  {key: 'signState', title: '状态', type: 'select', dictionary: 'order_type'},
-  {key: 'signFinishTime', title: '完成时间', type: 'date', rule: {type: '<', key: 'pickupTimeTo'}},
-  {key: 'pickupTimeTo', title: '至', type: 'date', rule: {type: '>', key: 'signFinishTime'}},
+  //{key: 'launchAccountId', title: '发起人', type: 'text'},
+  {key: 'signStartTimeFrom', title: '发起时间', type: 'date', rule: {type: '<', key: 'signStartTimeTo'}},
+  {key: 'signStartTimeTo', title: '至', type: 'date', rule: {type: '>', key: 'signStartTimeFrom'}},
+  {key: 'fileState', title: '状态', type: 'select', options: isOptions2},
+  {key: 'signExpirationTimeFrom', title: '完成时间', type: 'date', rule: {type: '<', key: 'signExpirationTimeTo '}},
+  {key: 'signExpirationTimeTo', title: '至', type: 'date', rule: {type: '>', key: 'signExpirationTimeFrom'}},
   {key: 'isAddCcSide', title: '是否抄送', type: 'select', options: isOptions}
 ];
 
@@ -32,8 +38,9 @@ const buttons = [
 ];
 
 const tableCols = [
-  {key: 'signFileSubject', title: '文件主题',link: true},
-  {key: 'signState', title: '状态', type: 'select', dictionary: 'order_type'},
+  {key: 'signFileOrder', title: '文件编号',link: true},
+  {key: 'signFileSubject', title: '文件主题'},
+  {key: 'fileState', title: '状态', options: isOptions2},
   {key: 'launchAccountId', title: '发起人'},
   {key: 'signStartTime', title: '发起时间'},
   {key: 'signAccountId', title: '签署人'},
@@ -45,10 +52,10 @@ const tableCols = [
 const config = {
   tabs: [{ key: 'index', title: '签署中心列表', close: false}],
   subTabs: [
-    {key: 'mySign', title:'待我签', status: 'mySigned'},
-    {key: 'hisSign', title:'待他人签', status: 'hisSigned'},
+    {key: 'mySign', title:'待我签', status: 'wait'},
+    {key: 'hisSign', title:'待他人签', status: 'wait'},
     {key: 'draft', title: '草稿', status: 'draft'},
-    {key: 'all', title: '所有', status: 'orders'}
+    {key: 'all', title: '所有', status: 'all'}
   ],
   activeKey: 'index',
   subActiveKey: 'mySign',

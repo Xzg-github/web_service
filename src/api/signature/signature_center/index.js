@@ -25,9 +25,14 @@ api.get('/getOne/:guid', async (req, res) => {
 
 //获取用户名
 api.get('/getName/:token', async (req, res) => {
-  console.log(req.params.token);
   const url = `${service1}/auth-center-provider/authc/${req.params.token}/account`;
-  console.log(url);
+  res.send(await fetchJsonByNode(req, url))
+});
+
+//提交
+api.get('/sub/:guid', async (req, res) => {
+  const url = `${service}/sign_center/submit/${req.params.guid}`;
+  console.log(url)
   res.send(await fetchJsonByNode(req, url))
 });
 
@@ -35,24 +40,37 @@ api.get('/getName/:token', async (req, res) => {
 api.post('/list', async (req, res) => {
   const url = `${service}/sign_center/search_sign_file`;
   const {filter, ...other} = req.body;
-  res.send(await fetchJsonByNode(req, url, postOption({...filter, ...other})));
+  const body = {
+    ...filter,
+    ...other
+  };
+  res.send(await fetchJsonByNode(req, url, postOption(body)));
 });
 
 //获取全部tabs列表数据
 api.post('/tabslist', async (req, res) => {
   const url = `${service}/sign_center/search_sign_file`;
-  const states = ['mySigned','hisSign','draft',false];
-  let body = {
-    itemFrom:0,
-    itemTo:65536
-  };
+  const states = [
+    {
+      signUser:'me',
+      fileState:'wait'
+    },{
+      signUser:'other',
+      fileState:'wait'
+    },{
+      signUser:'me',
+      fileState:'draft'
+    },{
+    },
+  ];
+
   const count = [];
   for(let state of states){
-    if(state){
-      body.signState = state;
-    }else {
-      delete body.signState
-    }
+   let body = {
+      itemFrom:0,
+      itemTo:65536,
+      ...state
+    };
     let json = await fetchJsonByNode(req,url,postOption(body));
     if(json.returnCode !== 0 ){
       res.send({returnCode:-1,returnMsg:'获取数据失败'});
@@ -91,8 +109,14 @@ api.post('/del', async(req, res) => {
 
 //从群组中添加
 api.post('/groups', async(req, res) => {
-  const url = `${service}/user/sign_groups/search`;
+  const url = `${service}/sign_group/select_by_param`;
   res.send(await fetchJsonByNode(req, url, postOption(req.body)))
+});
+
+//从联系人中添加
+api.post('/name', async(req, res) => {
+  const url = `${service}/company_contact/concat_by_name_or_account`;
+  res.send(await fetchJsonByNode(req, url, postOption(req, body)))
 });
 
 //校验企业认证

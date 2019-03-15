@@ -15,18 +15,15 @@ const oneControls = [
 
 const LABELS = [
   {key: 'grzh', title: '企业账号'},
-  {key: 'accountPassword', title: '登录密码',type:'edit'},
-  {key: 'companyName', title: '企业名称',type:'button',btn:'企业信息变更'},
+  {key: 'companyOrder', title: '企业编号'},
+  {key: 'companyName', title: '企业名称'},
   {key: 'companyContact', title: '法人姓名'},
-  {key: 'dgyykhzh', title: '身份账号'},
   {key: 'notifyPhone', title: '手机号码'},
-  {key: 'frsfzh', title: '收件地址'},
   {key: 'companyContactPhone', title: '企业电话'},
 ];
 
 const two_buttons = [
   {key:'add',title:'新增',bsStyle:'primary'},
-  {key:'edit',title:'编辑'},
   {key:'del',title:'删除'},
 ];
 
@@ -98,9 +95,6 @@ const four_controls = [
 const four_buttons = [
   {key:'order',title:'订购',bsStyle:'primary'},
   {key:'pay',title:'支付订单'},
-  {key:'input',title:'录入付款'},
-  {key:'application',title:'申请发票'},
-  {key:'view',title:'查看消费记录'},
 ];
 
 const four_filters = [
