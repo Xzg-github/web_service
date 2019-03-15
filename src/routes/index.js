@@ -54,7 +54,7 @@ export default {
 
   async action({ next }) {
     const route = await next();
-    route.title = route.title ? `${route.title} - ePLD` : 'ePLD';
+    //route.title = route.title ? `${route.title} - ePLD` : 'ePLD';
     route.description = route.description || '';
     return route;
   }
