@@ -6,6 +6,24 @@ const creditSettingOptions = [
   {value: 0, title: '否'}
 ];
 
+//订单状态
+const statusOptions = [
+  {value: 0, title: '未支付'},
+  {value: 1, title: '支付成功'}
+];
+
+//有效期
+const effectiveOptions = [
+  {value: 1, title: '长期有效'}
+];
+
+//支付方式
+const payOptions = [
+  {value: 1, title: '微信'},
+  {value: 2, title: '支付宝'},
+  {value: 3, title: '网银'}
+]
+
 const filters = [
   { key: 'companyName', title: '企业名称',type: 'search'},
   { key: 'companyOrder', title: '企业编号', type: 'text'},
@@ -76,13 +94,13 @@ const config = {
   //查看订购记录
   viewQuota: {
     tableCols: [
-      { key: 'orderStatus', title: '订单状态'},
+      { key: 'orderStatus', title: '订单状态', options: statusOptions},
       { key: 'nativeOrderNo', title: '订单编号'},
       { key: 'orderMoney', title: '订购金额'},
       { key: 'unitPrice', title: '文件签署单价'},
-      { key: 'effectiveType', title: '有效期'},
+      { key: 'effectiveType', title: '有效期', options: effectiveOptions},
       { key: 'orderTime', title: '订购时间'},
-      { key: 'payWay', title: '支付方式'},
+      { key: 'payWay', title: '支付方式', options: payOptions},
       { key: 'outerOrderNo', title: '支付流水号'},
       { key: 'invoiceStatus', title: '发票状态'},
       { key: 'usedMoney', title: '已用金额'},
