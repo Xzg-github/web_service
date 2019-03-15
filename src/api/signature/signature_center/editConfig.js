@@ -63,9 +63,9 @@ const tableCols2 = [
 ];
 
 const footerButtons = [
-  { key: 'save', title: '保存', bsStyle: 'primary'},
-/*  { key: 'next', title: '下一步', bsStyle: 'primary'},
-  { key: 'send', title: '发送', bsStyle: 'primary'}*/
+  { key: 'save', title: '保存'},
+  { key: 'next', title: '下一步', bsStyle: 'primary'},
+  //{ key: 'send', title: '发送', bsStyle: 'primary'}
 ];
 
 const editConfig = {
@@ -79,8 +79,8 @@ const editConfig = {
   contactConfig: {
     title: '从联系人中添加',
     tableCols : [
-      {key: 'mechanism', title: '姓名'},
-      {key: 'accountNumber', title: '账号'},
+      {key: 'companyContactName', title: '姓名'},
+      {key: 'companyContactAccount', title: '账号'},
     ],
     maxHeight: '400px',
     size: 'small',

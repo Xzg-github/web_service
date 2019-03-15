@@ -41,18 +41,27 @@ api.post('/list', async (req, res) => {
 //获取全部tabs列表数据
 api.post('/tabslist', async (req, res) => {
   const url = `${service}/sign_center/search_sign_file`;
-  const states = ['mySigned','hisSign','draft',false];
-  let body = {
-    itemFrom:0,
-    itemTo:65536
-  };
+  const states = [
+    {
+      signUser:'me',
+      signState:'wait'
+    },{
+      signUser:'other',
+      signState:'wait'
+    },{
+      signUser:'me',
+      signState:'draft'
+    },{
+    },
+  ];
+
   const count = [];
   for(let state of states){
-    if(state){
-      body.signState = state;
-    }else {
-      delete body.signState
-    }
+   let body = {
+      itemFrom:0,
+      itemTo:65536,
+      ...state
+    };
     let json = await fetchJsonByNode(req,url,postOption(body));
     if(json.returnCode !== 0 ){
       res.send({returnCode:-1,returnMsg:'获取数据失败'});
@@ -91,8 +100,14 @@ api.post('/del', async(req, res) => {
 
 //从群组中添加
 api.post('/groups', async(req, res) => {
-  const url = `${service}/user/sign_groups/search`;
+  const url = `${service}/sign_group/select_by_param`;
   res.send(await fetchJsonByNode(req, url, postOption(req.body)))
+});
+
+//从联系人中添加
+api.post('/name', async(req, res) => {
+  const url = `${service}/company_contact/concat_by_name_or_account`;
+  res.send(await fetchJsonByNode(req, url, postOption(req, body)))
 });
 
 //校验企业认证

@@ -112,12 +112,12 @@ const createEditPageContainer = (action, getSelfState) => {
     let list = value.signPartyList;
     if(key === 'signWay'){
       const {returnCode, returnMsg, result} = await fetchJson(`${URL_ACCOUNT}/${token}`,'get');
-      if(returnCode !== 0){
-        return showError(returnMsg)
-      }
+      if(returnCode !== 0) return;
       const account = result.account;
       const signPartyName = result.username;
-      list.unshift({account, signPartyName});
+      if(JSON.stringify(list).indexOf(JSON.stringify(account))===-1){
+        list.unshift({account, signPartyName});
+      }
       dispatch(action.assign({signPartyList: list}, 'value'))
     }
     dispatch (action.assign({[key]: values}, 'value'));
@@ -144,8 +144,11 @@ const createEditPageContainer = (action, getSelfState) => {
   //从联系人中添加
   const contactAction = async (dispatch, getState) => {
     const {contactConfig, tableItems}  = getSelfState(getState());
-    const url = '/api/signature/signature_center/list';
+    const url = '/api/signature/signature_center/name';
     const json = await fetchJson(url, 'post');
+    if(json.returnCode !== 0){
+      return showError('添加失败')
+    }
     if(json.returnCode !== 0) return showError(json.returnMsg);
     const selectItems = json.result;
     const filterItems = json.result;
@@ -182,21 +185,7 @@ const createEditPageContainer = (action, getSelfState) => {
     if(!list){
       return showError(`刷新页面数据失败`)
     }
-    let data;
-    data = list;
-    const buttons4 = [
-      {key: 'save', title: '保存'},
-      {key: 'next',title: '签署', bsStyle: 'primary'}
-    ];
-    const buttons5 = [
-      {key: 'save', title: '保存'},
-      {key: 'send',title: '发送', bsStyle: 'primary'}
-    ];
-    if(data.signWay === "1"){   //签署文件
-      dispatch(action.assign({value: data, buttons3:buttons4}))
-    }else{
-      dispatch(action.assign({value: data, buttons3: buttons5}))
-    }
+    dispatch(action.assign({value: list}))
   };
 
   //保存
