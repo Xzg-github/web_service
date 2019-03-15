@@ -32,7 +32,6 @@ api.get('/getName/:token', async (req, res) => {
 //提交
 api.get('/sub/:guid', async (req, res) => {
   const url = `${service}/sign_center/submit/${req.params.guid}`;
-  console.log(url)
   res.send(await fetchJsonByNode(req, url))
 });
 

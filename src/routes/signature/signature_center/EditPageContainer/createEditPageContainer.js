@@ -232,27 +232,28 @@ const createEditPageContainer = (action, getSelfState) => {
 
   //下一步
  const nextAction = async(dispatch, getState) => {
-  const {value} = getSelfState(getState());
-  let id = value.id;
-   const URL_SAVE = `/api/signature/signature_center/save`;      //保存
-   const URL_SUBMIT = '/api/signature/signature_center/sub';  //提交
-   const URL_SIGN =  '/api/signature/signature_center/sign';   //签署
+   try {
+     const {value} = getSelfState(getState());
+     let id = value.id;
+     const URL_SAVE = `/api/signature/signature_center/save`;      //保存
+     const URL_SUBMIT = '/api/signature/signature_center/sub';  //提交
+     const URL_SIGN =  '/api/signature/signature_center/sign';   //签署
 
-     const save = await fetchJson(URL_SAVE,postOption(value, 'post'));  //先保存
-     if(save.returnCode !== 0 ){
-       showError(save.returnMsg);
-       return
-     }
+     const save = helper.getJsonResult(await fetchJson(URL_SAVE,postOption(value, 'post')));  //先保存
 
-     const submit = await fetchJson(`${URL_SUBMIT}/${id}`, 'get');   //再提交
+     const submit = await fetchJson(`${URL_SUBMIT}/${save.id}`, 'get');   //再提交
      if(submit.returnCode !== 0){
        showError(submit.returnMsg);
        return
      }
 
-     const {returnCode, returnMsg, result } = await helper.fetchJson(URL_SIGN, helper.postOption(id)); //签署
+     const {returnCode, returnMsg, result } = await helper.fetchJson(URL_SIGN, helper.postOption(save.id)); //签署
      if (returnCode !== 0) return helper.showError(returnMsg);
      window.open(result);
+   }catch (e){
+     helper.showError(e.message)
+   }
+
 
  } ;
 

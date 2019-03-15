@@ -14,7 +14,8 @@ const isOptions1 = [
 const isOptions2 = [
   {value:'draft', title: '草稿'},
   {value:'wait', title: '待我签'},
-  {value: 'sign', title: '已签署'}
+  {value: 'sign', title: '已签署'},
+  {value: 'completed', title: '已完成'}
 ];
 
 const filters = [
