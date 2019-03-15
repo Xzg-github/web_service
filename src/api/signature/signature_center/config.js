@@ -14,7 +14,8 @@ const isOptions1 = [
 const isOptions2 = [
   {value:'draft', title: '草稿'},
   {value:'wait', title: '待我签'},
-  {value: 'sign', title: '已签署'}
+  {value: 'sign', title: '已签署'},
+  {value: 'completed', title: '已完成'}
 ];
 
 const filters = [
@@ -41,12 +42,12 @@ const tableCols = [
   {key: 'signFileOrder', title: '文件编号',link: true},
   {key: 'signFileSubject', title: '文件主题'},
   {key: 'fileState', title: '状态', options: isOptions2},
-  {key: 'launchAccountId', title: '发起人'},
   {key: 'signStartTime', title: '发起时间'},
-  {key: 'signAccountId', title: '签署人'},
+  {key: 'launchAccountId', title: '签署人'},
   {key: 'signFinishTime', title: '签完时间'},
   {key: 'signExpirationTime', title: '签署截止时间'},
   {key: 'isAddCcSide', title: '是否抄送', options: isOptions},
+  {key: 'insertUser', title: '创建人'},
 ];
 
 const config = {

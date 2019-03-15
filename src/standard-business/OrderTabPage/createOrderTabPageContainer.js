@@ -42,7 +42,7 @@ const mySearch = async (dispatch, action, selfState, currentPage, pageSize, filt
       break;
     }
     case 'all':{
-      signUser='';
+      signUser='me';
       fileState='';
       break;
     }
