@@ -40,7 +40,7 @@ class EditPage extends React.Component {
   };
 
   toButtons3 = (buttons) => {
-    const {buttons3} = this.props;
+    const {buttons3,value} = this.props;
     const props = {buttons: buttons3, size: 'default', callback: getObject(this.props, TOOLBAR_EVENTS )};
     return <div style={{textAlign: 'center'}}><SuperToolbar {...props}/></div>
   };

@@ -76,7 +76,6 @@ app.get('*', async (req, res, next) => {
       return;
     }
 
-
     if(req.path === '/code'){
       res.cookie('token', req.query.token);
       res.cookie('accountId', req.query.accountId);
