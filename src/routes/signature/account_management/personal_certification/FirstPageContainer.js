@@ -64,12 +64,12 @@ const exitValidActionCreator = () => {
 
 
 const verificationAtionCreator = () => async(dispatch,getState) =>{
-  const {text,strCookie,accountId} = getSelfState(getState());
+  const {text,strCookie} = getSelfState(getState());
   if(text === '已认证'){
     return
   }
   execWithLoading(async()=>{
-    const {result,returnCode,returnMsg} = await helper.fetchJson(`${URL_USER}/${accountId}`);
+    const {result,returnCode,returnMsg} = await helper.fetchJson(`${URL_USER}`);
     if(returnCode != 0){
       helper.showError(returnCode);
       return

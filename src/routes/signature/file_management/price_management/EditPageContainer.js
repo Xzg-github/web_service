@@ -78,14 +78,16 @@ const saveAction  = (props) =>async(dispatch, getState) => {
     dispatch(action.assign({valid: true},tabKey));
     return;
   }
-
+  if(value.companyId){
+    delete value.companyId
+  }
   const body = {
     ...value,
     detailDtoList:tableItems.map(item => helper.convert(item)),
     statusType:'status_draft'
   };
 
-  const {result,returnCode,returnMsg} = await helper.fetchJson(URL_UPDATE,helper.postOption(body,edit?'put':'post'));
+  const {result,returnCode,returnMsg} = await helper.fetchJson(URL_UPDATE,helper.postOption(body));
   if(returnCode !== 0 ){
     helper.showError(returnMsg);
     return
@@ -118,6 +120,10 @@ const submitAction  = (props) =>async(dispatch, getState) => {
     }
   }
 
+  if(value.companyId){
+    delete value.companyId
+  }
+
   const body = {
     ...value,
     detailDtoList:tableItems.map(item => helper.convert(item)),
@@ -125,7 +131,7 @@ const submitAction  = (props) =>async(dispatch, getState) => {
 
   delete body.statusType
 
-  const {result,returnCode,returnMsg} = await helper.fetchJson(URL_UPDATE,helper.postOption(body,edit?'put':'post'));
+  const {result,returnCode,returnMsg} = await helper.fetchJson(URL_UPDATE,helper.postOption(body));
   if(returnCode !== 0 ){
     helper.showError(returnMsg);
     return
@@ -212,7 +218,7 @@ const searchActionCreator= (rowIndex,key, title) => async (dispatch, getState) =
     case 'businessItemId' :{
       body = {
         maxNumber:20,
-        //itemName:title
+        itemName:title
       };
       url = URL_DROP;
       break;

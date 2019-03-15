@@ -13,6 +13,7 @@ const STATE_PATH =  ['price_management'];
 const URL_LIST = '/api/signature/file_management/price_management/list';
 const URL_DISABLE = '/api/signature/file_management/price_management/disable';
 const URL_DEL = '/api/signature/file_management/price_management/del';
+const URL_COMPANY = '/api/signature/file_management/price_management/dropCompany';
 
 const action = new Action(STATE_PATH);
 
@@ -153,15 +154,28 @@ const changeActionCreator = (key, value) => (dispatch,getState) =>{
   dispatch(action.assign({[key]: value}, [tabKey,'searchData']));
 };
 
-const formSearchActionCreator = (key, title,keyControl) => async (dispatch, getState) => {
-  const {filters,tabKey} = getSelfState(getState());
-  const json = await helper.fuzzySearch(keyControl.searchType, title);
-  if (!json.returnCode) {
-    const index = filters.findIndex(item => item.key == key);
-    dispatch(action.update({options:json.result}, [tabKey,'filters'], index));
-  }else {
-    helper.showError(json.returnMsg)
+const formSearchActionCreator = (key, title) => async (dispatch, getState) => {
+  const {tabKey,filters} = getSelfState(getState());
+  let body,url,json;
+  switch (key) {
+    case 'companyId' :{
+      body = {
+        maxNumber:20,
+        companyName:title
+      };
+      url = URL_COMPANY;
+      break;
+    }
+    default :
+      return
   }
+  json = await helper.fetchJson(url,helper.postOption(body));
+  if(json.returnCode !== 0 ){
+    helper.showError(json.returnMsg);
+  }
+  let options = json.result ;
+  const index = filters.findIndex(item => item.key == key);
+  dispatch(action.update({options}, [tabKey,'filters'], index));
 };
 const checkActionCreator = (isAll, checked, rowIndex) =>  (dispatch, getState) =>{
   const {tabKey} = getSelfState(getState());

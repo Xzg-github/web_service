@@ -211,10 +211,10 @@ const buildOrderTabPageCommonState = async (urlConfig, urlList, statusNames=[]) 
     const url = role === 'econtract_personal_role' ? URL_PERSON: URL_AUTHENTICATION;
     //判断认证
     const res = helper.getJsonResult(await helper.fetchJson(url));
-    const state = role === 'econtract_personal_role' ? res.userAccountState: res.companyAccountState
+    const state = role === 'econtract_personal_role' ? 'userAccountState': 'companyAccountState';
     let isAuthentication = false;
-    if(res && state){
-      isAuthentication = res.state == 3 ? true: false;
+    if(res && res[state]){
+      isAuthentication = res[state] == 3 ? true: false;
     }
     return {
       searchData:{},

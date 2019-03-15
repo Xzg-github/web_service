@@ -22,12 +22,12 @@ const data = {
     econtract_company_role: {
       signature_center: '签署中心',
       my_papers: '我的文件',
-      data_statistics: '数据统计',
+      // data_statistics: '数据统计',
       //monthly_bill: '月账单',
       file_management: '档案管理',
       account_management: '账号管理',
       enterprise_documents: '企业文件',
-      //worker: '企业员工',
+      worker: '企业员工',
       contacts: '联系人',
       signature_group: '签署群组',
       //template_management: '模板管理',
@@ -38,12 +38,12 @@ const data = {
     //电子签署平台运营
     econtract_admin_role: {
       business_account: '企业账户金额',
-      businessOrder: '企业订单',
-      data_statistics: '数据统计',
+      // businessOrder: '企业订单',
+      // data_statistics: '数据统计',
       //monthly_bill: '月账单',
-      businessArchives: '企业档案',
+      // businessArchives: '企业档案',
       file_management: '档案管理',
-      personalProfile: '个人账号档案',
+      // personalProfile: '个人账号档案',
       businessProject: '业务项目',
       price_management: '价格管理'
     },

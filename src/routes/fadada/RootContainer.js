@@ -40,7 +40,6 @@ const initActionCreator = () => async (dispatch, getState) => {
   try {
     dispatch(action.assign({status: 'loading'}));
     //初始化数据
-    let strCookie =  getCookie('accountId');
     const json = helper.getJsonResult(await helper.fetchJson(`${URL_USER}`));
 
     //页面数据

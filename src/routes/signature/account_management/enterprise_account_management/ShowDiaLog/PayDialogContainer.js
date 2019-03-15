@@ -5,6 +5,7 @@ import showPopup from '../../../../../standard-business/showPopup';
 import helper from '../../../../../common/common';
 
 const action = new Action(['fadada'], false);
+const URL_PRICE = '/api/signature/account_management/enterprise_account_management/payOrder';//支付
 
 
 const getSelfState = (state) => {
@@ -25,7 +26,14 @@ const changeActionCreator = (key, value) => {
 };
 
 const okActionCreator = () => async (dispatch, getState) => {
-
+  const {items} = getSelfState(getState());
+  const order = items[0].nativeOrderNo;
+  const {result,returnCode,returnMsg} = await helper.fetchJson(`${URL_PRICE}/${order}`,'post');
+  if(returnCode!=0){
+    helper.showError(returnMsg);
+    return
+  }
+  dispatch(action.assign({visible: false, ok: true}));
 };
 
 const closeActionCreator = () => (dispatch) => {

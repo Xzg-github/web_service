@@ -20,9 +20,7 @@ api.get('/tree', async (req, res) => {
 
 //新增组
 api.post('/addGroup',async(req,res) => {
-  const {accountId} = req.cookies;
   const body = {
-    accountId,
     ...req.body
   };
   const url = `${service}/sign_file_folder/add`;
