@@ -71,7 +71,7 @@ class EditPage extends React.Component {
     if(value.signOrderStrategy === '1' || value.signOrderStrategy === 1){
       return <SuperTable2 {...props}/>
     }else{
-      return <SuperTable2 {...props2}/>
+      return <SuperTable2 {...props}/>
     }
   };
 

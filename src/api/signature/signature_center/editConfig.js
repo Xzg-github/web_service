@@ -25,7 +25,7 @@ const uploadButtons = [
 
 const controls1 = [
   { key: 'signFileSubject', title: '文件主题', type: 'text', span: 2, required: true},
-  { key: 'signExpirationTime', title: '签署截止时间', type: 'date'},
+  { key: 'signExpirationTime', title: '签署截止时间', type: 'date', props:{showTime: true}},
   { key: 'note', title: '备注', type: 'textArea', span: 4},
 ];
 
@@ -46,7 +46,7 @@ const tableButtons = [
 const tableCols = [
   { key: 'checked', title: '', type: 'checkbox'},
   { key: 'index', title: '序号', type: 'index'},
-  { key: 'sequence', title: '签署顺序',type: 'number'},
+  { key: 'sequence', title: '签署顺序',type: 'number', required: true},
   { key: 'signPartyName', title: '姓名/机构',type: 'text', required: true},
   { key: 'account', title: '账号（手机/邮箱）', type: 'text'},
   { key: 'isAllowAddSignatories', title: '允许增加签署方', type: 'select', options: isOptions},

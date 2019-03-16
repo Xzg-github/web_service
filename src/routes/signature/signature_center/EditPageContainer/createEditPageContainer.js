@@ -228,6 +228,7 @@ const createEditPageContainer = (action, getSelfState) => {
       return
     }
     upDatePage(result.id)(dispatch, getState);
+    return updateTable(dispatch, action, getSelfState(getState()));
   };
 
   //下一步
@@ -260,7 +261,7 @@ const createEditPageContainer = (action, getSelfState) => {
  //发送
   const sendAction = async (dispatch, getState) => {
     try {
-      const {value} = getSelfState(getState());
+      const {value, closeFunc} = getSelfState(getState());
       let id = value.id;
       const URL_SAVE = `/api/signature/signature_center/save`;      //保存
       const URL_SUBMIT = '/api/signature/signature_center/sub';  //提交
@@ -271,6 +272,8 @@ const createEditPageContainer = (action, getSelfState) => {
         showError(submit.returnMsg);
         return
       }
+      showSuccessMsg(submit.returnMsg);
+      closeFunc && closeFunc();                   //发送成功后关闭当前页
     }catch (e){
       helper.showError(e.message)
     }

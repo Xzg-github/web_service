@@ -115,7 +115,7 @@ api.post('/groups', async(req, res) => {
 //从联系人中添加
 api.post('/name', async(req, res) => {
   const url = `${service}/company_contact/concat_by_name_or_account`;
-  res.send(await fetchJsonByNode(req, url, postOption(req, body)))
+  res.send(await fetchJsonByNode(req, url, postOption(req.body)))
 });
 
 //校验企业认证
