@@ -62,10 +62,16 @@ const tableCols2 = [
   { key: 'signIdentity', title: '签署身份', type: 'select', options: isOptions1}
 ];
 
-const footerButtons = [
+const footerButtons1 = [
+  { key: 'close', title: '关闭'},
   { key: 'save', title: '保存'},
   { key: 'next', title: '下一步', bsStyle: 'primary'},
-  //{ key: 'send', title: '发送', bsStyle: 'primary'}
+];
+
+const footerButtons2 = [
+  { key: 'close', title: '关闭'},
+  { key: 'save', title: '保存'},
+  { key: 'send', title: '发送', bsStyle: 'primary'}
 ];
 
 const editConfig = {
@@ -75,7 +81,8 @@ const editConfig = {
   buttons2:tableButtons,
   tableCols,
   tableCols2,
-  buttons3: footerButtons,
+  buttons3: footerButtons1,
+  buttons4: footerButtons2,
   contactConfig: {
     title: '从联系人中添加',
     tableCols : [

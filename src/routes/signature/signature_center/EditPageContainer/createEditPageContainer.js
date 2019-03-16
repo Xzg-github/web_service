@@ -259,12 +259,27 @@ const createEditPageContainer = (action, getSelfState) => {
 
  //发送
   const sendAction = async (dispatch, getState) => {
-    const {value} = getSelfState(getState());
-    let id = value.id;
-    const URL_SEND =  '/api/signature/signature_center/send';
-    const {returnCode, returnMsg } = await helper.fetchJson(URL_SEND, helper.postOption(value));
-    if (returnCode !== 0) return helper.showError(returnMsg);
-    showSuccessMsg(returnMsg)
+    try {
+      const {value} = getSelfState(getState());
+      let id = value.id;
+      const URL_SAVE = `/api/signature/signature_center/save`;      //保存
+      const URL_SUBMIT = '/api/signature/signature_center/sub';  //提交
+
+      const save = helper.getJsonResult(await fetchJson(URL_SAVE,postOption(value, 'post')));  //先保存
+      const submit = await fetchJson(`${URL_SUBMIT}/${save.id}`, 'get');   //再提交
+      if(submit.returnCode !== 0){
+        showError(submit.returnMsg);
+        return
+      }
+    }catch (e){
+      helper.showError(e.message)
+    }
+  };
+
+  //关闭
+  const closeAction = async(dispatch, getState) => {
+    const {closeFunc} = getSelfState(getState());
+    closeFunc && closeFunc();
   };
 
 
@@ -277,7 +292,8 @@ const createEditPageContainer = (action, getSelfState) => {
     save: saveAction,
     next: nextAction,
     upload: uploadAction,
-    send: sendAction
+    send: sendAction,
+    close: closeAction
   };
 
   const clickActionCreator = (key) => {

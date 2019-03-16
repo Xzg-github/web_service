@@ -40,9 +40,14 @@ class EditPage extends React.Component {
   };
 
   toButtons3 = (buttons) => {
-    const {buttons3,value} = this.props;
+    const {buttons3,value, buttons4} = this.props;
     const props = {buttons: buttons3, size: 'default', callback: getObject(this.props, TOOLBAR_EVENTS )};
-    return <div style={{textAlign: 'center'}}><SuperToolbar {...props}/></div>
+    const props1 = {buttons: buttons4, size: 'default', callback: getObject(this.props, TOOLBAR_EVENTS )};
+    if(value.signWay === 0 || value.signWay === '0'){
+      return <div style={{textAlign: 'center'}}><SuperToolbar {...props1}/></div>
+    }else{
+      return <div style={{textAlign: 'center'}}><SuperToolbar {...props}/></div>
+    }
   };
 
   toForm1 = () => {
