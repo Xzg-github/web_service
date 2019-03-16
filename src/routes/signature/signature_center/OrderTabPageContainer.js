@@ -80,7 +80,8 @@ const signatureAction = (tabKey) => async (dispatch, getState) =>{
   const URL_SIGN =  '/api/signature/signature_center/sign';
   const {returnCode, returnMsg, result } = await helper.fetchJson(URL_SIGN, helper.postOption(id));
   if (returnCode !== 0) return helper.showError(returnMsg);
-  window.open(result)
+  window.open(result);
+  return updateTable(dispatch, action, getSelfState(getState()));
 };
 
 // link详情查看
@@ -144,7 +145,7 @@ const onAuthenticationActionCreator = () => async(dispatch, getState) => {
   const {role} = getSelfState(getState());
 
   if(role === 'econtract_personal_role'){
-    jump('/signature/personal_certification')
+    jump('/signature/personal_certification');
     return
   }
   const controls = [

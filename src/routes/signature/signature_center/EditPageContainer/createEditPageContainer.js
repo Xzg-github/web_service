@@ -143,7 +143,11 @@ const createEditPageContainer = (action, getSelfState) => {
 
   //从联系人中添加
   const contactAction = async (dispatch, getState) => {
-    const {contactConfig, tableItems}  = getSelfState(getState());
+    const {contactConfig, value}  = getSelfState(getState());
+    if(!value.signWay){
+      showError('请先选择签署方式');
+      return
+    }
     const url = '/api/signature/signature_center/name';
     const json = await fetchJson(url, 'post');
     if(json.returnCode !== 0){
@@ -152,27 +156,33 @@ const createEditPageContainer = (action, getSelfState) => {
     if(json.returnCode !== 0) return showError(json.returnMsg);
     const selectItems = json.result;
     const filterItems = json.result;
+    const originalArray = value.signPartyList;
     const okFunc = (addItems = []) => {
-      const newItems = addItems.concat(tableItems);
-      dispatch(action.assign({tableItems: newItems}))
+      const newItems = addItems.concat(originalArray,filterItems);
+      dispatch(action.assign({signPartyList: newItems}, 'value'))
     };
-    buildAddState(contactConfig, selectItems.data, filterItems.data, true, dispatch, okFunc);
+    buildAddState(contactConfig, selectItems, filterItems, true, dispatch, okFunc);
     showPopup(AddDialogContainer)
   };
 
   //从签署群组中添加
   const groupAction = async (dispatch, getState) => {
     const {groupConfig, value} = getSelfState(getState());
+    if(!value.signWay){
+      showError('请先选择签署方式');
+      return
+    }
     const url = '/api/signature/signature_center/groups';
     const json = await fetchJson(url, 'post');
     if(json.returnCode !== 0) return showError(json.returnMsg);
     const selectItems = json.result;
     const filterItems = json.result;
+    const originalArray = value.signPartyList;
     const okFunc = (addItems = []) => {
-      const newItems = addItems.concat(value.signPartyList);
+      const newItems = addItems.concat(originalArray,filterItems);
       dispatch(action.assign({signPartyList: newItems}, 'value'))
     };
-    buildAddState(groupConfig, selectItems.data, filterItems.data, true, dispatch, okFunc);
+    buildAddState(groupConfig, selectItems, filterItems, true, dispatch, okFunc);
     showPopup(AddDialogContainer)
   };
 

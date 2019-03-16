@@ -95,8 +95,8 @@ const editConfig = {
   groupConfig: {
     title: '从签署群组添加',
     tableCols: [
-      {key: 'signGroupName', title: '签署群组名称'},
-      {key: 'signGroupNote', title: '群组成员'}
+      {key: 'realName', title: '签署群组名称'},
+      {key: 'account', title: '账号'}
     ],
     maxHeight: '400px',
     size: 'small',
