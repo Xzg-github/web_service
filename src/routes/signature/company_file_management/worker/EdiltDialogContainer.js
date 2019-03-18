@@ -51,7 +51,7 @@ const rejectActionCreator = () => async (dispatch, getState) => {
   const id = state.items.id;
   const {returnCode,returnMsg} = await helper.fetchJson(URL_STATUS, helper.postOption({id, userAccountState: '2'}, 'post'));
   if(returnCode === 0){
-    helper.showSuccessMsg('审核失败');
+    helper.showSuccessMsg('审核不通过');
     dispatch(action.assign({visible: false, ok: false}));
     return updateTable(dispatch, getState)
   }else{

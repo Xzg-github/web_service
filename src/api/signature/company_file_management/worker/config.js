@@ -6,7 +6,8 @@ const isOptions = [
   {value: 2, title: '认证失败'},
   {value: 3, title: '已认证'},
   {value: 4, title: '已启用'},
-  {value: 5, title: '已审核'}
+  {value: 5, title: '已审核'},
+  {value: 6, title: '待审核'}
 ];
 
 const filters = [
