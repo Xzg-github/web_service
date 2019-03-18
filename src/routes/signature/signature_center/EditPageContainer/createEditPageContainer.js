@@ -110,15 +110,17 @@ const createEditPageContainer = (action, getSelfState) => {
     let token = getCookie('token');
     const URL_ACCOUNT = '/api/signature/signature_center/getName';
     let list = value.signPartyList;
-    if(key === 'signWay'){
+    if(key === 'signWay' && values === '1'){
       const {returnCode, returnMsg, result} = await fetchJson(`${URL_ACCOUNT}/${token}`,'get');
       if(returnCode !== 0) return;
       const account = result.account;
       const signPartyName = result.username;
       if(JSON.stringify(list).indexOf(JSON.stringify(account))===-1){
-        list.unshift({account, signPartyName});
+        list.unshift({account, signPartyName, sequence: 1});
       }
       dispatch(action.assign({signPartyList: list}, 'value'))
+    }else if(key === 'signWay' && values === '0'){
+      dispatch(action.assign({signPartyList: []}, 'value'))
     }
     dispatch (action.assign({[key]: values}, 'value'));
   };
@@ -251,21 +253,17 @@ const createEditPageContainer = (action, getSelfState) => {
      const URL_SIGN =  '/api/signature/signature_center/sign';   //签署
 
      const save = helper.getJsonResult(await fetchJson(URL_SAVE,postOption(value, 'post')));  //先保存
-
      const submit = await fetchJson(`${URL_SUBMIT}/${save.id}`, 'get');   //再提交
      if(submit.returnCode !== 0){
        showError(submit.returnMsg);
        return
      }
-
      const {returnCode, returnMsg, result } = await helper.fetchJson(URL_SIGN, helper.postOption(save.id)); //签署
      if (returnCode !== 0) return helper.showError(returnMsg);
      window.open(result);
    }catch (e){
      helper.showError(e.message)
    }
-
-
  } ;
 
  //发送

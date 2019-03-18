@@ -14,11 +14,12 @@ const getSelfState = (state) => {
   return state.temp || {};
 };
 
-const buildState = ( items,edit) => {
+const buildState = ( items,config) => {
   return {
     title: '审核',
     visible: true,
-    items
+    items,
+    config: config
   };
 };
 
@@ -39,16 +40,27 @@ const okActionCreator = () => async (dispatch, getState) => {
   }else{
     helper.showError(returnMsg)
   }
-
 };
 
 const closeActionCreator = () => (dispatch) => {
   dispatch(action.assign({visible: false, ok: false}));
 };
 
+const rejectActionCreator = () => async (dispatch, getState) => {
+  const state = getSelfState(getState());
+  const id = state.items.id;
+  const {returnCode,returnMsg} = await helper.fetchJson(URL_STATUS, helper.postOption({id, userAccountState: '2'}, 'post'));
+  if(returnCode === 0){
+    helper.showSuccessMsg('审核失败');
+    dispatch(action.assign({visible: false, ok: false}));
+    return updateTable(dispatch, getState)
+  }else{
+    helper.showError(returnMsg)
+  }
+};
+
 const clickActionCreators = {
-  ok: okActionCreator,
-  close: closeActionCreator
+  cancel: closeActionCreator,
 };
 
 const clickActionCreator = (key) => {
@@ -65,11 +77,14 @@ const mapStateToProps = (state) => {
 
 const actionCreators = {
   onClick: clickActionCreator,
+  ok: okActionCreator,
+  cancel: closeActionCreator,
+  reject: rejectActionCreator,
 };
 
-export default async (items={},edit=false) => {
+export default async (items={}, config) => {
   const Container = connect(mapStateToProps, actionCreators)(EditDialog);
-  global.store.dispatch(action.create(buildState(items,edit)));
+  global.store.dispatch(action.create(buildState(items,config)));
   await showPopup(Container, {}, true);
 
   const state = getSelfState(global.store.getState());
