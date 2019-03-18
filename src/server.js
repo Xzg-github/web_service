@@ -20,6 +20,7 @@ import api from './api';
 import './less/index.less';
 import WsServer from './standard-business/wsServer';
 import WebSocketProxy from './api/wsProxy';
+import {fadada} from "./api/gloablConfig";
 
 const app = express();
 
@@ -46,23 +47,15 @@ if (process.env.NODE_ENV !== 'production') {
 
 app.use('/api', api);
 
-const isLogin = (req) => {
+const isRegistered = (req) => {
   const {token} = req.cookies;
+  const path = req.path;
+  if(path === '/registered'){
+    return true
+  }
   return !!token;
 };
 
-const isJumpLogin = (req) => {
-  const path = req.path;
-  if (path === '/password/find') {
-    return false;
-  } else if (path === '/password/reset') {
-    return false;
-  } else if (path === '/registered') {
-    return false;
-  } else {
-    return !isLogin(req) && (path !== '/login');
-  }
-};
 
 //
 // Register server-side rendering middleware
@@ -73,6 +66,13 @@ app.get('*', async (req, res, next) => {
     if (isNotSupport(userAgent)) {
       const page = ReactDOM.renderToStaticMarkup(<NotSupport userAgent={userAgent} />);
       res.send(`<!doctype html>${page}`);
+      return;
+    }
+
+
+    //跳转去epld
+    if (req.path === '/epldLogin'){
+      res.redirect(302, fadada);
       return;
     }
 
@@ -89,10 +89,12 @@ app.get('*', async (req, res, next) => {
       return;
     }
 
-    if (isJumpLogin(req)) {
-      res.redirect(302, '/login');
+    //识别不到token跳转去注册页面
+    if (!isRegistered(req)) {
+      res.redirect(302, '/registered');
       return;
     }
+
 
     const css = new Set();
     // Global (context) variables that can be easily accessed from any React component

@@ -41,8 +41,8 @@ export default {
   path: '/',
 
   children: [
-      require('./home').default,
-      require('./login').default,
+      //require('./home').default,
+      //require('./login').default,
       createRoute('/signature', loadSignature),
       require('./password/modify').default,
       require('./password/find').default,

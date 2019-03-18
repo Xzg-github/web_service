@@ -2,7 +2,7 @@ import React from 'react';
 import {SuperTab2, Card, SuperToolbar } from '../../components';
 import Frame from '../password/frame/Frame';
 import withStyles from 'isomorphic-style-loader/lib/withStyles';
-import {Input, Button } from 'antd';
+import {Input, Button ,Icon} from 'antd';
 import s from './Page.less';
 
 class Page extends React.Component {
@@ -76,14 +76,49 @@ class Page extends React.Component {
     return <SuperToolbar {...props} />;
   };
 
+  toRegistered = () => {
+    return (
+      <div>
+        <div><h1>注册</h1></div>
+        <div className={s.customSuperTab}>{this.toTabs()}</div>
+        {this.toPage()}
+        <div className = {s.footer}>{this.toFooter()}</div>
+      </div>
+    )
+  };
+
+  tuButton = () => {
+    const {onLogin} = this.props;
+    const buttons = [
+      {key:'login',title:'前往登录'}
+    ];
+    const propsObj = {
+      size: 'large',
+      buttons,
+      onClick:onLogin
+    };
+    return <SuperToolbar {...propsObj}/>;
+  };
+
+
+  toSuccess = () => {
+    return (
+      <div className={s.box}>
+        <Icon type="check-circle"  style={{fontSize:36,color:'#2196F3'}}/>
+        <p>恭喜您，注册成功！</p>
+        <p>账号及密码信息已经发送到您的邮箱，请前往登录系统，并进行实名认证.</p>
+        {this.tuButton()}
+      </div>
+    )
+  };
+
   render(){
+    const {isRegistered = true} = this.props;
     return (
       <Frame  contentClass={s.root}>
         <Card className={s.container}>
-          <div><h1>注册</h1></div>
-          <div className={s.customSuperTab}>{this.toTabs()}</div>
-          {this.toPage()}
-          <div className = {s.footer}>{this.toFooter()}</div>
+          {isRegistered && this.toRegistered()}
+          {!isRegistered &&  this.toSuccess()}
         </Card>
       </Frame>
     )
