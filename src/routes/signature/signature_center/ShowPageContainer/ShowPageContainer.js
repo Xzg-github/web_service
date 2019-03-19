@@ -14,7 +14,7 @@ const getSelfState = (rootState) => {
 const buildShowState = (config, items=[], dispatch, title) => {
   dispatch(action.create({
     ...config,
-    tableItems: items,
+    value: items,
     visible: true,
     title
   }))

@@ -82,15 +82,15 @@ const config = {
   paginationConfig,
   showConfig: {
     tableCols: [
-      {key: 'sign', title: '顺序签'},
-      { key: 'mechanism', title: '姓名/机构',type: 'text'},
-      { key: 'accountNumber', title: '账号', type: 'text'},
-      { key: 'whether', title: '允许增加签署方', type: 'select', options: isOptions},
-      { key: 'identity', title: '签署身份', type: 'select', options: isOptions1},
-      { key: 'signTime', title: '签署时间'},
-      { key: 'signingOpinions', title: '签署意见', type: 'text'},
-      { key: 'sendLink', title: '链接', link: '发送链接'},
-      { key: 'notice', title: '提醒', link: '点击提醒'}
+      {key: 'sequence', title: '签署顺序'},
+      { key: 'signPartyName', title: '姓名/机构',type: 'text'},
+      { key: 'account', title: '账号', type: 'text'},
+      { key: 'signIdentity', title: '签署身份', type: 'select', options: isOptions1},
+      //{ key: 'isAllowAddSignatories', title: '允许增加签署方', type: 'select', options: isOptions},
+     // { key: 'signTime', title: '签署时间'},
+      //{ key: 'signingOpinions', title: '签署意见', type: 'text'},
+     // { key: 'sendLink', title: '链接', link: '发送链接'},
+      //{ key: 'notice', title: '提醒', link: '点击提醒'}
     ],
   }
 };

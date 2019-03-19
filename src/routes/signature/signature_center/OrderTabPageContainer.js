@@ -2,7 +2,7 @@ import { connect } from 'react-redux';
 import { Action } from '../../../action-reducer/action';
 import {getPathValue} from '../../../action-reducer/helper';
 import {search2} from '../../../common/search';
-import helper from '../../../common/common';
+import helper, {fetchJson} from '../../../common/common';
 import { getObject } from '../../../common/common';
 import createOrderTabPageContainer, {buildOrderTabPageCommonState, updateTable} from "../../../standard-business/OrderTabPage/createOrderTabPageContainer";
 import ShowPageContainer,{buildShowState} from "./ShowPageContainer/ShowPageContainer";
@@ -85,11 +85,13 @@ const signatureAction = (tabKey) => async (dispatch, getState) =>{
 };
 
 // link详情查看
-const onLinkActionCreator = (tabKey, key, rowIndex, item) => (dispatch, getState) => {
+const onLinkActionCreator = (tabKey, key, rowIndex, item) => async (dispatch, getState) => {
   const {showConfig, tableItems} = getSelfState(getState());
+  const URL_RECORD = `/api/signature/signature_center/record`;
   const items = tableItems[tabKey][rowIndex];
-  const title = items.associatedFileTheme;
-  buildShowState(showConfig, items, dispatch, title);
+  const {returnCode, returnMsg, result} = await helper.fetchJson(`${URL_RECORD}/${items.id}`);
+  const title = items.signFileSubject;
+  buildShowState(showConfig, result, dispatch, title);
   showPopup(ShowPageContainer);
 };
 

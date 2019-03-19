@@ -131,4 +131,10 @@ api.get('/authenticationList', async(req, res) => {
   res.send(await fetchJsonByNode(req, url))
 });
 
+//查看详情
+api.get('/record/:guid', async(req, res) => {
+  const url = `${service}/sign_center/record_by_id/${req.params.guid}`;
+  res.send(await fetchJsonByNode(req, url))
+});
+
 export default api;

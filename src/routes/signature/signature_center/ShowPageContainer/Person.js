@@ -14,20 +14,20 @@ const Panel = Collapse.Panel;
 
 const LABELS = [
   {key: 'fileLink', title: '文件链接'},
-  {key: 'fileTheme', title: '文件主题'},
-  {key: 'status', title: '状态'},
-  {key: 'insertTimeStart', title: '发起时间'},
-  {key: 'insertTimeEnd', title: '截至签署日期'},
-  {key: 'remarks', title: '备注'},
-  {key: 'annex', title: '附件'},
+  {key: 'signFileSubject', title: '文件主题'},
+  {key: 'fileState', title: '状态'},
+  {key: 'signStartTime', title: '发起时间'},
+  {key: 'signExpirationTime', title: '截至签署日期'},
+  {key: 'note', title: '备注'},
+  //{key: 'annex', title: '附件'},
 ];
 
 const MESSAGE = [
-  {key: 'method', title: '签署方式'},
+  {key: 'signWay', title: '签署方式'},
   {key: 'sequence', title: '签署顺序'},
-  {key: 'position', title: '指定签署位置'},
-  {key: 'copy', title: '添加抄送方'},
-  {key: 'copyMessage', title: '抄送放信息'}
+  {key: 'isSignInSpecifiedLocation', title: '指定签署位置'},
+  {key: 'isAddCcSide', title: '添加抄送方'},
+ // {key: 'copyMessage', title: '抄送放信息'}
 ];
 
 class Person extends React.Component {
@@ -48,9 +48,9 @@ class Person extends React.Component {
   };
 
   toTable = () => {
-    const {tableCols, tableItems, onLink} = this.props;
+    const {tableCols, value, onLink} = this.props;
     const props = {cols: tableCols,
-                  items: [],
+                  items: value.signPartyList,
                callback: { onLink: onLink ? onLink.bind(null) : undefined}
     };
     return <SuperTable {...props} />
@@ -85,15 +85,19 @@ class Person extends React.Component {
 
   render() {
     const data = this.props.data;
-    const {panels = []} = this.props;
+    const {panels = [], value} = this.props;
     return (
       <ModalWithDrag {...this.getProps()}>
         <Title title = "文件信息" />
-        <div>{LABELS.map((item, index) => <div key={index}>{`${item.title}:`}</div>)}</div>
-
+        <div style={{overflow: 'hidden'}}>
+          <div style={{float: 'left', marginRight: '6px', textAlign: 'right'}}>{LABELS.map((item, index) => <div key={index}>{`${item.title}:`}</div>)}</div>
+          <div style={{float: 'left'}}>{LABELS.map((item, index)=> <div key={index} data-no={!value[item.key]}>{value[item.key] || '无'}</div>)}</div>
+        </div>
         <Title title = "签署信息"/>
-        <div>{MESSAGE.map((item, index) => <div key={index}>{`${item.title}:`}</div>)}</div>
-
+        <div style={{overflow: 'hidden'}}>
+          <div style={{float: 'left', marginRight: '6px', textAlign: 'right'}}>{MESSAGE.map((item, index) => <div key={index}>{`${item.title}:`}</div>)}</div>
+          <div style={{float: 'left'}}>{MESSAGE.map((item, index)=> <div key={index} data-no={!value[item.key]}>{value[item.key] || '无'}</div>)}</div>
+        </div>
         <Title title = "签署记录" />
         {this.toTable()}
         <Title title = "操作记录" />
