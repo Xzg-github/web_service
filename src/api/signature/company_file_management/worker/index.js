@@ -24,4 +24,10 @@ api.post('/status', async(req, res) => {
   res.send(await fetchJsonByNode(req, url, postOption(req.body, 'post')))
 });
 
+//审核通过
+api.post('/audit', async (req, res) => {
+  const url = `${service}/user_account/company_audit`;
+  res.send(await fetchJsonByNode(req, url, postOption(req.body, 'post')))
+});
+
 export default api;

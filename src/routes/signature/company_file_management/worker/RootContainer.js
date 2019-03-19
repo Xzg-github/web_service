@@ -178,4 +178,5 @@ const actionCreators = {
   onPageSizeChange: pageSizeActionCreator
 };
 
+export {updateTable}
 export default connect(mapStateToProps, actionCreators)(EnhanceLoading(OrderPage));
