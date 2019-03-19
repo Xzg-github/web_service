@@ -30,7 +30,6 @@ class OrderPage extends React.Component {
   };
 
   toOkButton = () => {
-    console.log(this.props);
     const props = {
       style: {width: '100%',fontSize:'16px'},
       loading:this.props.loading,
@@ -50,6 +49,7 @@ class OrderPage extends React.Component {
       <div className={s.root}>
         <div className={s.box}>
           <h1 role='title'>ePLD供应链管理系统</h1>
+          {this.toInput('mobile', '手机号')}
           {this.toInput('idNumber', '身份证号')}
           {this.toInput('realName', '姓名')}
           {this.toOkButton()}
