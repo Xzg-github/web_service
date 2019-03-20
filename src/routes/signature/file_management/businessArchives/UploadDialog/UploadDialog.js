@@ -44,7 +44,10 @@ class UploadDialog extends React.Component{
 
   toLabel = () => {
     return (
-      <label style={{display:'block'}}><span style={{color:'#f04134', fontFamily: 'SimSun'}}>*</span>{this.props.title}</label>
+      <label style={{display: 'block', lineHeight: '16px', marginTop: '4px'}}>
+        <span style={{color: '#FF0000', fontFamily: 'SimSun', fontSize: '12px', marginRight: '4px'}}>*</span>
+        {this.props.title}
+      </label>
     );
   };
 
@@ -61,7 +64,7 @@ class UploadDialog extends React.Component{
     return (
       <div>
         <h3>示例图</h3>
-        <p>步骤一: 请下载《企业认证申请表》<br/>步骤二：法大大账号及数字证书申请表盖章扫描件（盖章原件需邮寄）<br/>支持.jpg .jpeg .png格式，大小不超过20M</p>
+        <p>步骤一: 请下载《企业认证申请表》<br/>步骤二：法大大账号及数字证书申请表盖章扫描件<br/>支持.jpg .jpeg .png格式，大小不超过20M</p>
       </div>
     )
   };
@@ -75,33 +78,33 @@ class UploadDialog extends React.Component{
     )
   };
 
-  toRightComment = (key) => {debugger
-    if (key === 'BLRN' || key === 'OCC') {
+  toRightComment = (key) => {
+    if (key === 'urlOfLicensePicture' || key === 'urlOfOrganizationCode') {
       return this.toComment1();
-    } else if (key === 'apply'){
+    } else if (key === 'applicationForm'){
       return this.toComment2();
     }
-    else if (key === 'corporateRes' || key === 'accountManager') {
+    else if (key === 'urlOfLegalPersonPicture' || key === 'urlOfIdCard') {
       return this.toComment3();
     }
   };
 
   render() {
     const {src, isLook, UploadKey} = this.props;
-    const url = 'http://img.mp.itc.cn/upload/20160906/9ef83821c2ae4d31b4341553f9d88a7f_th.jpg';
+    const url = 'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1553672871&di=dfc77322db7750428b9ebe728f81773f&imgtype=jpg&er=1&src=http%3A%2F%2Fcdn.unwire.hk%2Fwp-content%2Fuploads%2F2012%2F09%2FiPad-Mini-06.jpg';
     return (
-      <div className={s.root}>
+      <div className={isLook ? s.root1 : s.root}>
         {this.toLabel()}
-        <div className={s.imgDiv}>
-          <img src={src ? src : url}/>
+        <div className={isLook ? s.imgDiv1 : s.imgDiv}>
+          <img alt={this.props.title} src={src ? src : url}/>
         </div>
-        <div className={s.rightDiv}>
-          {isLook && this.toRightComment(UploadKey)}
+        <div className={isLook ? s.rightDiv1 : s.rightDiv}>
+          {!isLook && this.toRightComment(UploadKey)}
           {!isLook && this.toUpload()}
         </div>
       </div>
     )
   }
-};
+}
 
 export default withStyles(s)(UploadDialog);
