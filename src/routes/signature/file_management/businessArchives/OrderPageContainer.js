@@ -5,7 +5,7 @@ import {getPathValue} from "../../../../action-reducer/helper";
 import {toFormValue} from "../../../../common/check";
 import {search2} from "../../../../common/search";
 import {commonExport, exportExcelFunc} from "../../../../common/exportExcelSetting";
-import {fetchJson, genTabKey, getObject, postOption, showError, deepCopy} from "../../../../common/common";
+import {fetchJson, genTabKey, getObject, showError, deepCopy} from "../../../../common/common";
 
 const STATE_PATH = ['businessArchives'];
 const action = new Action(STATE_PATH);
@@ -87,25 +87,24 @@ const formSearchActionCreator = (key, title) => async (dispatch, getState) => {
 
 //设置controls为只读
 const changeTypeToReadOnly = (targrt=[]) => {
-  const result = targrt.reduce((result, item) => {
+  return targrt.reduce((result, item) => {
     const backUpItem = deepCopy(item);
     backUpItem.type = 'readonly';
     result.push(backUpItem);
     return result;
   },[]);
-  return result;
 };
 
 //展示详细
 const linkActionCreator = (key, rowIndex, item) => async (dispatch, getState) => {
   const {editConfig, tabs} = getSelfState(getState());
   //依据item.id获取详细信息
-  const {returnMsg, returnCode, result} = await fetchJson(URL_DETAIL, postOption(item.id));
+  const {returnMsg, returnCode, result} = await fetchJson(`${URL_DETAIL}/${item.id}`);
   if (returnCode !== 0) return showError(returnMsg);
   const tabKey = genTabKey('look', tabs);
   const newTabs = tabs.find(tab => tab.key === tabKey)
     ? tabs
-    : tabs.concat([{key: tabKey, title: item['customerOrder']}]);
+    : tabs.concat([{key: tabKey, title: item['companyOrder']}]);
   const {businessInfo, managerInfo, ...others} = editConfig;
   const backUpbusinessInfo = changeTypeToReadOnly(businessInfo);
   const backUpManagerInfo = changeTypeToReadOnly(managerInfo);

@@ -39,7 +39,7 @@ class EditPage extends React.Component{
     return <SuperForm {...formProps} />
   };
 
-  toManagerInfoUpload = (props, {key, title}) => {
+  toUpload = (props, {key, title}) => {
     const {value, isLook, onUploadChange} = props;
     const UploadProps = {
       src: value[key],
@@ -50,43 +50,31 @@ class EditPage extends React.Component{
       key
     };
     return <UploadDialog {...UploadProps}/>
-  }
+  };
 
   toButton = () => {
     const props = {
       size: 'default',
       buttons: this.props.editButton,
       onClick: this.props.onClick.bind(null, this.props)
-    }
+    };
     return <SuperToolbar {...props}/>
   };
 
   render() {
-    const {businessTitle, managerTitle, businessInfoUpload} = this.props;
-    const url = 'http://img.mp.itc.cn/upload/20160906/9ef83821c2ae4d31b4341553f9d88a7f_th.jpg';
+    const {businessTitle, managerTitle, businessInfoUpload, managerInfoUpload} = this.props;
     return (
       <Card className={s.root}>
         {this.toTitle(businessTitle)}
         <Indent>{this.toBusinessInfoForm()}</Indent>
-        <div className={s.business}>
-          {businessInfoUpload.map(item => this.toManagerInfoUpload(this.props, item))}
-        </div>
+        {businessInfoUpload.map(item => this.toUpload(this.props, item))}
         {this.toTitle(managerTitle)}
         <Indent>{this.toManagerInfoForm()}</Indent>
-        <div  className={s.business}>
-          <div className={s.imgContainer} key= 'representative'>
-            <p className={s.imgTitle}><span>*</span>法定代表人身份证正反面复印件</p>
-            <img className={s.img} src={url}/>
-          </div>
-          <div className={s.imgContainer} key= 'manager'>
-            <p className={s.imgTitle}><span>*</span>账号管理人身份证正反面复印件</p>
-            <img className={s.img} src={url}/>
-          </div>
-        </div>
+        {managerInfoUpload.map(item => this.toUpload(this.props, item))}
         <div className={s.footer}>{this.toButton()}</div>
       </Card>
     )
   }
-};
+}
 
 export default withStyles(s)(EditPage);
