@@ -2,7 +2,7 @@ import { connect } from 'react-redux';
 import { Action } from '../../../action-reducer/action';
 import {getPathValue} from '../../../action-reducer/helper';
 import {search2} from '../../../common/search';
-import helper from '../../../common/common';
+import helper, {fetchJson, showError} from '../../../common/common';
 import { getObject } from '../../../common/common';
 import createOrderTabPageContainer, {buildOrderTabPageCommonState, updateTable} from "../../../standard-business/OrderTabPage/createOrderTabPageContainer";
 import ShowPageContainer,{buildShowState} from "./ShowPageContainer/ShowPageContainer";
@@ -48,6 +48,12 @@ const showOrderInfoPage = (dispatch, item, selfState, edit) => {
 
 //新增
 const addAction  = (tabKey) => async (dispatch, getState) => {
+  const URL_CREATE = `/api/signature/signature_center/create`;
+  const {returnCode, returnMsg, result} = await fetchJson(URL_CREATE, 'get');
+  if(result !== 1){
+    showError(returnMsg);
+    return
+  }
   const selfState = getSelfState(getState());
   showOrderInfoPage(dispatch, {}, selfState, false)
 };
@@ -80,15 +86,18 @@ const signatureAction = (tabKey) => async (dispatch, getState) =>{
   const URL_SIGN =  '/api/signature/signature_center/sign';
   const {returnCode, returnMsg, result } = await helper.fetchJson(URL_SIGN, helper.postOption(id));
   if (returnCode !== 0) return helper.showError(returnMsg);
-  window.open(result)
+  window.open(result);
+  return updateTable(dispatch, action, getSelfState(getState()));
 };
 
 // link详情查看
-const onLinkActionCreator = (tabKey, key, rowIndex, item) => (dispatch, getState) => {
+const onLinkActionCreator = (tabKey, key, rowIndex, item) => async (dispatch, getState) => {
   const {showConfig, tableItems} = getSelfState(getState());
+  const URL_RECORD = `/api/signature/signature_center/record`;
   const items = tableItems[tabKey][rowIndex];
-  const title = items.associatedFileTheme;
-  buildShowState(showConfig, items, dispatch, title);
+  const {returnCode, returnMsg, result} = await helper.fetchJson(`${URL_RECORD}/${items.id}`);
+  const title = items.signFileSubject;
+  buildShowState(showConfig, result, dispatch, title);
   showPopup(ShowPageContainer);
 };
 
@@ -144,7 +153,7 @@ const onAuthenticationActionCreator = () => async(dispatch, getState) => {
   const {role} = getSelfState(getState());
 
   if(role === 'econtract_personal_role'){
-    jump('/signature/personal_certification')
+    jump('/signature/personal_certification');
     return
   }
   const controls = [

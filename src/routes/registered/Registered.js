@@ -23,7 +23,7 @@ const initActionCreator = () => async (dispatch) => {
   try {
     dispatch(action.assign({status: 'loading'}));
     const config = helper.getJsonResult(await helper.fetchJson(URL_CONFIG));
-    const payload = {...config, value: {}, loading: false, status: 'page'};
+    const payload = {...config, value: {}, loading: false, status: 'page',isRegistered:true};
     dispatch(action.create(payload));
   } catch (e) {
     helper.showError(e.message);
@@ -93,14 +93,19 @@ const okActionCreator = (key) => async (dispatch, getState) => {
     };
     const {returnCode, result, returnMsg} = await helper.fetchJson(activeKey === 'companyEmail'? URL_COMPANY:URL_SET_NEWPSW, helper.postOption(params));
     if (returnCode === 0) {
-      helper.showSuccessMsg('注册成功，返回登录页进行登录');
+      helper.showSuccessMsg('注册成功');
       dispatch(action.assign({value: {}}));
     }else {
       helper.showError(returnMsg);
+      return
     }
-    dispatch(action.assign({value: {}}));
-    setTimeout(() => window.location.href = '/login', 500);
+    dispatch(action.assign({value: {},isRegistered:false}));
   });
+};
+
+//提交
+const onLoginCreator = (key) =>  (dispatch, getState) => {
+  setTimeout(() => window.location.href = '/epldLogin');
 };
 
 const mapStateToProps = (state) => {
@@ -112,6 +117,7 @@ const actionCreator = {
   onChange:changeActionCreator,
   onTabChange: onTabChangeActionCreator,
   onClick: okActionCreator,
+  onLogin:onLoginCreator,
   sendVarifyCode
 };
 

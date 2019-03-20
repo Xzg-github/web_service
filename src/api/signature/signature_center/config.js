@@ -13,7 +13,7 @@ const isOptions1 = [
 
 const isOptions2 = [
   {value:'draft', title: '草稿'},
-  {value:'wait', title: '待我签'},
+  {value:'wait', title: '待签'},
   {value: 'sign', title: '已签署'},
   {value: 'completed', title: '已完成'}
 ];
@@ -24,14 +24,22 @@ const filters = [
   {key: 'signStartTimeFrom', title: '发起时间', type: 'date', rule: {type: '<', key: 'signStartTimeTo'}},
   {key: 'signStartTimeTo', title: '至', type: 'date', rule: {type: '>', key: 'signStartTimeFrom'}},
   {key: 'fileState', title: '状态', type: 'select', options: isOptions2},
-  {key: 'signExpirationTimeFrom', title: '完成时间', type: 'date', rule: {type: '<', key: 'signExpirationTimeTo '}},
-  {key: 'signExpirationTimeTo', title: '至', type: 'date', rule: {type: '>', key: 'signExpirationTimeFrom'}},
+  {key: 'signFinishTimeFrom', title: '完成时间', type: 'date', rule: {type: '<', key: 'signExpirationTimeTo '}},
+  {key: 'signFinishTimeTo', title: '至', type: 'date', rule: {type: '>', key: 'signExpirationTimeFrom'}},
   {key: 'isAddCcSide', title: '是否抄送', type: 'select', options: isOptions}
 ];
 
 const buttons = [
   {key: 'add', title: '新增', bsStyle: 'primary'},
   {key: 'edit', title: '编辑'},
+  {key: 'del', title: '删除', confirm:'是否确定删除'},
+  {key: 'signature', title: '签署'},
+  {key: 'upload', title: '下载文件'},
+  {key: 'view', title: '在线预览'}
+];
+
+const buttons2 = [
+  {key: 'add', title: '新增', bsStyle: 'primary'},
   {key: 'del', title: '删除', confirm:'是否确定删除'},
   {key: 'signature', title: '签署'},
   {key: 'upload', title: '下载文件'},
@@ -65,6 +73,7 @@ const config = {
   searchDataBak: {},
   filters,
   buttons,
+  buttons2,
   tableCols,
   initPageSize: pageSize,
   pageSizeType,
@@ -73,15 +82,15 @@ const config = {
   paginationConfig,
   showConfig: {
     tableCols: [
-      {key: 'sign', title: '顺序签'},
-      { key: 'mechanism', title: '姓名/机构',type: 'text'},
-      { key: 'accountNumber', title: '账号', type: 'text'},
-      { key: 'whether', title: '允许增加签署方', type: 'select', options: isOptions},
-      { key: 'identity', title: '签署身份', type: 'select', options: isOptions1},
-      { key: 'signTime', title: '签署时间'},
-      { key: 'signingOpinions', title: '签署意见', type: 'text'},
-      { key: 'sendLink', title: '链接', link: '发送链接'},
-      { key: 'notice', title: '提醒', link: '点击提醒'}
+      {key: 'sequence', title: '签署顺序'},
+      { key: 'signPartyName', title: '姓名/机构',type: 'text'},
+      { key: 'account', title: '账号', type: 'text'},
+      { key: 'signIdentity', title: '签署身份', type: 'select', options: isOptions1},
+      //{ key: 'isAllowAddSignatories', title: '允许增加签署方', type: 'select', options: isOptions},
+     // { key: 'signTime', title: '签署时间'},
+      //{ key: 'signingOpinions', title: '签署意见', type: 'text'},
+     // { key: 'sendLink', title: '链接', link: '发送链接'},
+      //{ key: 'notice', title: '提醒', link: '点击提醒'}
     ],
   }
 };

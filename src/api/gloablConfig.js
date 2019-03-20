@@ -36,12 +36,17 @@ const maxSearchCount = 20;
 //let hostname = '192.168.202.33';
 let hostname = '10.10.10.76';
 let trackMapUrl;
+let fadadaURL = '10.10.10.76';
+let fadadaPort = 3000;
 const readConfig = () => {
   try {
     const filePath = path.join(__dirname, 'api_config.json');
     const config = JSON.parse(fs.readFileSync(filePath,'utf-8'));
     hostname = config.hostname;
     trackMapUrl = config.trackMapUrl;
+    const fadada = config.fadada;
+    fadadaURL = fadada.host;
+    fadadaPort = fadada.port;
   }catch (e) {
     console.log('can not read config file');
   }
@@ -54,6 +59,8 @@ const port = '5555';
 const fadadaServiceName = 'fadada-service';
 //const fadadaServiceName = '';
 const host = `http://${hostname}:${port}`;
+const fadada = `http://${fadadaURL}:${fadadaPort}`;
+
 
 
 //跟踪管理-轨迹信息的扩展页面地址
@@ -73,5 +80,6 @@ export {
   fadadaServiceName,
   privilege,
   maxSearchCount,
-  trackMapUrlEx
+  trackMapUrlEx,
+  fadada
 };

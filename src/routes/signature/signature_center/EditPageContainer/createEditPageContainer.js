@@ -42,7 +42,8 @@ const createEditPageContainer = (action, getSelfState) => {
     try{
       let url = '/api/signature/signature_center/editConfig';
       const editConfig = getJsonResult(await fetchJson(url));
-      let data = {signExpirationTime:moment().format('YYYY-MM-DD HH:mm:ss'), signPartyList: []};  //获取当前时间
+      let data = {signPartyList: []};
+      //let data = {signExpirationTime:moment().format('YYYY-MM-DD HH:mm:ss'), signPartyList: []};  //获取当前时间
       if(id){
         const URL_LIST_ONE = '/api/signature/signature_center/getOne';
         const list = getJsonResult(await fetchJson(`${URL_LIST_ONE}/${id}`,'get'));
@@ -110,15 +111,17 @@ const createEditPageContainer = (action, getSelfState) => {
     let token = getCookie('token');
     const URL_ACCOUNT = '/api/signature/signature_center/getName';
     let list = value.signPartyList;
-    if(key === 'signWay'){
+    if(key === 'signWay' && values === '1'){
       const {returnCode, returnMsg, result} = await fetchJson(`${URL_ACCOUNT}/${token}`,'get');
       if(returnCode !== 0) return;
       const account = result.account;
       const signPartyName = result.username;
       if(JSON.stringify(list).indexOf(JSON.stringify(account))===-1){
-        list.unshift({account, signPartyName});
+        list.unshift({account, signPartyName, sequence: 1});
       }
       dispatch(action.assign({signPartyList: list}, 'value'))
+    }else if(key === 'signWay' && values === '0'){
+      dispatch(action.assign({signPartyList: []}, 'value'))
     }
     dispatch (action.assign({[key]: values}, 'value'));
   };
@@ -143,7 +146,11 @@ const createEditPageContainer = (action, getSelfState) => {
 
   //从联系人中添加
   const contactAction = async (dispatch, getState) => {
-    const {contactConfig, tableItems}  = getSelfState(getState());
+    const {contactConfig, value}  = getSelfState(getState());
+    if(!value.signWay){
+      showError('请先选择签署方式');
+      return
+    }
     const url = '/api/signature/signature_center/name';
     const json = await fetchJson(url, 'post');
     if(json.returnCode !== 0){
@@ -152,27 +159,33 @@ const createEditPageContainer = (action, getSelfState) => {
     if(json.returnCode !== 0) return showError(json.returnMsg);
     const selectItems = json.result;
     const filterItems = json.result;
+    const originalArray = value.signPartyList;
     const okFunc = (addItems = []) => {
-      const newItems = addItems.concat(tableItems);
-      dispatch(action.assign({tableItems: newItems}))
+      const newItems = addItems.concat(originalArray,filterItems);
+      dispatch(action.assign({signPartyList: newItems}, 'value'))
     };
-    buildAddState(contactConfig, selectItems.data, filterItems.data, true, dispatch, okFunc);
+    buildAddState(contactConfig, selectItems, filterItems, true, dispatch, okFunc);
     showPopup(AddDialogContainer)
   };
 
   //从签署群组中添加
   const groupAction = async (dispatch, getState) => {
     const {groupConfig, value} = getSelfState(getState());
+    if(!value.signWay){
+      showError('请先选择签署方式');
+      return
+    }
     const url = '/api/signature/signature_center/groups';
     const json = await fetchJson(url, 'post');
     if(json.returnCode !== 0) return showError(json.returnMsg);
     const selectItems = json.result;
     const filterItems = json.result;
+    const originalArray = value.signPartyList;
     const okFunc = (addItems = []) => {
-      const newItems = addItems.concat(value.signPartyList);
+      const newItems = addItems.concat(originalArray,filterItems);
       dispatch(action.assign({signPartyList: newItems}, 'value'))
     };
-    buildAddState(groupConfig, selectItems.data, filterItems.data, true, dispatch, okFunc);
+    buildAddState(groupConfig, selectItems, filterItems, true, dispatch, okFunc);
     showPopup(AddDialogContainer)
   };
 
@@ -228,6 +241,7 @@ const createEditPageContainer = (action, getSelfState) => {
       return
     }
     upDatePage(result.id)(dispatch, getState);
+    return updateTable(dispatch, action, getSelfState(getState()));
   };
 
   //下一步
@@ -240,31 +254,44 @@ const createEditPageContainer = (action, getSelfState) => {
      const URL_SIGN =  '/api/signature/signature_center/sign';   //签署
 
      const save = helper.getJsonResult(await fetchJson(URL_SAVE,postOption(value, 'post')));  //先保存
-
      const submit = await fetchJson(`${URL_SUBMIT}/${save.id}`, 'get');   //再提交
      if(submit.returnCode !== 0){
        showError(submit.returnMsg);
        return
      }
-
      const {returnCode, returnMsg, result } = await helper.fetchJson(URL_SIGN, helper.postOption(save.id)); //签署
      if (returnCode !== 0) return helper.showError(returnMsg);
      window.open(result);
    }catch (e){
      helper.showError(e.message)
    }
-
-
  } ;
 
  //发送
   const sendAction = async (dispatch, getState) => {
-    const {value} = getSelfState(getState());
-    let id = value.id;
-    const URL_SEND =  '/api/signature/signature_center/send';
-    const {returnCode, returnMsg } = await helper.fetchJson(URL_SEND, helper.postOption(value));
-    if (returnCode !== 0) return helper.showError(returnMsg);
-    showSuccessMsg(returnMsg)
+    try {
+      const {value, closeFunc} = getSelfState(getState());
+      let id = value.id;
+      const URL_SAVE = `/api/signature/signature_center/save`;      //保存
+      const URL_SUBMIT = '/api/signature/signature_center/sub';  //提交
+
+      const save = helper.getJsonResult(await fetchJson(URL_SAVE,postOption(value, 'post')));  //先保存
+      const submit = await fetchJson(`${URL_SUBMIT}/${save.id}`, 'get');   //再提交
+      if(submit.returnCode !== 0){
+        showError(submit.returnMsg);
+        return
+      }
+      showSuccessMsg(submit.returnMsg);
+      closeFunc && closeFunc();                   //发送成功后关闭当前页
+    }catch (e){
+      helper.showError(e.message)
+    }
+  };
+
+  //关闭
+  const closeAction = async(dispatch, getState) => {
+    const {closeFunc} = getSelfState(getState());
+    closeFunc && closeFunc();
   };
 
 
@@ -277,7 +304,8 @@ const createEditPageContainer = (action, getSelfState) => {
     save: saveAction,
     next: nextAction,
     upload: uploadAction,
-    send: sendAction
+    send: sendAction,
+    close: closeAction
   };
 
   const clickActionCreator = (key) => {

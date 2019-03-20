@@ -28,14 +28,20 @@ const changeActionCreator = (event) => (dispatch, getState) =>{
   const { filterItems, formValue} = getSelfState(getState());
   let newTableItems = [];
   filterItems.forEach((item) => {
-    if(item.signGroupName.toLowerCase().indexOf(formValue.toLowerCase()) > -1) {
+    if(item.companyContactName.toLowerCase().indexOf(formValue.toLowerCase()) > -1) {
+      newTableItems.push(item);
+    }
+  });
+  filterItems.forEach((item) => {
+    if(item.realName.toLowerCase().indexOf(formValue.toLowerCase()) > -1) {
       newTableItems.push(item);
     }
   });
   dispatch(action.assign({tableItems: newTableItems}));
 };
-const okActionCreator = ({okFunc}) => async() => {
+const okActionCreator = ({okFunc, onClose}) => async() => {
   okFunc();
+  onClose();
 };
 
 const checkActionCreator = (isAll, checked, rowIndex) => (dispatch,getState) => {

@@ -11,12 +11,12 @@ const filters = [
   {key:'signStartTimeFrom',title:'发起时间',type:"date"},
   {key:'signStartTimeTo',title:'至',type:"date"},
   {key:'isAddCcSide',title:'是否抄送',type:"select",options:isYesOrNo},
-  {key:'signFileSerialNumber',title:'系统编号',type:'text'}
+  {key:'signFileOrder',title:'系统编号',type:'text'}
 ];
 
 const tableCols = [
-  {key:'signFileSerialNumber',title:'系统编号',link:true},
-  {key:'signFileSubject',title:'文件主题',link:true},
+  {key:'signFileOrder',title:'系统编号'},
+  {key:'signFileSubject',title:'文件主题'},
   {key:'insertUser',title:'发起人'},
   {key:'signStartTime',title:'发起时间'},
   {key:'isAddCcSide',title:'是否抄送',options:isYesOrNo},

@@ -23,7 +23,7 @@ const initActionCreator = () => async (dispatch) => {
     dispatch(action.assign({status: 'loading'}));
     const config = helper.getJsonResult(await helper.fetchJson(URL_CONFIG));
     const list = helper.getJsonResult(await search(URL_LIST, 0, config.pageSize, {}));
-    const payload = buildOrderPageState(list, config.index);
+    const payload = buildOrderPageState(list, config.index, config.edit);
     payload.status = 'page';
     payload.searchDataBak = payload.searchData;
     dispatch(action.assign(payload));
@@ -84,13 +84,13 @@ const editActionCreator = () => async (dispatch, getState) => {
 
 //审核
 const examineActionCreator = ()=> async(dispatch, getState) => {
-  const { tableItems } = getSelfState(getState());
+  const { tableItems, config } = getSelfState(getState());
   const items = tableItems.filter(item => item.checked);
   if(items.length !== 1){
     helper.showError('请勾选一条记录');
     return
   }
-  if (await showDialog( items[0] ,false)) {
+  if (await showDialog( items[0] ,config)) {
     refresh(dispatch, state);
   }
 };
@@ -110,7 +110,7 @@ const enableActionCreator = () => async(dispatch, getState) => {
     return
   }
   const id = items[0].id;
-  const {returnCode,returnMsg} = await helper.fetchJson(URL_STATUS, helper.postOption({id, userAccountState: '3'}, 'post'));
+  const {returnCode,returnMsg} = await helper.fetchJson(URL_STATUS, helper.postOption({id, userAccountState: '4'}, 'post'));
   if(returnCode === 0){
     helper.showSuccessMsg('启用成功');
     return updateTable(dispatch, getState)
@@ -178,4 +178,5 @@ const actionCreators = {
   onPageSizeChange: pageSizeActionCreator
 };
 
+export {updateTable}
 export default connect(mapStateToProps, actionCreators)(EnhanceLoading(OrderPage));

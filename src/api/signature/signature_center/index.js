@@ -60,6 +60,7 @@ api.post('/tabslist', async (req, res) => {
       signUser:'me',
       fileState:'draft'
     },{
+      signUser:'me',
     },
   ];
 
@@ -115,7 +116,7 @@ api.post('/groups', async(req, res) => {
 //从联系人中添加
 api.post('/name', async(req, res) => {
   const url = `${service}/company_contact/concat_by_name_or_account`;
-  res.send(await fetchJsonByNode(req, url, postOption(req, body)))
+  res.send(await fetchJsonByNode(req, url, postOption(req.body)))
 });
 
 //校验企业认证
@@ -127,6 +128,18 @@ api.post('/authentication', async(req, res) => {
 //校验企业是否已经认证
 api.get('/authenticationList', async(req, res) => {
   const url = `${service}/company_account/detail`;
+  res.send(await fetchJsonByNode(req, url))
+});
+
+//查看详情
+api.get('/record/:guid', async(req, res) => {
+  const url = `${service}/sign_center/record_by_id/${req.params.guid}`;
+  res.send(await fetchJsonByNode(req, url))
+});
+
+//判断新增操作
+api.get('/create', async(req, res) => {
+  const url = `${service}/sign_center/check_can_create_sign_file`;
   res.send(await fetchJsonByNode(req, url))
 });
 
