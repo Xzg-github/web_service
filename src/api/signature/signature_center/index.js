@@ -137,4 +137,10 @@ api.get('/record/:guid', async(req, res) => {
   res.send(await fetchJsonByNode(req, url))
 });
 
+//判断新增操作
+api.get('/create', async(req, res) => {
+  const url = `${service}/sign_center/check_can_create_sign_file`;
+  res.send(await fetchJsonByNode(req, url))
+});
+
 export default api;

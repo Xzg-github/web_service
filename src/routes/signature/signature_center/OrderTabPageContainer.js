@@ -2,7 +2,7 @@ import { connect } from 'react-redux';
 import { Action } from '../../../action-reducer/action';
 import {getPathValue} from '../../../action-reducer/helper';
 import {search2} from '../../../common/search';
-import helper, {fetchJson} from '../../../common/common';
+import helper, {fetchJson, showError} from '../../../common/common';
 import { getObject } from '../../../common/common';
 import createOrderTabPageContainer, {buildOrderTabPageCommonState, updateTable} from "../../../standard-business/OrderTabPage/createOrderTabPageContainer";
 import ShowPageContainer,{buildShowState} from "./ShowPageContainer/ShowPageContainer";
@@ -48,6 +48,12 @@ const showOrderInfoPage = (dispatch, item, selfState, edit) => {
 
 //新增
 const addAction  = (tabKey) => async (dispatch, getState) => {
+  const URL_CREATE = `/api/signature/signature_center/create`;
+  const {returnCode, returnMsg, result} = await fetchJson(URL_CREATE, 'get');
+  if(result !== 1){
+    showError(returnMsg);
+    return
+  }
   const selfState = getSelfState(getState());
   showOrderInfoPage(dispatch, {}, selfState, false)
 };
