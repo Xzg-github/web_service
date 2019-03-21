@@ -26,7 +26,7 @@ const data = {
       //monthly_bill: '月账单',
       file_management: '档案管理',
       account_management: '账号管理',
-      enterprise_documents: '企业文件',
+     //enterprise_documents: '企业文件',
       worker: '企业员工',
       contacts: '联系人',
       signature_group: '签署群组',
