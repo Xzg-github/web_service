@@ -180,7 +180,7 @@ api.get('/role', async (req, res) => {
   const {token} = req.cookies;
   const url = `${service}/authc/${token}/account`;
   const {returnCode, result} = await fetchJsonByNode(req, url);
-  returnCode === 0 ? res.send({returnCode, result: result['contractRoles']}) : res.send({returnCode: -1});
+  returnCode === 0 ? res.send({returnCode, result: result['contractRoles'], username: result['username']}) : res.send({returnCode: -1});
 })
 
 export default api;
