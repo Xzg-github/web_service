@@ -173,12 +173,24 @@ const resetActionCreator = () => (dispatch,getState) =>{
 //管理文件
 const fileAction = () =>  async (dispatch, getState) => {
   const {editConfig,tree,handleTree} = getSelfState(getState());
-  if (await showTreeDialog(editConfig,tree,handleTree,'管理文件夹')) {
+  if (await showTreeDialog(editConfig,tree,handleTree,'管理分组')) {
     const treeData = helper.getJsonResult(await helper.fetchJson(URL_TREE_LIST));
     //生成树结构
-    const newTree = Tree.createWithInsertRoot(treeData,'全部文件', {guid: 'root', districtType:0});
-    dispatch(action.assign({tree:newTree,select:'1-0'}));
-    selectActionCreator('1-0')
+    const newTree = Tree.createWithInsertRoot(treeData,'所有分组', {guid: 'root', districtType:0});
+    dispatch(action.assign({tree:newTree}));
+    const body = {
+      filter:{
+
+      },
+      itemFrom:0,
+      itemTo:10
+    };
+    const {result,returnCode,returnMsg} = await helper.fetchJson(URL_LIST,helper.postOption(body));
+    if(returnCode !== 0 ){
+      helper.showError(returnMsg);
+      return
+    }
+    dispatch(action.assign({maxRecords: result.returnTotalItem,searchData:{},tableItems:result.data, select: '1-0',parents:null}));
   }
 };
 

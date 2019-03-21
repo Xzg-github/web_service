@@ -12,8 +12,8 @@ const tableCols = [
   {key:'companyContactMemberNum',title:'组员人数'},
   {key:'companyContactMemberName',title:'组员'},
   {key:'signGroupNote',title:'备注'},
-  {key:'insertTime',title:'创建时间'},
-  {key:'insertUser',title:'创建人员'},
+  {key:'insertUser',title:'操作人'},
+  {key:'insertTime',title:'操作时间'},
 ];
 
 const controls = [
@@ -42,8 +42,9 @@ const chooseGoodsConfig =  {
     {key: 'filter', title: '', span: 2, type: 'text', props: {placeholder: '请输入姓名、账号、状态搜索'}}
   ],
     cols: [
-      {key:'realName', title: '姓名'},
-      {key:'account',title:'账号'},
+      {key:'companyContactName', title: '姓名'},
+      {key:'companyContactAccount',title:'账号'},
+      {key:'companyContactGroupId',title:'群组'},
   ]
 };
 

@@ -8,6 +8,7 @@ import showDiaLog from './ShowDiaLog/OrderContainer';
 import showPayDiaLog from './ShowDiaLog/PayDialogContainer';
 import showDiaLogOne from './ShowDiaLog/DialogContainer';
 import showApplication from './ShowDiaLog/ApplicationDialogContainer';
+import showLookDialog from './ShowDiaLog/LookDialogContainer';
 import {search,search2} from '../../../../common/search';
 import {toFormValue,hasSign} from '../../../../common/check';
 import {buildOrderPageState} from '../../../../common/state';
@@ -18,6 +19,7 @@ const STATE_PATH =  ['enterprise_account_management'];
 
 const URL_LIST = '/api/signature/account_management/enterprise_account_management/list';//获取列表信息
 const URL_PRICE = '/api/signature/account_management/enterprise_account_management/price';//根据id获取价格信息
+const URL_RECORD = '/api/signature/account_management/enterprise_account_management/record';//根据id获取账单信息
 
 const action = new Action(STATE_PATH);
 
@@ -26,11 +28,11 @@ const getSelfState = (rootState) => {
 };
 
 const initActionCreator = () => async (dispatch, getState) => {
-  const state = getSelfState(getState());
-  //页面数据
-  const list = helper.getJsonResult(await search(URL_LIST, 0, 10, {}));
   dispatch(action.assign({status: 'loading'}, TAB_KEY));
   try {
+    const state = getSelfState(getState());
+    //页面数据
+    const list = helper.getJsonResult(await search(URL_LIST, 0, 10, {}));
     dispatch(action.assign({
       ...state,
       tableItems:list.data,
@@ -104,6 +106,26 @@ const applicationAction = () => async (dispatch, getState) => {
 };
 
 
+const lookActionCreator = () => async (dispatch, getState) => {
+  const {look,tableItems} = getSelfState(getState());
+  const index = helper.findOnlyCheckedIndex(tableItems);
+  if(index === -1){
+    helper.showError('请勾选一条记录');
+    return
+  }
+  const id = tableItems[index].id;
+  const {result,returnCode,returnMsg} = await helper.fetchJson(`${URL_RECORD}/${id}`);
+  if(returnCode!==0){
+    helper.showError(returnMsg);
+    return
+  }
+  if (await showLookDialog(look,result)) {
+
+  }
+};
+
+
+
 const toolbarActions = {
   order:orderAction,
   pay:payAction,
@@ -111,6 +133,7 @@ const toolbarActions = {
   application:applicationAction,
   search: searchClickActionCreator,
   reset: resetActionCreator,
+  look:lookActionCreator
 };
 
 const clickActionCreator = (key) => {

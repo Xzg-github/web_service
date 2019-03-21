@@ -12,6 +12,7 @@ const RadioGroup = Radio.Group;
  * index: 唯一标识
  * checkValue: 对象，判断是哪一个box被勾选
  * radioValue: 对象，判断是哪一个box被勾选
+ * signSealName:名字
  *
  */
 
@@ -24,6 +25,7 @@ class UploadDialog extends React.Component {
     radioValue:PropTypes.object,
     result:PropTypes.object,
     imgUrl:PropTypes.string,
+    signSealName:PropTypes.string
   };
 
 
@@ -34,10 +36,13 @@ class UploadDialog extends React.Component {
 
 
   render() {
-    const { checkValue,index,onCheck,onRadio,radioValue ,imgUrl} = this.props;
+    const { checkValue,index,onCheck,onRadio,radioValue ,imgUrl,signSealName} = this.props;
     return (
       <div className={s.root}>
         <div className={s.box}>
+          <div className={s.box_head}>
+            {signSealName}
+          </div>
           <Checkbox className={s.checkbox} checked={checkValue[index]} onChange={(e)=>onCheck(e.target.checked,index)}/>
           <div className={s.boxTop}>
             <img src={imgUrl?imgUrl: require('../../../../../../public/default_picture.png')} alt=""/>

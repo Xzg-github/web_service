@@ -74,6 +74,19 @@ const saveAction  = (props) =>async(dispatch, getState) => {
     helper.showError('报价明细信息不能为空');
     return
   }
+  //若存在固定价格，不可同时存在第二条固定价格或阶梯价格
+  for(let item of tableItems){
+    if(item.chargeWay === 'fixedPrice'){
+     const filterItems = tableItems.filter(i => {
+       return i.businessItemId.value === item.businessItemId.value
+     });
+      if(filterItems.length>1){
+       helper.showError('报价记录已存在，不可重填添加');
+       return
+      }
+    }
+  }
+
   if(!helper.validArray(cols,tableItems)){
     dispatch(action.assign({valid: true},tabKey));
     return;
@@ -113,6 +126,19 @@ const submitAction  = (props) =>async(dispatch, getState) => {
     return;
   }
 
+  //若存在固定价格，不可同时存在第二条固定价格或阶梯价格
+  for(let item of tableItems){
+    if(item.chargeWay === 'fixedPrice'){
+      const filterItems = tableItems.filter(i => {
+        return i.businessItemId.value === item.businessItemId.value
+      });
+      if(filterItems.length>1){
+        helper.showError('报价记录已存在，不可重填添加');
+        return
+      }
+    }
+  }
+
   for(let item of tableItems) {
     if(item.chargeWay === 'ladderPrice' && !item.priceRule){
       helper.showError('阶梯价格必须设置价格区间');
@@ -129,7 +155,7 @@ const submitAction  = (props) =>async(dispatch, getState) => {
     detailDtoList:tableItems.map(item => helper.convert(item)),
   };
 
-  delete body.statusType
+  delete body.statusType;
 
   const {result,returnCode,returnMsg} = await helper.fetchJson(URL_UPDATE,helper.postOption(body));
   if(returnCode !== 0 ){

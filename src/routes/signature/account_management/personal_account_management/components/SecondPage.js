@@ -37,7 +37,8 @@ class SecondPage extends React.Component {
       index:item.id,
       checkValue:this.props.checkValue,
       radioValue:this.props.radioValue,
-      imgUrl:item.signSealImgBase64
+      imgUrl:item.signSealImgBase64,
+      signSealName:item.signSealName
     };
     return <UploadBox {...props} />;
   };

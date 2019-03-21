@@ -69,7 +69,6 @@ app.get('*', async (req, res, next) => {
       return;
     }
 
-
     //跳转去epld
     if (req.path === '/epldLogin'){
       res.redirect(302, fadada);
@@ -88,7 +87,6 @@ app.get('*', async (req, res, next) => {
       res.redirect(302, '/');
       return;
     }
-
     //识别不到token跳转去注册页面
     if (!isRegistered(req)) {
       res.redirect(302, '/registered');

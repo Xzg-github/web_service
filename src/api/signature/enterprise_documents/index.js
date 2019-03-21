@@ -27,7 +27,7 @@ api.post('/searchList', async (req, res) => {
   const body = {
     param:req.body.filter
   };
-  const url = `${service}/sign_group/select_member_info`;
+  const url = `${service}/company_contact/concat_by_name_or_account`;
   res.send(await fetchJsonByNode(req,url,postOption(body)));
 });
 

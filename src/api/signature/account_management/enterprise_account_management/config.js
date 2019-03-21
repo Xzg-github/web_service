@@ -72,19 +72,30 @@ const statusOptions = [
   {value:1,title:'已支付'}
 ];
 
+const invoiceOptions = [
+  {value:0,title:'未支付'},
+  {value:1,title:'已支付成功'},
+];
+
+const payOptions = [
+  {value:1,title:'微信'},
+  {value:2,title:'支付宝'},
+  {value:3,title:'网银'}
+];
+
 const four_tableCols = [
   {key:'orderStatus',title:'订单状态',options:statusOptions},
   {key:'nativeOrderNo',title:'订单编号'},
   {key:'orderMoney',title:'订购金额'},
   {key:'orderTime',title:'有效期'},
   {key:'insertTime',title:'订购时间'},
-  {key:'e',title:'支付方式'},
-  {key:'f',title:'付款流水号'},
-  {key:'g',title:'付款时间'},
-  {key:'o',title:'付款备注'},
-  {key:'i',title:'发票状态'},
-  {key:'w',title:'已用金额'},
-  {key:'u',title:'剩余金额'},
+  {key:'payWay',title:'支付方式',options:payOptions},
+  {key:'outerOrderNo',title:'付款流水号'},
+  {key:'payTime',title:'付款时间'},
+  {key:'payDescription',title:'付款备注'},
+  {key:'invoiceStatus',title:'发票状态',options:invoiceOptions},
+  {key:'usedMoney',title:'已用金额'},
+  {key:'leftMoney',title:'剩余金额'},
 
 ];
 
@@ -95,6 +106,7 @@ const four_controls = [
 const four_buttons = [
   {key:'order',title:'订购',bsStyle:'primary'},
   {key:'pay',title:'支付订单'},
+  {key:'look',title:'查看消费记录'},
 ];
 
 const four_filters = [
@@ -105,7 +117,7 @@ const four_filters = [
 ];
 
 const unitOptions = [
-  {value:'unitType',title:'次'},
+  {value:'second',title:'次'},
   {value:'strip',title:'条'},
 ];
 
@@ -139,6 +151,27 @@ const four_input_controls = [
   {key:'a',title:'付款流水号',type:'text',required:true},
   {key:'b',title:'付款时间',type:'date'},
   {key:'c',title:'支付备注',type:'textArea'},
+];
+
+
+const four_look_controls = [
+  {key:'nativeOrderNo',title:'订单编号',type:"readonly"},
+  {key:'orderTime',title:'订购日期',type:"readonly"},
+  {key:'orderMoney',title:'订购金额',type:"readonly"},
+  {key:'consumerTotalAmount',title:'消费总额',type:"readonly"},
+];
+
+const four_look_tableCols1 = [
+  {key:'itemName',title:'业务项目'},
+  {key:'totalNum',title:'数量合计'},
+  {key:'totalAmount',title:'金额合计'},
+];
+
+const four_look_tableCols2 = [
+  {key:'itemName',title:'业务项目'},
+  {key:'consumerTime',title:'时间'},
+  {key:'unitType',title:'单位',options:unitOptions},
+  {key:'price',title:'费用'},
 ];
 
 const optionApp = [
@@ -237,6 +270,11 @@ const config = {
       controls:four_input_controls,
       title:'录入付款',
       width:350
+    },
+    look:{
+      controls:four_look_controls,
+      cols1:four_look_tableCols1,
+      cols2:four_look_tableCols2,
     },
     application:{
       controls:{
