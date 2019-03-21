@@ -63,4 +63,10 @@ api.get('/price/:id', async (req, res) => {
   res.send(await fetchJsonByNode(req,url));
 });
 
+//根据id获取账单信息
+api.get('/record/:id', async (req, res) => {
+  const url = `${service}/company_order/view_record/${req.params.id}`;
+  res.send(await fetchJsonByNode(req,url));
+});
+
 export default api;

@@ -10,6 +10,7 @@ import { exportExcelFunc, commonExport } from '../../../common/exportExcelSettin
 const TAB_KEY = 'index';
 const STATE_PATH =  ['monthly_bill'];
 
+const URL_LIST = '/api/signature/monthly_bill/list';
 
 const action = new Action(STATE_PATH);
 
@@ -63,7 +64,7 @@ const clickActionCreator = (key) => {
 const onLinkActionCreator = (key, rowIndex, item)  => async (dispatch,getState) => {
   const {tabs} = getPathValue(getState(), STATE_PATH);
   const tabKey = helper.genTabKey('look', tabs);
-  const title =  item.a + '-查看月账单';
+  const title =  item.monthBillCode + '-查看月账单';
   dispatch(action.assign(buildPageState (tabs, tabKey,title,item)));
 };
 

@@ -13,9 +13,9 @@ import SuperSteps from './SuperSteps';
 const Panel = Collapse.Panel;
 
 const LABELS = [
-  {key: 'fileState', title: '状态'},
+  {key: 'urlOfSignedFileViewpdf', title: '文件链接', link: true},
+  {key: 'fileState', title: '状态', type: 'select'},
   {key: 'note', title: '备注'},
-  //{key: 'fileLink', title: '文件链接'},
   {key: 'signFileSubject', title: '文件主题'},
   {key: 'signStartTime', title: '发起时间'},
   {key: 'signExpirationTime', title: '截至签署日期'},
@@ -23,9 +23,9 @@ const LABELS = [
 ];
 
 const MESSAGE = [
-  {key: 'signWay', title: '签署方式'},
-  {key: 'signOrderStrategy', title: '签署顺序'},
-  {key: 'isAddCcSide', title: '添加抄送方'},
+  {key: 'signWay', title: '签署方式', link: true},
+  {key: 'signOrderStrategy', title: '签署顺序', type: 'select'},
+  {key: 'isAddCcSide', title: '添加抄送方', value: '1'},
   {key: 'isSignInSpecifiedLocation', title: '指定签署位置'},
  // {key: 'copyMessage', title: '抄送放信息'}
 ];
@@ -79,6 +79,64 @@ class Person extends React.Component {
     )
   };
 
+  rendValue = (item, index) => {
+    const {value} = this.props;
+    const state = value.fileState;
+    let show;
+    if(state === 'completed'){
+      show = '已完成'
+    }else if(state === 'draft'){
+      show = '草稿'
+    }else if(state === 'wait'){
+      show = '待签署'
+    }else{
+      show = '已签署'
+    }
+    if(item.link){
+      return <div key = {index}><a href={value.urlOfSignedFileViewpdf} target="_blank">在线预览</a></div>
+    }else if(item.type){
+      return <div key = {index}>{show}</div>
+    }else{
+      return <div key={index}>{value[item.key] || '无'}</div>
+    }
+  };
+
+  rendValue1 = (item, index) => {
+    const {value} = this.props;
+    let show1, show2, show3, show4;
+    if(value.signWay === '1'){
+      show1 = '签署文件（每人都需签署）'
+    }else{
+      show1 = '发送文件（仅需对方签署）'
+    }
+    if(value.signOrderStrategy === 0){
+      show2 = '无序签署'
+    }else if(value.signOrderStrategy === 1){
+      show2 = '顺序签署'
+    }else{
+      show2 = '每个单独签'
+    }
+    if(value.isAddCcSide === '0'){
+      show3 = '否'
+    }else{
+      show3 = '是'
+    }
+    if(value.isSignInSpecifiedLocation === '0'){
+      show4 = '否'
+    }else{
+      show4 = '是'
+    }
+    if(item.link){
+      return <div key = {index}>{show1}</div>
+    }else if(item.type){
+      return <div key = {index}>{show2}</div>
+    }else if(item.value){
+      return <div key ={index}>{show3}</div>
+    }else{
+      return <div key = {index}>{show4}</div>
+    }
+  };
+
   toEmpty = () => {
     return <div>暂无任何文件操作记录</div>;
   };
@@ -91,12 +149,12 @@ class Person extends React.Component {
         <Title title = "文件信息" />
         <div style={{overflow: 'hidden'}}>
           <div style={{float: 'left', marginRight: '6px', textAlign: 'right'}}>{LABELS.map((item, index) => <div key={index}>{`${item.title}:`}</div>)}</div>
-          <div style={{float: 'left'}}>{LABELS.map((item, index)=> <div key={index} data-no={!value[item.key]}>{value[item.key] || '无'}</div>)}</div>
+          <div style={{float: 'left'}}>{LABELS.map((item, index)=> this.rendValue(item, index))}</div>
         </div>
         <Title title = "签署信息"/>
         <div style={{overflow: 'hidden'}}>
           <div style={{float: 'left', marginRight: '6px', textAlign: 'right'}}>{MESSAGE.map((item, index) => <div key={index}>{`${item.title}:`}</div>)}</div>
-          <div style={{float: 'left'}}>{MESSAGE.map((item, index)=> <div key={index} data-no={!value[item.key]}>{value[item.key] || '无'}</div>)}</div>
+          <div style={{float: 'left'}}>{MESSAGE.map((item, index)=> this.rendValue1(item, index))}</div>
         </div>
         <Title title = "签署记录" />
         {this.toTable()}

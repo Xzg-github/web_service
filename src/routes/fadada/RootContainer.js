@@ -63,9 +63,15 @@ const changeActionCreator = (keyValue,key) => async(dispatch, getState) => {
 const nextActionCreator = () => async(dispatch, getState) => {
   dispatch(action.assign({loading:true}));
   const {value} = getSelfState(getState());
+  if(!value.mobile || !value.realName || !value.mobile){
+    helper.showError('某必填未填写')
+    dispatch(action.assign({loading:false}));
+    return
+  }
   const body = {
     idNumber:value.idNumber,
-    realName:value.realName
+    realName:value.realName,
+    mobile:value.mobile
   };
   const {returnCode,returnMsg} = await helper.fetchJson(URL_NEXT,helper.postOption(body));
   if(returnCode!==0){

@@ -114,13 +114,16 @@ const changeActionCreator = ({file, fileList}) => (dispatch,getState) => {
   if(file.size / 1024 / 1024  >  20){
     helper.showError('图片大小需<20MB');
     return
+  }else if(file.type !== 'image/png'){
+    helper.showError('请上传png图片');
+    return
   }
   let srcImg;
   const reader=new FileReader();//读取本地文件,预览图片
   reader.readAsDataURL(file);
   reader.onload =  (result) => {
     srcImg = result.target.result;
-    file.thumbUrl = srcImg
+    file.thumbUrl = srcImg;
     const newList = [file];
     dispatch(action.assign({fileList:newList,srcImg:srcImg}))
   };

@@ -18,7 +18,7 @@ const typeOptions = [
 ];
 
 const unitOptions = [
-  {value:'unitType',title:'次'},
+  {value:'second',title:'次'},
   {value:'strip',title:'条'},
 ];
 
@@ -107,7 +107,7 @@ const diaLogControls = [
   {key:'startPrice',title:'区间下限(>=)',type:'number',props:{zero:true}},
   {key:'endPrice',title:'区间上限(<)',type:'number',props:{zero:true}},
   {key:'ruleName',title:'阶梯区间名称',type:'text',span:2,required:true},
-  {key:'ruleDescribe',title:'价格区间规则',type:'textArea',span:2},
+  {key:'ruleDescribe',title:'价格区间规则',type:'readonly',span:2},
 ];
 
 const config = {

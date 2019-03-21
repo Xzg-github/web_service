@@ -156,9 +156,14 @@ const onAuthenticationActionCreator = () => async(dispatch, getState) => {
     jump('/signature/personal_certification');
     return
   }
+  const options = [
+    {value:1,title:'法人'},
+    {value:2,title:'代理人'},
+  ]
+
   const controls = [
-    {key:'identNo',title:'组织机构代码或者统一社会信息代码 ',type:'text',required:true},
-    {key:'name',title:'企业名称',type:'text',required:true},
+    {key:'companyPrincipalType',title:'企业负责人信息 ',type:'select',options,required:true},
+    {key:'name',title:'法人信息',type:'text',required:true},
   ];
   if (await showDiaLog(controls, {} ,false)) {
   }

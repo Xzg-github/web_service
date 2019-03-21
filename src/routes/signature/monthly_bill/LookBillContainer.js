@@ -8,6 +8,7 @@ import LookBillPage from './LookBillPage';
 const STATE_PATH =  ['monthly_bill'];
 const action = new Action(STATE_PATH);
 
+const URL_ID = '/api/signature/monthly_bill/getId'; //根据ID获取月账单
 
 const getSelfState = (rootState) => {
   const parent = getPathValue(rootState, STATE_PATH);
@@ -19,12 +20,11 @@ const initActionCreator = () => async (dispatch, getState) => {
   const {tabKey,id} = getSelfState(getState());
   dispatch(action.assign({status: 'loading'}, tabKey));
   try {
-
-
+    const result = helper.getJsonResult(await helper.fetchJson(`${URL_ID}/${id}`));
     dispatch(action.assign({
       ...editConfig,
-      value:{},
-      tableItems: [],
+      value:result,
+      tableItems: result.detailList? result.detailList : [],
       status: 'page',
       options: {},
     }, tabKey));

@@ -12,8 +12,8 @@ const tableCols = [
   {key:'companyContactMemberNum',title:'组员人数'},
   {key:'companyContactMemberName',title:'组员'},
   {key:'signGroupNote',title:'备注'},
-  {key:'insertTime',title:'创建时间'},
-  {key:'insertUser',title:'创建人员'},
+  {key:'insertUser',title:'操作人'},
+  {key:'insertTime',title:'操作时间'},
 ];
 
 const controls = [

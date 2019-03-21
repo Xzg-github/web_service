@@ -1,45 +1,59 @@
 import {pageSize, pageSizeType, description, searchConfig} from '../../gloablConfig';
 
-const filters = [
-  {key:'a',title:'状态',type:'select'},
-  {key:'b',title:'账单编号',type:'text'},
-  {key:'c',title:'账期开始日期',type:'date'},
-  {key:'d',title:'账期结束日期',type:'date'},
+const statusOptions = [
+  {value:0,title:'待发送'},
+  {value:1,title:'已发送'},
 ];
 
+const unitOptions = [
+  {value:'second',title:'次'},
+  {value:'strip',title:'条'},
+];
+
+const filters = [
+  {key:'companyId',title:'客户名称',type:'select'},
+  {key:'monthBillCode',title:'账单编号',type:'text'},
+  {key:'startTime',title:'账期开始日期',type:'date'},
+  {key:'endTime',title:'账期结束日期',type:'date'},
+  {key:'statusType',title:'状态',type:'select'},
+  {key:'insertTimeFrom',title:'创建日期',type:'date'},
+  {key:'insertTimeTo',title:'至',type:'date'},
+  {key:'insertUser',title:'创建人',type:'text'},
+];
 
 const tableCols = [
-  {key:'a',title:'账单编号',link:true},
-  {key:'b',title:'账单名称'},
-  {key:'c',title:'账单开始日期'},
-  {key:'d',title:'账单结束日期'},
-  {key:'e',title:'上期账户余额'},
-  {key:'f',title:'本期账户充值'},
-  {key:'g',title:'本期账单支出'},
-  {key:'h',title:'本期账户余额'},
-  {key:'i',title:'发送人'},
-  {key:'j',title:'发送时间'},
-  {key:'k',title:'审核人'},
-  {key:'l',title:'审核时间'},
+  {key:'statusType',title:'状态',options:statusOptions},
+  {key:'monthBillCode',title:'账单编号',link:true},
+  {key:'companyId',title:'客户名称'},
+  {key:'startTime',title:'账单开始日期'},
+  {key:'endTime',title:'账单结束日期'},
+  {key:'previousAccountBalance',title:'上期账户余额'},
+  {key:'currentAccountRecharge',title:'本期账户充值'},
+  {key:'currentBillExpenditure',title:'本期账单支出'},
+  {key:'currentAccountBalance',title:'本期账户余额'},
+  {key:'insertUser',title:'创建人'},
+  {key:'insertTime',title:'创建时间'},
+  {key:'updateUser',title:'操作人'},
+  {key:'updateTime',title:'操作时间'},
 ];
 
 const controls = [
-  {key:'a',title:'账单开始时间',type:'readonly'},
-  {key:'b',title:'账单结束时间',type:'readonly'},
-  {key:'c',title:'客户名称',type:'readonly'},
-  {key:'d',title:'客户编号',type:'readonly'},
-  {key:'e',title:'上期账户余额',type:'readonly'},
-  {key:'f',title:'本期账户充值',type:'readonly'},
-  {key:'g',title:'本期账单支出',type:'readonly'},
-  {key:'h',title:'本期账户余额',type:'readonly'},
+  {key:'startTime',title:'账单开始时间',type:'readonly'},
+  {key:'endTime',title:'账单结束时间',type:'readonly'},
+  {key:'companyId',title:'客户名称',type:'readonly'},
+  {key:'companyOrder',title:'客户编号',type:'readonly'},
+  {key:'previousAccountBalance',title:'上期账户余额',type:'readonly'},
+  {key:'currentAccountRecharge',title:'本期账户充值',type:'readonly'},
+  {key:'currentBillExpenditure',title:'本期账单支出',type:'readonly'},
+  {key:'currentAccountBalance',title:'本期账户余额',type:'readonly'},
 ];
 
 const cols = [
-  {key:'a',title:'费用项目'},
-  {key:'b',title:'价格'},
-  {key:'c',title:'计量单位'},
-  {key:'d',title:'本期总数量'},
-  {key:'e',title:'总金额'},
+  {key:'businessItemId',title:'费用项目'},
+  {key:'price',title:'价格'},
+  {key:'unitType',title:'计量单位',options:unitOptions},
+  {key:'totalNumber',title:'本期总数量'},
+  {key:'totalAmount',title:'总金额'},
 ];
 
 
