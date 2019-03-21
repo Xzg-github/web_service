@@ -18,7 +18,7 @@ const file = [
     {key: 'contacts'},   //联系人档案
     {key: 'signature_group'}, //签署群组
     {key: 'template_management'}, //模板管理
-    {key: 'businessArchives'},   //企业档案
+    {key: 'businessArchives'},   //客户档案
     {key: 'personalProfile'},    //个人账号档案
     {key: 'price_management'}, //价格管理
     {key: 'worker'},   //企业员工

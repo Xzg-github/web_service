@@ -115,9 +115,10 @@ const createEditPageContainer = (action, getSelfState) => {
       const {returnCode, returnMsg, result} = await fetchJson(`${URL_ACCOUNT}/${token}`,'get');
       if(returnCode !== 0) return;
       const account = result.account;
+      const email = result.userEmail;
       const signPartyName = result.username;
       if(JSON.stringify(list).indexOf(JSON.stringify(account))===-1){
-        list.unshift({account, signPartyName, sequence: 1});
+        list.unshift({account:email, signPartyName, sequence: 1});
       }
       dispatch(action.assign({signPartyList: list}, 'value'))
     }else if(key === 'signWay' && values === '0'){
