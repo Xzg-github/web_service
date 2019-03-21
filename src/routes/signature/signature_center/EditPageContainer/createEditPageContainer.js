@@ -118,7 +118,7 @@ const createEditPageContainer = (action, getSelfState) => {
       const email = result.userEmail;
       const signPartyName = result.username;
       if(JSON.stringify(list).indexOf(JSON.stringify(account))===-1){
-        list.unshift({account:email, signPartyName, sequence: 1});
+        list.unshift({account:email, signPartyName, sequence: 1, readonly: true});
       }
       dispatch(action.assign({signPartyList: list}, 'value'))
     }else if(key === 'signWay' && values === '0'){
@@ -134,35 +134,49 @@ const createEditPageContainer = (action, getSelfState) => {
   };
 
   //新增行
-  const increaseAction = (dispatch) => {
+  const increaseAction = (dispatch, getState) => {
+    const {value} = getSelfState(getState());
+    if(!value.signWay){ return showError('请先选择签署方式');}
     dispatch(action.add({}, ['value', 'signPartyList'], 1))
   };
 
   //删除行
   const delAction = (dispatch, getState) => {
     const {value} = getSelfState(getState());
+    const items = value.signPartyList.filter(item => item.checked);
+    if(value.signWay === '1' && items[0].readonly === true){
+      return showError('签署方式为签署文件时，第一条记录不可被删除！')
+    }
     const newItems = value.signPartyList.filter(item => !item.checked);
     dispatch(action.assign({signPartyList: newItems}, 'value'))
+  };
+
+  //修改数组对象key值
+  const changeKey = (arr, key) => {
+    let newArr = [];
+    arr.forEach((item, index) => {
+      let newObj = {};
+      for(let i = 0; i < key.length; i++ ){
+        newObj[key[i]] = item[Object.keys(item)[i]]
+      }
+      newArr.push(newObj)
+    });
+    return newArr
   };
 
   //从联系人中添加
   const contactAction = async (dispatch, getState) => {
     const {contactConfig, value}  = getSelfState(getState());
-    if(!value.signWay){
-      showError('请先选择签署方式');
-      return
-    }
+    if(!value.signWay){ return showError('请先选择签署方式');}
     const url = '/api/signature/signature_center/name';
     const json = await fetchJson(url, 'post');
-    if(json.returnCode !== 0){
-      return showError('添加失败')
-    }
     if(json.returnCode !== 0) return showError(json.returnMsg);
     const selectItems = json.result;
     const filterItems = json.result;
     const originalArray = value.signPartyList;
     const okFunc = (addItems = []) => {
-      const newItems = addItems.concat(originalArray,filterItems);
+      const changeArr = changeKey(filterItems, ['id', 'signPartyName', 'account']);    //转换数组对象的key值
+      const newItems = addItems.concat(originalArray,changeArr);
       dispatch(action.assign({signPartyList: newItems}, 'value'))
     };
     buildAddState(contactConfig, selectItems, filterItems, true, dispatch, okFunc);
@@ -183,7 +197,8 @@ const createEditPageContainer = (action, getSelfState) => {
     const filterItems = json.result;
     const originalArray = value.signPartyList;
     const okFunc = (addItems = []) => {
-      const newItems = addItems.concat(originalArray,filterItems);
+      const changeArr = changeKey(filterItems, ['id', 'signPartyName', 'account']);
+      const newItems = addItems.concat(originalArray,changeArr);
       dispatch(action.assign({signPartyList: newItems}, 'value'))
     };
     buildAddState(groupConfig, selectItems, filterItems, true, dispatch, okFunc);

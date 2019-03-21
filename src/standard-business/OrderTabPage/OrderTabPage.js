@@ -94,7 +94,7 @@ class OrderTabPage extends React.Component {
         onLink: onLink ? onLink.bind(null, subActiveKey) : undefined,
         onTableChange: onTableChange.bind(null, subActiveKey)
       },
-      maxHeight: `calc(100vh - ${this.state.height + 322 + extra}px)`
+      maxHeight: `calc(100vh - ${this.state.height + 225 + extra}px)`
     };
     return <SuperTable {...props}/>;
   };

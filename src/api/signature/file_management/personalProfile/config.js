@@ -8,23 +8,23 @@ const isOptions1 = [
 ];
 
 const filters = [
-  {key: 'name', title: '姓名', type: 'text'},
+  {key: 'realName', title: '姓名', type: 'text'},
   {key: 'account', title: '注册账号', type: 'text'},
-  {key: 'number', title: '手机号码', type: 'text'},
-  {key: 'statusType', title: '状态', type: 'select', options: isOptions1},
+  {key: 'phoneNumber', title: '手机号码', type: 'text'},
+  {key: 'userAccountState', title: '状态', type: 'select', options: isOptions1},
   {key: 'email', title: '电子邮件', type: 'text'},
-  {key: 'customerOrder', title: '归属企业', type: 'text'},
+  {key: 'companyId', title: '归属企业', type: 'text'},
 ];
 
 const tableCols = [
-  {key: 'statusType', title: '账号状态', options: isOptions1},
-  {key: 'account', title: '注册账号', link: true},
-  {key: 'ame', title: '姓名'},
+  {key: 'userAccountState', title: '账号状态', options: isOptions1},
+  {key: 'account', title: '注册账号'},
+  {key: 'realName', title: '姓名'},
   {key: 'idCard', title: '身份证号码'},
-  {key: 'number', title: '手机号码'},
+  {key: 'phoneNumber', title: '手机号码'},
   {key: 'email', title: '电子邮件'},
-  {key: 'customerOrder', title: '归属企业名称'},
-  {key: 'bankName', title: '企业编号'},
+  {key: 'companyId', title: '归属企业名称'},
+  {key: 'companyOrder', title: '企业编号'},
 ];
 
 const buttons = [
