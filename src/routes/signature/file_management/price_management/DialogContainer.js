@@ -45,6 +45,11 @@ const okActionCreator = () => async (dispatch, getState) => {
     return
   }
 
+  if(value.startPrice &&  value.endPrice && value.startPrice >= value.endPrice){
+    helper.showError('区间上限不能大于等于区间下限');
+    return
+  }
+
   if(value.startPrice && value.endPrice && Number(value.startPrice) > Number(value.endPrice)){
     helper.showError('区间下限不能大于区间上限');
     return

@@ -121,7 +121,7 @@ api.post('/name', async(req, res) => {
 
 //校验企业认证
 api.post('/authentication', async(req, res) => {
-  const url = `${service}/verify/company_verify`;
+  const url = `${service}/verify/new_company_verify`;
   res.send(await fetchJsonByNode(req, url, postOption(req.body)))
 });
 

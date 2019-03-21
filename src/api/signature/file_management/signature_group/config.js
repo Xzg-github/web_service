@@ -42,8 +42,9 @@ const chooseGoodsConfig =  {
     {key: 'filter', title: '', span: 2, type: 'text', props: {placeholder: '请输入姓名、账号、状态搜索'}}
   ],
     cols: [
-      {key:'realName', title: '姓名'},
-      {key:'account',title:'账号'},
+      {key:'companyContactName', title: '姓名'},
+      {key:'companyContactAccount',title:'账号'},
+      {key:'companyContactGroupId',title:'群组'},
   ]
 };
 
