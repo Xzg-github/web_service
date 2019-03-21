@@ -34,7 +34,7 @@ const buttons = [
 ];
 
 const treeButtons = [
-  {key:'file',title:'管理文件夹'},
+  {key:'file',title:'管理分组'},
 ];
 
 const fileButtons = [
@@ -66,7 +66,7 @@ const config = {
     searchData:{},
     treeButtons
   },
-  root:'全部文件',
+  root:'所有分组',
   file:{
     buttons:fileButtons
   },

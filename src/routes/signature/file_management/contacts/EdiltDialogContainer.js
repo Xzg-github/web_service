@@ -55,11 +55,11 @@ const okActionCreator = () => async (dispatch, getState) => {
     dispatch(action.assign({valid: true}));
     return;
   }
-  if(!checkPhone(state.value.companyContactPhoneNumber)){
+  if(state.value.companyContactPhoneNumber &&!checkPhone(state.value.companyContactPhoneNumber)){
     helper.showError('手机号码格式不正确')
     return
   }
-  if(!checkMail(state.value.companyContactEmail)){
+  if(state.value.companyContactEmail && !checkMail(state.value.companyContactEmail)){
     helper.showError('邮箱格式不正确')
     return
   }
