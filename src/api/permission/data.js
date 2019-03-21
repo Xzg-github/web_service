@@ -1,13 +1,10 @@
-/**
- * 法大大前端权限控制配置结果
- */
 
 const data = {
   returnCode: 0,
   result: {
     signature: '文件签署管理',
 
-    //电子签署个人账号拥有权限
+    //电子签署个人账号氪拥有权限
     econtract_personal_role: {
       signature_center: '签署中心',
       my_papers: '我的文件',
@@ -45,6 +42,8 @@ const data = {
       // data_statistics: '数据统计',
       //monthly_bill: '月账单',
       businessArchives: '客户档案',
+      monthly_bill: '月账单',
+      // businessArchives: '企业档案',
       file_management: '档案管理',
       // personalProfile: '个人账号档案',
       businessProject: '业务项目',

@@ -327,7 +327,7 @@ class SuperTable extends React.Component {
   };
 
   getProps = () => {
-    const {cols, items,isPaging=false,hasUnreadTable} = this.props;
+    const {cols, items,isPaging=false,hasUnreadTable,footer=null} = this.props;
     let tableClassName = hasUnreadTable === undefined ? s.root : s.noTransition;
     return {
       className: tableClassName,
@@ -336,6 +336,7 @@ class SuperTable extends React.Component {
       size: 'small',
       pagination: isPaging,
       scroll: {x: true},
+      footer,
       onRowDoubleClick: this.onDoubleClick,
       onChange: this.onTableChange,
       ...this.getPropsByCheckbox()

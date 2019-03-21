@@ -18,7 +18,7 @@ const typeOptions = [
 ];
 
 const unitOptions = [
-  {value:'unitType',title:'次'},
+  {value:'second',title:'次'},
   {value:'strip',title:'条'},
 ];
 
