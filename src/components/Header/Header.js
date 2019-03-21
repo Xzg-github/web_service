@@ -112,7 +112,7 @@ class Header extends React.Component {
       <Menu className={s.menu} onClick={this.onMenuItemClick}>
         <MenuItemGroup title={this.state.username} />
         <MenuDivider />
-        <MenuItem key='revoke'>注销</MenuItem>
+        {/*<MenuItem key='revoke'>注销</MenuItem>*/}
       </Menu>
     );
   };
@@ -125,11 +125,11 @@ class Header extends React.Component {
       onVisibleChange: this.onVisibleChange
     };
     return (
-      //<Dropdown {...props}>
+      <Dropdown {...props}>
         <span role='avatar' data-role='block' data-active={this.state.visible ? true : null}>
           <Avatar icon="user" />
         </span>
-      //</Dropdown>
+      </Dropdown>
     );
   };
 
