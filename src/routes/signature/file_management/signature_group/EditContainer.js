@@ -86,18 +86,23 @@ const addActionCreator = (props) => async(dispatch,getState) => {
   const {chooseGoodsConfig,tabKey,tableItems} = props;
   const items = await showStaffDialog(chooseGoodsConfig);
   const copyItems = JSON.parse(JSON.stringify(tableItems));
+  const arr = [];
   if (items.length > 0) {
     for(let item of items){
+
+      const obj = {
+        companyContactName:item.companyContactName,
+        companyContactAccount:item.companyContactAccount,
+        companyContactId:item.id
+      };
+
       let isItmes = copyItems.filter(i => {
-        let id = i.userAccountId ? i.userAccountId :i.id;
-        return id === item.userAccountId;
+        return i.companyContactId === obj.companyContactId;
       });
       if(isItmes.length == 0){
-
-        copyItems.push(item)
+        copyItems.push(obj)
       }
     }
-
     dispatch(action.assign({tableItems:copyItems},tabKey))
   }
 };
@@ -112,11 +117,10 @@ const okActionCreator = (props) => async (dispatch,getState) => {
   for(let [index,elem] of new Map( tableItems.map( ( item, i ) => [ i, item ] ) )){
     let i = {
       companyContactId:elem.companyContactId,
-      userAccountId:elem.userAccountId,
       signGroupMemberSeq:index
     };
     if(elem.id){
-      i.memberId = elem.id
+      i.id = elem.id;
     }
     childDto.push(i)
   };

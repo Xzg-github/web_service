@@ -34,7 +34,7 @@ const updateTable = async(dispatch,getState)  =>{
   result.grzh = result.registerType === 'phone_number' ? result.notifyPhone : result.notifyEmail;
   result.isNotifiedByEmail = result.isNotifiedByEmail === 'true' ? true : false;
   result.isNotifiedByPhone = result.isNotifiedByPhone === 'true' ? true : false;
-  dispatch(action.assign({value: {...result}}))
+  dispatch(action.assign({value: {...result}},TAB_KEY))
 };
 
 

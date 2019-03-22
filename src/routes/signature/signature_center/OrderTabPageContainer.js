@@ -12,6 +12,7 @@ import {jump} from '../../../components/Link';
 
 const URL_CONFIG = '/api/signature/signature_center/config';
 const urlList = '/api/signature/signature_center/list';
+const urlPerson = '/api/signature/signature_center/personAuthentication'; //个人认证
 
 const STATE_PATH = ['signature_center'];
 const action = new Action(STATE_PATH);
@@ -153,7 +154,12 @@ const onAuthenticationActionCreator = () => async(dispatch, getState) => {
   const {role} = getSelfState(getState());
 
   if(role === 'econtract_personal_role'){
-    jump('/signature/personal_certification');
+    const {result,returnCode,returnMsg} =await helper.fetchJson(urlPerson);
+    if(returnCode !== 0) {
+      helper.showError(returnMsg);
+      return
+    }
+    window.open(result);
     return
   }
   const options = [
