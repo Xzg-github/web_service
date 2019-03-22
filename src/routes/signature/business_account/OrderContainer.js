@@ -128,7 +128,7 @@ const checkAction = (isAll, checked, rowIndex) => {
 };
 
 const filterSearchActionCreator = (key, value) => async (dispatch)=> {
-  if(key === 'companyName'){
+  if(key === 'companyId'){
     const option = helper.postOption({maxNumber: 10, companyName: value});
     let data = await helper.fetchJson(URL_COMPANY, option);
     if (data.returnCode === 0) {

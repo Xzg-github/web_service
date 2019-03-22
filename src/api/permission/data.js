@@ -45,7 +45,7 @@ const data = {
       monthly_bill: '月账单',
       // businessArchives: '企业档案',
       file_management: '档案管理',
-      // personalProfile: '个人账号档案',
+      personalProfile: '个人账号档案',
       businessProject: '业务项目',
       price_management: '价格管理'
     },
