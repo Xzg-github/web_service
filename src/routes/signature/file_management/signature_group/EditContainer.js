@@ -111,6 +111,7 @@ const okActionCreator = (props) => async (dispatch,getState) => {
   let childDto = [];
   for(let [index,elem] of new Map( tableItems.map( ( item, i ) => [ i, item ] ) )){
     let i = {
+      companyContactId:elem.companyContactId,
       userAccountId:elem.userAccountId,
       signGroupMemberSeq:index
     };
