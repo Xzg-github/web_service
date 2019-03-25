@@ -43,7 +43,8 @@ class Person extends React.Component {
       width: 1000,
       visible: true,
       maskClosable: false,
-      cancelText: '撤销'
+      cancelText: '关闭',
+      okText: '撤销'
     };
   };
 

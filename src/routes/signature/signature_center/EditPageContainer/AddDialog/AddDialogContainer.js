@@ -11,6 +11,14 @@ const getSelfState = (rootState) => {
   return getPathValue(rootState, STATE_PATH);
 };
 
+const PARENT_PATH = ['signature_center'];
+const parentAction = new Action(PARENT_PATH);
+
+const getParentState =(rootState) => {
+  const state = getPathValue(rootState, PARENT_PATH);
+  return state[state.activeKey];
+};
+
 export const buildAddState = (config, filterItems, items=[], add, dispatch, okFunc) => {
   dispatch(action.create({
     ...config,
@@ -32,14 +40,19 @@ const changeActionCreator = (event) => (dispatch, getState) =>{
       newTableItems.push(item);
     }
   });
-  filterItems.forEach((item) => {
-    if(item.realName.toLowerCase().indexOf(formValue.toLowerCase()) > -1) {
-      newTableItems.push(item);
-    }
-  });
   dispatch(action.assign({tableItems: newTableItems}));
 };
-const okActionCreator = ({okFunc, onClose}) => async() => {
+
+const okActionCreator = ({okFunc, onClose}) => async(dispatch, getState) => {
+/*  const {value} = getParentState(getState());
+  const {filterItems} = getSelfState(getState());
+  const oldArray = value.signPartyList;
+  const checkId = [];
+  filterItems.forEach(item => {
+    item.checked && (checkId.push(item))
+  });
+  const newItems = value.signPartyList.concat(checkId);
+  dispatch(parentAction.assign({signPartyList: newItems}, 'value'));*/
   okFunc();
   onClose();
 };
@@ -50,9 +63,9 @@ const checkActionCreator = (isAll, checked, rowIndex) => (dispatch,getState) => 
   dispatch(action.update({checked}, 'tableItems', rowIndex));
   const {tableItems} = getSelfState(getState());
   tableItems.forEach(item => {
-    item.checked && (id.push(item.id))
+    item.checked && (id.push(item))
   });
-  dispatch(action.assign({status: id}));
+  dispatch(action.assign({filterItems: id}));
 };
 
 const cancelActionCreator = ({onClose}) => () => {

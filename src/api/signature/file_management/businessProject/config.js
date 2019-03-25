@@ -12,7 +12,7 @@ const filters = [
 const tableCols = [
   {key:'code',title:'业务项目编码'},
   {key:'itemName',title:'业务项目名称'},
-  {key:'limitedItem',title:'受限于账户余额'},
+  {key:'limitedItem',title:'受限于账户余额', type: 'select', options: isOptions},
   {key:'description',title:'描述'},
   {key:'insertUser',title:'创始人'},
   {key:'insertTime',title:'创始时间'},

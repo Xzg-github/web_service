@@ -25,8 +25,15 @@ const cancelActionCreator = ({onClose}) => () => {
   onClose();
 };
 
-const okActionCreator = ({onClose}) => () => {
+const okActionCreator = ({onClose}) => async(dispatch, getState) => {
+  const {value} = getSelfState(getState());
+  const URL_REJECT = `/api/signature/signature_center/repeal`;
+  const {returnCode, returnMsg, result} = await fetchJson(`${URL_REJECT}/${value.id}`, 'get');
+  if (returnCode !== 0) {
+    return showError(returnMsg)
+  }
   onClose();
+  showSuccessMsg(returnMsg);
 };
 
 const onLinkActionCreator = (tabKey, key, rowIndex, item) => (dispatch, getState) => {

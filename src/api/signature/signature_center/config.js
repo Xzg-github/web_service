@@ -15,7 +15,8 @@ const isOptions2 = [
   {value:'draft', title: '草稿'},
   {value:'wait', title: '待签'},
   {value: 'sign', title: '已签署'},
-  {value: 'completed', title: '已完成'}
+  {value: 'completed', title: '已完成'},
+  {value: 'revoke', title: '已撤销'}
 ];
 
 const filters = [
@@ -85,7 +86,7 @@ const config = {
       {key: 'sequence', title: '签署顺序'},
       { key: 'signPartyName', title: '姓名/机构',type: 'text'},
       { key: 'account', title: '账号', type: 'text'},
-      { key: 'signIdentity', title: '签署身份', type: 'select', options: isOptions1},
+     // { key: 'signIdentity', title: '签署身份', type: 'select', options: isOptions1},
       //{ key: 'isAllowAddSignatories', title: '允许增加签署方', type: 'select', options: isOptions},
       { key: 'signFinishTime', title: '签署时间'},
       { key: 'signState', title: '签署状态', options: isOptions2},

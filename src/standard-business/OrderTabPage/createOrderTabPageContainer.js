@@ -37,12 +37,11 @@ const mySearch = async (dispatch, action, selfState, currentPage, pageSize, filt
       break;
     }
     case 'draft':{
-      signUser='me';
       fileState='draft';
       break;
     }
     case 'all':{
-      signUser='me';
+      signUser='';
       fileState='';
       break;
     }

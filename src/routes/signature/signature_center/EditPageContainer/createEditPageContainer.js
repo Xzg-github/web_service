@@ -37,7 +37,7 @@ export const getCookie = (cookieName) =>{
   return "";
 };
 
-const createEditPageContainer = (action, getSelfState) => {
+const createEditPageContainer = (action, getSelfState, getTempState) => {
   const buildEditState = async ({id, closeFunc,}) => {
     try{
       let url = '/api/signature/signature_center/editConfig';
@@ -93,7 +93,7 @@ const createEditPageContainer = (action, getSelfState) => {
         if(status && response.returnCode === 0){
           showSuccessMsg(`[${name}]上传成功`);
         }else{
-          showError(`[${name}]上传失败`)
+          return showError(`[${name}]上传失败`)
         }
         dispatch(action.assign({...fileBody, signFileSubject: name}, 'value'))
       })
@@ -117,7 +117,7 @@ const createEditPageContainer = (action, getSelfState) => {
       const account = result.account;
       const email = result.userEmail;
       const signPartyName = result.username;
-      if(JSON.stringify(list).indexOf(JSON.stringify(account))===-1){
+      if(JSON.stringify(list).indexOf(JSON.stringify(email))===-1){
         list.unshift({account:email, signPartyName, sequence: 1, readonly: true});
       }
       dispatch(action.assign({signPartyList: list}, 'value'))
@@ -129,7 +129,6 @@ const createEditPageContainer = (action, getSelfState) => {
 
   //表格内容变化
   const contentChangeAction = (rowIndex, keyName, value) => async(dispatch,getState) => {
-    const {tableItems} = getSelfState(getState());
     dispatch(action.update({[keyName]: value}, ['value', 'signPartyList'], rowIndex))
   };
 
@@ -137,7 +136,7 @@ const createEditPageContainer = (action, getSelfState) => {
   const increaseAction = (dispatch, getState) => {
     const {value} = getSelfState(getState());
     if(!value.signWay){ return showError('请先选择签署方式');}
-    dispatch(action.add({}, ['value', 'signPartyList'], 1))
+    dispatch(action.add({}, ['value', 'signPartyList']))
   };
 
   //删除行
@@ -167,6 +166,7 @@ const createEditPageContainer = (action, getSelfState) => {
   //从联系人中添加
   const contactAction = async (dispatch, getState) => {
     const {contactConfig, value}  = getSelfState(getState());
+    const {tableItems}  = getTempState(getState());
     if(!value.signWay){ return showError('请先选择签署方式');}
     const url = '/api/signature/signature_center/name';
     const json = await fetchJson(url, 'post');
@@ -179,7 +179,7 @@ const createEditPageContainer = (action, getSelfState) => {
       const newItems = addItems.concat(originalArray,changeArr);
       dispatch(action.assign({signPartyList: newItems}, 'value'))
     };
-    buildAddState(contactConfig, selectItems, filterItems, true, dispatch, okFunc);
+    buildAddState(contactConfig, filterItems, selectItems, true, dispatch, okFunc);
     showPopup(AddDialogContainer)
   };
 
@@ -219,25 +219,8 @@ const createEditPageContainer = (action, getSelfState) => {
 
   //保存
   const saveAction = async (dispatch, getState) => {
-    const {value, controls1, controls2, tableCols} = getSelfState(getState());
-    if(!validValue(controls1, value)){   //判断from1必填
-      dispatch(action.assign({valid: true}));
-      return
-    }
-    if(!validValue(controls2, value)){   //判断from2必填
-      dispatch(action.assign({valid: true}));
-      return
-    }
-    if(!validArray(tableCols, value.signPartyList.filter(item => !item.hide))){   //判断表格必填
-      dispatch(action.assign({valid: true, from: false}));
-      return
-    }
-    if(value.signPartyList.length === 0){
-      showError('至少添加一个签署方');
-      return
-    }
+    const {value} = getSelfState(getState());
     const URL_SAVE = `/api/signature/signature_center/save`;
-
     const postData = {
       signContractId: value.signContractId,
       id: value.id,
@@ -257,14 +240,30 @@ const createEditPageContainer = (action, getSelfState) => {
       return
     }
     upDatePage(result.id)(dispatch, getState);
-    return updateTable(dispatch, action, getSelfState(getState()));
+    return updateTable(dispatch, action, getSelfState(getState()), ['mySign', 'hisSign', 'draft', 'all']);
   };
 
   //下一步
  const nextAction = async(dispatch, getState) => {
    try {
-     const {value} = getSelfState(getState());
-     let id = value.id;
+     const {value, controls1, controls2, tableCols} = getSelfState(getState());
+     if(!validValue(controls1, value)){   //判断from1必填
+       dispatch(action.assign({valid: true}));
+       return
+     }
+     if(!validValue(controls2, value)){   //判断from2必填
+       dispatch(action.assign({valid: true}));
+       return
+     }
+     if(!validArray(tableCols, value.signPartyList.filter(item => !item.hide))){   //判断表格必填
+       dispatch(action.assign({valid: true, from: false}));
+       return
+     }
+     if(value.signPartyList.length === 0){
+       showError('至少添加一个签署方');
+       return
+     }
+
      const URL_SAVE = `/api/signature/signature_center/save`;      //保存
      const URL_SUBMIT = '/api/signature/signature_center/sub';  //提交
      const URL_SIGN =  '/api/signature/signature_center/sign';   //签署
@@ -299,6 +298,7 @@ const createEditPageContainer = (action, getSelfState) => {
       }
       showSuccessMsg(submit.returnMsg);
       closeFunc && closeFunc();                   //发送成功后关闭当前页
+      return updateTable(dispatch, action, getSelfState(getState()), ['mySign', 'hisSign', 'draft', 'all']);
     }catch (e){
       helper.showError(e.message)
     }
@@ -308,6 +308,7 @@ const createEditPageContainer = (action, getSelfState) => {
   const closeAction = async(dispatch, getState) => {
     const {closeFunc} = getSelfState(getState());
     closeFunc && closeFunc();
+    return updateTable(dispatch, action, getSelfState(getState()), ['mySign', 'hisSign', 'draft', 'all']);
   };
 
 

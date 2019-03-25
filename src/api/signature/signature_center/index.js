@@ -57,10 +57,9 @@ api.post('/tabslist', async (req, res) => {
       signUser:'other',
       fileState:'wait'
     },{
-      signUser:'me',
       fileState:'draft'
     },{
-      signUser:'me',
+      signUser:'',
     },
   ];
 
@@ -134,6 +133,12 @@ api.get('/authenticationList', async(req, res) => {
 //查看详情
 api.get('/record/:guid', async(req, res) => {
   const url = `${service}/sign_center/record_by_id/${req.params.guid}`;
+  res.send(await fetchJsonByNode(req, url))
+});
+
+//撤销签署
+api.get('/repeal/:guid', async(req, res) => {
+  const url = `${service}/sign_center/revoke/${req.params.guid}`;
   res.send(await fetchJsonByNode(req, url))
 });
 

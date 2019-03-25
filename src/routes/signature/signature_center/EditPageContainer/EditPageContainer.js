@@ -10,6 +10,13 @@ const getSelfState = (rootState) => {
   return state[state.activeKey];
 };
 
-const Container = createEditPageContainer(action, getSelfState);
+const STATE_TEMP = ['temp'];
+const tempAction = new Action(STATE_TEMP);
+
+const getTempState = (rootState) => {
+  return getPathValue(rootState, STATE_TEMP);
+};
+
+const Container = createEditPageContainer(action, getSelfState, getTempState);
 export default Container;
 

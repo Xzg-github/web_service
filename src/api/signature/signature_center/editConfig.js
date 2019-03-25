@@ -32,8 +32,8 @@ const controls1 = [
 const controls2 = [
   { key: 'signWay', title: '签署方式', type: 'select', options: isWay, required: true},
   { key: 'signOrderStrategy', title: '签署顺序',  type: 'select', options: isStrategy, required: true},
-  { key: 'isSignInSpecifiedLocation', title: '指定签署位置', type: 'select', options: isOptions},
-  { key: 'isAddCcSide', title: '添加抄送方', type: 'select',options: isOptions}
+/*  { key: 'isSignInSpecifiedLocation', title: '指定签署位置', type: 'select', options: isOptions},
+  { key: 'isAddCcSide', title: '添加抄送方', type: 'select',options: isOptions}*/
 ];
 
 const tableButtons = [
@@ -95,8 +95,8 @@ const editConfig = {
   groupConfig: {
     title: '从签署群组添加',
     tableCols: [
-      {key: 'realName', title: '签署群组名称'},
-      {key: 'account', title: '账号'}
+      {key: 'signGroupName', title: '签署群组名称'},
+     // {key: 'account', title: '账号'}
     ],
     maxHeight: '400px',
     size: 'small',
