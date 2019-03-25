@@ -38,7 +38,8 @@ const okActionCreator = () => async (dispatch, getState) => {
   for(let item of items){
     let money = Number(value.orderMoney);
     let start = Number(item.startPrice);
-    let end = Number(item.endPrice);
+    let end = typeof (item.endPrice) !== 'number' ? Number.MAX_VALUE :Number(item.endPrice);
+    console.log(end);
     if(money >= start && money <= end){
       isMoney = true;
       value.unitPrice = item.price;

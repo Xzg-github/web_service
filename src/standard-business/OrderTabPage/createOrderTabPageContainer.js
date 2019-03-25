@@ -272,6 +272,7 @@ const buildOrderTabPageCommonState = async (urlConfig, urlList, statusNames=[]) 
       filterInfo: {},
       status: 'page',
       isAuthentication,
+      authenticationState:res[state],
       role
     };
   } catch (e) {
