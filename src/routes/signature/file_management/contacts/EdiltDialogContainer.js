@@ -30,6 +30,9 @@ const buildState = (config, items,edit) => {
 };
 
 const changeActionCreator = (key, value) => {
+  if(typeof value !== 'object'){
+    value = value.replace(/^\s+|\s+$/g,"")
+  }
   return action.assign({[key]: value}, 'value');
 };
 

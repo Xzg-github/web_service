@@ -111,8 +111,8 @@ const exitValidActionCreator = () => {
 
 const changeActionCreator = ({file, fileList}) => (dispatch,getState) => {
   const {fileList=[]} = getSelfState(getState());
-  if(file.size / 1024 / 1024  >  20){
-    helper.showError('图片大小需<20MB');
+  if(file.size / 1024 / 1024  >  2){
+    helper.showError('图片大小需<2MB');
     return
   }else if(file.type !== 'image/png'){
     helper.showError('请上传png图片');
