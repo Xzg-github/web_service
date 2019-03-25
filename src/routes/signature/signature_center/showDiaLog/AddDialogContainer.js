@@ -39,6 +39,7 @@ const okActionCreator = () => async (dispatch, getState) => {
     return
   }
   window.open(result);
+  dispatch(action.assign({visible: false, ok: false}));
 };
 
 const closeActionCreator = () => (dispatch) => {
