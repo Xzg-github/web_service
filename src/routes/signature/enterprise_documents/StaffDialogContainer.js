@@ -12,7 +12,7 @@ const getSelfState = (state) => {
   return state.temp || {};
 };
 
-const buildState = (config, items) => {
+const buildState = (config, items=[]) => {
   return {
     ...config,
     tableItems:items,
@@ -30,7 +30,7 @@ const checkActionCreator = (isAll, checked, rowIndex) => {
 
 const okActionCreator = () => async (dispatch, getState) => {
   const {tableItems} = getSelfState(getState());
-  const checkItems = tableItems.filter(item => item.checked)
+  const checkItems = tableItems.filter(item => item.checked);
   if(checkItems.length < 1){
     helper.showError('至少请勾选一条');
     return;
@@ -60,7 +60,7 @@ const searchActionTor = () => async (dispatch, getState) => {
 };
 
 
-const resetActionCreator = () => async (dispatch, getState) => {
+const resetActionCreator = () => async (dispatch) => {
   dispatch( action.assign({searchData: {}}) );
 };
 
@@ -96,12 +96,21 @@ const actionCreators = {
 
 const URL_CONFIG = '/api/signature/enterprise_documents/config';
 export default async (result) => {
-  const config = helper.getJsonResult(await helper.fetchJson(URL_CONFIG));
-  const Container = connect(mapStateToProps, actionCreators)(StaffDialog);
-  global.store.dispatch(action.create(buildState(result ? result : config.chooseGoodsConfig, [])));
-  await showPopup(Container, {}, true);
+  try {
+    const config = helper.getJsonResult(await helper.fetchJson(URL_CONFIG));
+    const Container = connect(mapStateToProps, actionCreators)(StaffDialog);
+    const body = {
+      filter:''
+    };
+    const json = helper.getJsonResult(await helper.fetchJson(URL_SERCH,helper.postOption(body)));
 
-  const state = getSelfState(global.store.getState());
-  global.store.dispatch(action.create({}));
-  return state.ok;
+    global.store.dispatch(action.create(buildState(result ? result : config.chooseGoodsConfig, json)));
+    await showPopup(Container, {}, true);
+
+    const state = getSelfState(global.store.getState());
+    global.store.dispatch(action.create({}));
+    return state.ok;
+  }catch (e){
+    helper.showError(e.message)
+  }
 };
