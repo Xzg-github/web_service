@@ -27,7 +27,7 @@ const getSelfState = (rootState) => {
 
 //刷新表格
 const updateTable = async(dispatch,getState)  =>{
-  const {currentPage, pageSize, searchData} = getSelfState(getState());
+  const {currentPage, pageSize, searchData={}} = getSelfState(getState());
   return search2(dispatch, action, URL_LIST, currentPage, pageSize, toFormValue(searchData));
 };
 
