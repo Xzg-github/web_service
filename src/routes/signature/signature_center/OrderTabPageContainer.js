@@ -29,7 +29,7 @@ const buildOrderTabPageState = async () => {
 //构建新增编辑页面状态
 const showOrderInfoPage = (dispatch, item, selfState, edit) => {
   const key = item.id ? item.id : 'add';
-  const title = edit? item.signFileSubject : '新增';
+  const title = edit? item.signFileSubject || '编辑' : '新增';
   if(helper.isTabExist(selfState.tabs,key)){
     dispatch(action.assign({activeKey: key}))
   }else{

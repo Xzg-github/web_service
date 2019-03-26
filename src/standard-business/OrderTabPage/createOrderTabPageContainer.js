@@ -11,20 +11,6 @@ const mySearch = async (dispatch, action, selfState, currentPage, pageSize, filt
   const {subActiveKey, urlList, isTotal, subTabs, fixedFilters={}} = selfState;
   const from = (currentPage - 1) * pageSize;
   const to = from + pageSize;
-  const states = [
-    {
-      signUser:'me',
-      isAll: 'false'
-    },{
-      signUser:'other',
-      isAll: 'false'
-    },{
-      isAll: 'false',
-      fileState:'draft'
-    },{
-      isAll: 'true'
-    },
-  ];
   let signUser,fileState, isAll;
   switch (subActiveKey){
     case 'mySign':{
@@ -147,20 +133,28 @@ const createOrderTabPageContainer = (action, getSelfState, actionCreatorsEx={}) 
     dispatch(action.assign({subActiveKey: key}));
     const selfState = getSelfState(getState());
     const {isRefresh, searchDataBak={}, pageSize, subTabs, subActiveKey, fixedFilters = {}} = selfState;
-    if(subActiveKey === 'mySign'){
-      fixedFilters.signUser = 'me';
-      fixedFilters.isAll = 'false';
-    }
-    if(subActiveKey === 'hisSign'){
-      fixedFilters.signUser = 'other';
-      fixedFilters.isAll = 'false';
-    }
-    if(subActiveKey === 'draft'){
-      fixedFilters.fileState = 'draft';
-      fixedFilters.isAll = 'false';
-    }
-    if(subActiveKey === 'all'){
-      fixedFilters.isAll= 'true'
+    switch(subActiveKey){
+      case 'mySign':{
+        fixedFilters.signUser = 'me';
+        fixedFilters.isAll = 'false';
+        break;
+      }
+      case 'hisSign':{
+        fixedFilters.signUser = 'other';
+        fixedFilters.isAll = 'false';
+        break
+      }
+      case 'draft': {
+        fixedFilters.fileState = 'draft';
+        fixedFilters.isAll = 'false';
+        break
+      }
+      case 'all': {
+        fixedFilters.isAll= 'true';
+        break
+      }
+      default:
+        return
     }
       const newState = {isRefresh: {...selfState.isRefresh, [key]: false}};
       return mySearch(dispatch, action, selfState, 1, pageSize[key], fixedFilters, newState);
