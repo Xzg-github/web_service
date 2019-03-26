@@ -27,12 +27,12 @@ const getSelfState = (rootState) => {
 
 //刷新表格
 const updateTable = async(dispatch,getState)  =>{
-  const {currentPage, pageSize, searchData} = getSelfState(getState());
+  const {currentPage, pageSize, searchData={}} = getSelfState(getState());
   return search2(dispatch, action, URL_LIST, currentPage, pageSize, toFormValue(searchData));
 };
 
 
-const buildState = async(config, treeData=[]) => {
+const buildState = async(config, treeData=[],json) => {
   const tree = Tree.createWithInsertRoot(treeData,config.root, {guid: 'root', districtType:0});
   const key = Tree.getRootKey(tree);
   //子列表
@@ -43,7 +43,8 @@ const buildState = async(config, treeData=[]) => {
     select: key,
     parents:null,
     expand: {[key]: true},
-    tableItems: [],
+    tableItems: json.data,
+    maxRecords: json.returnTotalItem,
     editConfig: config.file,
     addConfig: config.edit,
   };
@@ -73,8 +74,14 @@ const initActionCreator = () => async (dispatch) => {
     const tree = helper.getJsonResult(await helper.fetchJson(URL_TREE_LIST));
     //树结构 id，pid处理为{title,value,children}
     //const tree = convertToTree(items.result);
-
-    const payload = await buildState(config, tree);
+    const body = {
+      filter:{
+      },
+      itemFrom:0,
+      itemTo:10
+    };
+    const json = helper.getJsonResult(await helper.fetchJson(URL_LIST,helper.postOption(body)));
+    const payload = await buildState(config, tree,json);
 
     payload.status = 'page';
     payload.allItems = tree;
