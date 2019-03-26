@@ -58,8 +58,8 @@ const tableCols2 = [
   { key: 'index', title: '序号', type: 'index'},
   { key: 'signPartyName', title: '姓名/机构',type: 'text', required: true},
   { key: 'account', title: '账号（手机/邮箱）', type: 'text'},
-  { key: 'isAllowAddSignatories', title: '允许增加签署方', type: 'select', options: isOptions},
-  { key: 'signIdentity', title: '签署身份', type: 'select', options: isOptions1}
+/*  { key: 'isAllowAddSignatories', title: '允许增加签署方', type: 'select', options: isOptions},
+  { key: 'signIdentity', title: '签署身份', type: 'select', options: isOptions1}*/
 ];
 
 const footerButtons1 = [

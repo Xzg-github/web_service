@@ -39,6 +39,12 @@ class EditPage extends React.Component {
     return <SuperToolbar {...props}/>
   };
 
+  toButtons4 = (buttons) => {
+    const {buttons2} = this.props;
+    const props = {buttons: buttons2,size: 'small', callback: getObject(this.props, TOOLBAR_EVENTS )};
+    return <div style={{marginTop: '10px'}}><SuperToolbar {...props}/></div>
+  };
+
   toButtons3 = (buttons) => {
     const {buttons3,value, buttons4} = this.props;
     const props = {buttons: buttons3, size: 'default', callback: getObject(this.props, TOOLBAR_EVENTS )};
@@ -71,7 +77,23 @@ class EditPage extends React.Component {
     if(value.signOrderStrategy === '1' || value.signOrderStrategy === 1){
       return <SuperTable2 {...props}/>
     }else{
-      return <SuperTable2 {...props}/>
+      return <SuperTable2 {...props2}/>
+    }
+  };
+
+  toCopy = () => {
+    const {tableCols2, value, onExitValid, valid} = this.props;
+    const {onContentChange, onCheck} = getObject(this.props, ['onContentChange', 'onCheck']);
+    const events1 = { onContentChange, onCheck, onExitValid };
+    const props2 = {cols: tableCols2, items: [], callback: events1, valid};
+    if(value.isAddCcSide === '1' || value.isAddCcSide === 1){
+      return (
+        <div>
+          <Title title="添加抄送方（只查看，不用签署）"/>
+          {this.toButtons4()}
+          <SuperTable2 {...props2}/>
+        </div>
+      )
     }
   };
 
@@ -88,6 +110,7 @@ class EditPage extends React.Component {
         <Title title = "添加签署方" />
         {this.toButtons2()}
         {this.toTable()}
+        {this.toCopy()}
         {this.toButtons3()}
       </Card>
     )

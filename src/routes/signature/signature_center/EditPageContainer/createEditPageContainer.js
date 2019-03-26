@@ -136,7 +136,12 @@ const createEditPageContainer = (action, getSelfState, getTempState) => {
   const increaseAction = (dispatch, getState) => {
     const {value} = getSelfState(getState());
     if(!value.signWay){ return showError('请先选择签署方式');}
-    dispatch(action.add({}, ['value', 'signPartyList']))
+    let number;
+    const listNumber = value.signPartyList;
+    for(let i = 2; i <= listNumber.length + 1; i++){
+      number = i
+    }
+    dispatch(action.add({sequence: number}, ['value', 'signPartyList']))
   };
 
   //删除行
@@ -219,13 +224,13 @@ const createEditPageContainer = (action, getSelfState, getTempState) => {
       return
     }
     closeFunc && closeFunc();
-    upDatePage(result.id)(dispatch, getState);
+    //upDatePage(result.id)(dispatch, getState);
   };
 
   //下一步
  const nextAction = async(dispatch, getState) => {
    try {
-     const {value, controls1, controls2, tableCols} = getSelfState(getState());
+     const {value, controls1, controls2, tableCols, closeFunc} = getSelfState(getState());
      if(!validValue(controls1, value)){   //判断from1必填
        dispatch(action.assign({valid: true}));
        return
@@ -256,6 +261,7 @@ const createEditPageContainer = (action, getSelfState, getTempState) => {
      const {returnCode, returnMsg, result } = await helper.fetchJson(URL_SIGN, helper.postOption(save.id)); //签署
      if (returnCode !== 0) return helper.showError(returnMsg);
      window.open(result);
+     closeFunc && closeFunc();
    }catch (e){
      helper.showError(e.message)
    }
