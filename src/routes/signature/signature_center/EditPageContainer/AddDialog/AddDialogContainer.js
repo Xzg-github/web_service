@@ -32,29 +32,60 @@ export const buildAddState = (config, filterItems, items=[], add, dispatch, okFu
 
 //Input搜索框change监听
 const changeActionCreator = (event) => (dispatch, getState) =>{
-  dispatch(action.assign({formValue: event.target.value}));
-  const { filterItems, formValue} = getSelfState(getState());
-  let newTableItems = [];
-  filterItems.forEach((item) => {
-    if(item.companyContactName.toLowerCase().indexOf(formValue.toLowerCase()) > -1) {
-      newTableItems.push(item);
+  const {value, groupConfig} = getParentState(getState());
+  if(groupConfig.title === '从联系人中添加'){
+    dispatch(action.assign({formValue: event.target.value}));
+    const { filterItems, formValue} = getSelfState(getState());
+    let newTableItems = [];
+    filterItems.forEach((item) => {
+      if(item.companyContactName.toLowerCase().indexOf(formValue.toLowerCase()) > -1) {
+        newTableItems.push(item);
+      }
+    });
+    dispatch(action.assign({tableItems: newTableItems}));
+  }else{
+    dispatch(action.assign({formValue: event.target.value}));
+    const { filterItems, formValue} = getSelfState(getState());
+    let newTableItems = [];
+    filterItems.forEach((item) => {
+      if(item.signGroupName.toLowerCase().indexOf(formValue.toLowerCase()) > -1) {
+        newTableItems.push(item);
+      }
+    });
+    dispatch(action.assign({tableItems: newTableItems}));
+  }
+
+};
+
+//修改数组对象key值
+const changeKey = (arr, key) => {
+  let newArr = [];
+  arr.forEach((item, index) => {
+    let newObj = {};
+    for(let i = 0; i < key.length; i++ ){
+      newObj[key[i]] = item[Object.keys(item)[i]]
     }
+    newArr.push(newObj)
   });
-  dispatch(action.assign({tableItems: newTableItems}));
+  return newArr
 };
 
 const okActionCreator = ({okFunc, onClose}) => async(dispatch, getState) => {
-/*  const {value} = getParentState(getState());
+  const {value, groupConfig, contactConfig} = getParentState(getState());
   const {filterItems} = getSelfState(getState());
-  const oldArray = value.signPartyList;
-  const checkId = [];
-  filterItems.forEach(item => {
-    item.checked && (checkId.push(item))
-  });
-  const newItems = value.signPartyList.concat(checkId);
-  dispatch(parentAction.assign({signPartyList: newItems}, 'value'));*/
-  okFunc();
-  onClose();
+  if(contactConfig.title === '从联系人中添加'){
+    const checkId = [];
+    filterItems.forEach(item => {
+      item.checked && (checkId.push(item))
+    });
+    const changeItems = changeKey(filterItems, ['account', 'signPartyName']);
+
+    const newItems = value.signPartyList.concat(changeItems);
+    okFunc(newItems);
+    onClose();
+  }else{
+    const checkItems = [];
+  }
 };
 
 const checkActionCreator = (isAll, checked, rowIndex) => (dispatch,getState) => {

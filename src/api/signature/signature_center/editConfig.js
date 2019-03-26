@@ -39,7 +39,7 @@ const controls2 = [
 const tableButtons = [
   { key: 'increase', title: '添加', bsStyle: 'primary'},
   { key: 'contact', title: '联系人中添加'},
-  { key: 'group', title: '从签署群组添加'},
+  //{ key: 'group', title: '从签署群组添加'},
   {key: 'del', title: '删除', confirm:'是否确定删除'}
 ];
 
@@ -96,7 +96,7 @@ const editConfig = {
     title: '从签署群组添加',
     tableCols: [
       {key: 'signGroupName', title: '签署群组名称'},
-     // {key: 'account', title: '账号'}
+      //{key: 'concatMemberVos', title: '群组成员'}
     ],
     maxHeight: '400px',
     size: 'small',

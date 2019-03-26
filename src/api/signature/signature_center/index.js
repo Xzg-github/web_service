@@ -52,14 +52,15 @@ api.post('/tabslist', async (req, res) => {
   const states = [
     {
       signUser:'me',
-      fileState:'wait'
+      isAll:'false'
     },{
       signUser:'other',
-      fileState:'wait'
+      isAll:'false'
     },{
-      fileState:'draft'
+      fileState:'draft',
+      isAll:'false'
     },{
-      signUser:'',
+      isAll:'true'
     },
   ];
 

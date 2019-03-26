@@ -150,18 +150,6 @@ const createEditPageContainer = (action, getSelfState, getTempState) => {
     dispatch(action.assign({signPartyList: newItems}, 'value'))
   };
 
-  //修改数组对象key值
-  const changeKey = (arr, key) => {
-    let newArr = [];
-    arr.forEach((item, index) => {
-      let newObj = {};
-      for(let i = 0; i < key.length; i++ ){
-        newObj[key[i]] = item[Object.keys(item)[i]]
-      }
-      newArr.push(newObj)
-    });
-    return newArr
-  };
 
   //从联系人中添加
   const contactAction = async (dispatch, getState) => {
@@ -173,11 +161,8 @@ const createEditPageContainer = (action, getSelfState, getTempState) => {
     if(json.returnCode !== 0) return showError(json.returnMsg);
     const selectItems = json.result;
     const filterItems = json.result;
-    const originalArray = value.signPartyList;
     const okFunc = (addItems = []) => {
-      const changeArr = changeKey(filterItems, ['id', 'signPartyName', 'account']);    //转换数组对象的key值
-      const newItems = addItems.concat(originalArray,changeArr);
-      dispatch(action.assign({signPartyList: newItems}, 'value'))
+      dispatch(action.assign({signPartyList: addItems}, 'value'))
     };
     buildAddState(contactConfig, filterItems, selectItems, true, dispatch, okFunc);
     showPopup(AddDialogContainer)
@@ -186,22 +171,16 @@ const createEditPageContainer = (action, getSelfState, getTempState) => {
   //从签署群组中添加
   const groupAction = async (dispatch, getState) => {
     const {groupConfig, value} = getSelfState(getState());
-    if(!value.signWay){
-      showError('请先选择签署方式');
-      return
-    }
+    if(!value.signWay){return showError('请先选择签署方式')}
     const url = '/api/signature/signature_center/groups';
     const json = await fetchJson(url, 'post');
     if(json.returnCode !== 0) return showError(json.returnMsg);
     const selectItems = json.result;
     const filterItems = json.result;
-    const originalArray = value.signPartyList;
     const okFunc = (addItems = []) => {
-      const changeArr = changeKey(filterItems, ['id', 'signPartyName', 'account']);
-      const newItems = addItems.concat(originalArray,changeArr);
-      dispatch(action.assign({signPartyList: newItems}, 'value'))
+      dispatch(action.assign({signPartyList: addItems}, 'value'))
     };
-    buildAddState(groupConfig, selectItems, filterItems, true, dispatch, okFunc);
+    buildAddState(groupConfig, filterItems, selectItems, true, dispatch, okFunc);
     showPopup(AddDialogContainer)
   };
 
@@ -219,7 +198,7 @@ const createEditPageContainer = (action, getSelfState, getTempState) => {
 
   //保存
   const saveAction = async (dispatch, getState) => {
-    const {value} = getSelfState(getState());
+    const {value, closeFunc} = getSelfState(getState());
     const URL_SAVE = `/api/signature/signature_center/save`;
     const postData = {
       signContractId: value.signContractId,
@@ -239,8 +218,8 @@ const createEditPageContainer = (action, getSelfState, getTempState) => {
       showError(returnMsg);
       return
     }
+    closeFunc && closeFunc();
     upDatePage(result.id)(dispatch, getState);
-    return updateTable(dispatch, action, getSelfState(getState()), ['mySign', 'hisSign', 'draft', 'all']);
   };
 
   //下一步
@@ -298,7 +277,6 @@ const createEditPageContainer = (action, getSelfState, getTempState) => {
       }
       showSuccessMsg(submit.returnMsg);
       closeFunc && closeFunc();                   //发送成功后关闭当前页
-      return updateTable(dispatch, action, getSelfState(getState()), ['mySign', 'hisSign', 'draft', 'all']);
     }catch (e){
       helper.showError(e.message)
     }
@@ -308,7 +286,6 @@ const createEditPageContainer = (action, getSelfState, getTempState) => {
   const closeAction = async(dispatch, getState) => {
     const {closeFunc} = getSelfState(getState());
     closeFunc && closeFunc();
-    return updateTable(dispatch, action, getSelfState(getState()), ['mySign', 'hisSign', 'draft', 'all']);
   };
 
 

@@ -14,41 +14,42 @@ const mySearch = async (dispatch, action, selfState, currentPage, pageSize, filt
   const states = [
     {
       signUser:'me',
-      fileState:'wait'
+      isAll: 'false'
     },{
       signUser:'other',
-      fileState:'wait'
+      isAll: 'false'
     },{
-      signUser:'me',
+      isAll: 'false',
       fileState:'draft'
     },{
+      isAll: 'true'
     },
   ];
-  let signUser,fileState;
+  let signUser,fileState, isAll;
   switch (subActiveKey){
     case 'mySign':{
-        signUser='me';
-      fileState='wait';
+      signUser='me';
+      isAll= 'false';
       break;
     }
     case 'hisSign':{
       signUser='other';
-      fileState='wait';
+      isAll= 'false';
       break;
     }
     case 'draft':{
       fileState='draft';
+      isAll= 'false';
       break;
     }
     case 'all':{
-      signUser='';
-      fileState='';
+      isAll= 'true';
       break;
     }
     default:
       return
   }
-  const {returnCode, returnMsg, result} = await search(urlList, from, to, {...filter,signUser,fileState}, false);
+  const {returnCode, returnMsg, result} = await search(urlList, from, to, {...filter,signUser,fileState,isAll}, false);
   if (returnCode === 0) {
     if (!result.tags && result.tabTotal) { //转成统一结构
       result.tags = Object.keys(result.tabTotal).map(item => ({tag: item, count: result.tabTotal[item]}));
@@ -146,9 +147,20 @@ const createOrderTabPageContainer = (action, getSelfState, actionCreatorsEx={}) 
     dispatch(action.assign({subActiveKey: key}));
     const selfState = getSelfState(getState());
     const {isRefresh, searchDataBak={}, pageSize, subTabs, subActiveKey, fixedFilters = {}} = selfState;
-      fixedFilters.fileState = subActiveKey;
+    if(subActiveKey === 'mySign'){
+      fixedFilters.signUser = 'me';
+      fixedFilters.isAll = 'false';
+    }
+    if(subActiveKey === 'hisSign'){
+      fixedFilters.signUser = 'other';
+      fixedFilters.isAll = 'false';
+    }
+    if(subActiveKey === 'draft'){
+      fixedFilters.fileState = 'draft';
+      fixedFilters.isAll = 'false';
+    }
     if(subActiveKey === 'all'){
-      delete fixedFilters.fileState
+      fixedFilters.isAll= 'true'
     }
       const newState = {isRefresh: {...selfState.isRefresh, [key]: false}};
       return mySearch(dispatch, action, selfState, 1, pageSize[key], fixedFilters, newState);
@@ -211,7 +223,7 @@ const buildOrderTabPageCommonState = async (urlConfig, urlList, statusNames=[]) 
     const {subActiveKey, subTabs, isTotal, initPageSize, fixedFilters={}, searchDataBak={}, buttons} = config;
     for(let tab of subTabs){
       if(tab.key === subActiveKey){
-        fixedFilters.fileState = 'wait';
+        fixedFilters.isAll = 'false';
         fixedFilters.signUser = 'me';
       }
     }

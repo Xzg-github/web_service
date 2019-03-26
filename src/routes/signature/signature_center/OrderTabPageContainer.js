@@ -28,7 +28,7 @@ const buildOrderTabPageState = async () => {
 
 //构建新增编辑页面状态
 const showOrderInfoPage = (dispatch, item, selfState, edit) => {
-  const key = item.id ? item.id : 'add ';
+  const key = item.id ? item.id : 'add';
   const title = edit? item.signFileSubject : '新增';
   if(helper.isTabExist(selfState.tabs,key)){
     dispatch(action.assign({activeKey: key}))
@@ -36,7 +36,7 @@ const showOrderInfoPage = (dispatch, item, selfState, edit) => {
     const closeFunc = () => {
       const newTabs = selfState.tabs.filter(tab => tab.key !== key);
       dispatch(action.assign({tabs: newTabs, [key]: undefined, activeKey: 'index'}));
-      return updateTable(dispatch, action, selfState, ['mySign']);
+      return updateTable(dispatch, action, selfState, ['mySign', 'hisSign', 'draft', 'other']);
     };
     const payload = {
       id: item.id,
