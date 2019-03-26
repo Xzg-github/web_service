@@ -131,6 +131,13 @@ api.get('/authenticationList', async(req, res) => {
   res.send(await fetchJsonByNode(req, url))
 });
 
+//个人认证
+api.get('/personAuthentication', async(req, res) => {
+  const url = `${service}/user/get_person_verify_url`;
+  res.send(await fetchJsonByNode(req, url))
+});
+
+
 //查看详情
 api.get('/record/:guid', async(req, res) => {
   const url = `${service}/sign_center/record_by_id/${req.params.guid}`;

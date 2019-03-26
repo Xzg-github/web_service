@@ -66,7 +66,7 @@ const getActionCreator = () => async(dispatch,getState) => {
     return
   }
   dispatch(action.assign({['companyName']: result.companyName}, 'value'));
-  dispatch(action.assign({['companyAccountId']: result.id}, 'value'))
+  dispatch(action.assign({['companyAccountId']: result.accountId}, 'value'))
 };
 
 const clickActionCreators = {

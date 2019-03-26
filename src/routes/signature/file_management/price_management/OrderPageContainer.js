@@ -80,7 +80,7 @@ const delAction= async (dispatch, getState) => {
   const {result,returnCode,returnMsg} = await helper.fetchJson(`${URL_DEL}`,helper.postOption(item,'delete'));
   if(returnCode !== 0 ){
     helper.showError(returnMsg);
-    retrun
+    return
   }
   helper.showSuccessMsg(returnMsg)
   return updateTable(dispatch, getState)

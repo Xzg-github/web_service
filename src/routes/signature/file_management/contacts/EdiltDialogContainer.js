@@ -4,6 +4,7 @@ import {Action} from '../../../../action-reducer/action';
 import showPopup from '../../../../standard-business/showPopup';
 import helper from '../../../../common/common';
 import {toFormValue} from '../../../../common/check';
+import execWithLoading from '../../../../standard-business/execWithLoading';
 
 const action = new Action(['temp'], false);
 
@@ -30,6 +31,9 @@ const buildState = (config, items,edit) => {
 };
 
 const changeActionCreator = (key, value) => {
+  if(typeof value !== 'object'){
+    value = value.replace(/^\s+|\s+$/g,"")
+  }
   return action.assign({[key]: value}, 'value');
 };
 
@@ -64,12 +68,14 @@ const okActionCreator = () => async (dispatch, getState) => {
     return
   }
   const body = helper.postOption(helper.convert(state.value),state.edit?'put':'post');
-  const {result,returnCode,returnMsg} = await helper.fetchJson(URL_ADD,body);
-  if(returnCode !== 0 ){
-    helper.showError(returnMsg);
-    return
-  }
-  dispatch(action.assign({visible: false, ok: true}));
+  execWithLoading( async() => {
+    const {result,returnCode,returnMsg} = await helper.fetchJson(URL_ADD,body);
+    if(returnCode !== 0 ){
+      helper.showError(returnMsg);
+      return
+    }
+    dispatch(action.assign({visible: false, ok: true}));
+  })
 };
 
 const closeActionCreator = () => (dispatch) => {

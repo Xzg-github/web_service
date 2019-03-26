@@ -14,7 +14,7 @@ const data = {
       signature_group: '签署群组',
       contacts:'联系人',
       //template_management: '模板管理',
-      personal_certification: '个人认证',
+      //personal_certification: '个人认证',
       personal_account_management: '个人账号管理'
     },
 

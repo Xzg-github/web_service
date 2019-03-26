@@ -24,8 +24,8 @@ const controls = [
 const cols = [
   {key: 'checked', title: '', type: 'checkbox'},
   {key: 'index', title: '序号', type: 'index'},
-  {key:'realName',title:'姓名'},
-  {key:'account',title:'账号'},
+  {key:'companyContactName',title:'姓名'},
+  {key:'companyContactAccount',title:'账号'},
 ];
 
 const tableButtons = [
