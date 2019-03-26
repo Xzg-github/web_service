@@ -29,12 +29,12 @@ const tableCols = [
 ];
 
 const buttons = [
-  {key: 'add', title: '新增客户', bsStyle: 'primary'},
-  {key: 'export', title: '导出', menu: [
-      {key: 'exportSearch', title: '查询导出'},
-      {key: 'exportPage', title: '页面导出'}
-      ]
-  }
+  // {key: 'add', title: '新增客户', bsStyle: 'primary'},
+  // {key: 'export', title: '导出', menu: [
+  //     {key: 'exportSearch', title: '查询导出'},
+  //     {key: 'exportPage', title: '页面导出'}
+  //     ]
+  // }
 ];
 
 const index = {
