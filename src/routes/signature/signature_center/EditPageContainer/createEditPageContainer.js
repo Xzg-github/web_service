@@ -47,6 +47,9 @@ const createEditPageContainer = (action, getSelfState, getTempState) => {
       if(id){
         const URL_LIST_ONE = '/api/signature/signature_center/getOne';
         const list = getJsonResult(await fetchJson(`${URL_LIST_ONE}/${id}`,'get'));
+        if(list.signWay === '1' || list.signWay === 1){
+          list.signPartyList[0].readonly = true         //签署文件时，发起人信息设为只读
+        }
           data = list;
       }
       return {
@@ -231,6 +234,10 @@ const createEditPageContainer = (action, getSelfState, getTempState) => {
  const nextAction = async(dispatch, getState) => {
    try {
      const {value, controls1, controls2, tableCols, closeFunc} = getSelfState(getState());
+     let date = moment().format('YYYY-MM-DD HH:mm:ss'); //获取当前时间
+     if(value.signExpirationTime < date){
+       return showError(('签署截至时间已过期，请重新确认！'))
+     }
      if(!validValue(controls1, value)){   //判断from1必填
        dispatch(action.assign({valid: true}));
        return
@@ -244,8 +251,7 @@ const createEditPageContainer = (action, getSelfState, getTempState) => {
        return
      }
      if(value.signPartyList.length === 0){
-       showError('至少添加一个签署方');
-       return
+       return showError('至少添加一个签署方');
      }
 
      const URL_SAVE = `/api/signature/signature_center/save`;      //保存

@@ -15,7 +15,7 @@ const isWay = [
 
 const isStrategy = [
   { value: 0, title: '无序签署'},
-  { value: 1, title: '顺序签署'},
+  { value: 1, title: '顺序签署(签署顺序为表格序号)'},
   { value: 2, title: '每个单独签'}
 ];
 
@@ -46,21 +46,13 @@ const tableButtons = [
 const tableCols = [
   { key: 'checked', title: '', type: 'checkbox'},
   { key: 'index', title: '序号', type: 'index'},
-  { key: 'sequence', title: '签署顺序',type: 'number', required: true},
+  { key: 'sequence', title: '签署顺序',type: 'number', required: true, hide: true},
   { key: 'signPartyName', title: '姓名/机构',type: 'text', required: true},
   { key: 'account', title: '账号（邮箱）', type: 'text'},
 /*  { key: 'isAllowAddSignatories', title: '允许增加签署方', type: 'select', options: isOptions},
   { key: 'signIdentity', title: '签署身份', type: 'select', options: isOptions1}*/
 ];
 
-const tableCols2 = [
-  { key: 'checked', title: '', type: 'checkbox'},
-  { key: 'index', title: '序号', type: 'index'},
-  { key: 'signPartyName', title: '姓名/机构',type: 'text', required: true},
-  { key: 'account', title: '账号（手机/邮箱）', type: 'text'},
-/*  { key: 'isAllowAddSignatories', title: '允许增加签署方', type: 'select', options: isOptions},
-  { key: 'signIdentity', title: '签署身份', type: 'select', options: isOptions1}*/
-];
 
 const footerButtons1 = [
   { key: 'close', title: '关闭'},
@@ -80,7 +72,6 @@ const editConfig = {
   controls2: controls2,
   buttons2:tableButtons,
   tableCols,
-  tableCols2,
   buttons3: footerButtons1,
   buttons4: footerButtons2,
   contactConfig: {
