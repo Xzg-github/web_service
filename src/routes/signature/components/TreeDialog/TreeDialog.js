@@ -22,7 +22,7 @@ class TreeDialog extends React.Component {
 
   getFooter = (footer) => {
     return [
-      <Button key='1' size='large' onClick={this.onClick.bind(null, 'close')}>取消</Button>,
+      <Button key='1' size='large' onClick={this.onClick.bind(null, 'close')}>关闭</Button>,
       footer && <Button key='3' size='large' onClick={this.onClick.bind(null, 'ok')} type='primary'>确认</Button>
     ];
   };

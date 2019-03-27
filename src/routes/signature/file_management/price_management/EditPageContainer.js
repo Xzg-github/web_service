@@ -20,7 +20,7 @@ const getSelfState = (rootState) => {
 
 const initActionCreator = () => async (dispatch, getState) => {
   const {editConfig} = getPathValue(getState(), STATE_PATH);
-  const {tabKey,id} = getSelfState(getState());
+  const {tabKey,id,look=false} = getSelfState(getState());
   dispatch(action.assign({status: 'loading'}, tabKey));
   try {
     let value = {};
@@ -38,6 +38,7 @@ const initActionCreator = () => async (dispatch, getState) => {
       tableItems,
       status: 'page',
       options: {},
+      look
     }, tabKey));
 
 

@@ -18,7 +18,7 @@ class EditPage extends React.Component {
 
   formProps = (props ) => {
     return {
-      readonly: false,
+      readonly: props.look,
       container: true,
       controls: props.controls,
       value: props.value,
@@ -32,6 +32,7 @@ class EditPage extends React.Component {
 
   tableProps = (props) => {
     return  {
+      readonly: props.look,
       options: props.options,
       cols: props.cols,
       valid: props.valid,
