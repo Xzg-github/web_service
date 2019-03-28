@@ -24,14 +24,15 @@ const buildState = (config, items={}) => {
 const changeActionCreator = (key, keyValue) => (dispatch, getState) => {
   dispatch(action.assign({[key]: keyValue}, 'value'));
   const {value,controls} = getSelfState(getState());
-
-  let rule = value.ruleBasicParameter ==  1 ? '文件份数':'订购金额';
-  let startPrice = value.startPrice ? value.startPrice : '0';
-  let endPrice = value.endPrice ? value.endPrice : '∞';
-  let text1 = `${rule}: ${startPrice}~${endPrice}`;
-  let text2 = `${rule} > ${startPrice} & ${rule} < ${endPrice}`;
-  dispatch(action.assign({['ruleName']: text1}, 'value'));
-  dispatch(action.assign({['ruleDescribe']: text2}, 'value'));
+  if(key === 'startPrice' || key === 'endPrice'){
+    let rule = value.ruleBasicParameter ==  1 ? '文件份数':'订购金额';
+    let startPrice = value.startPrice ? value.startPrice : '0';
+    let endPrice = value.endPrice ? value.endPrice : '∞';
+    let text1 = `${rule}: ${startPrice}~${endPrice}`;
+    let text2 = `${rule} > ${startPrice} & ${rule} < ${endPrice}`;
+    dispatch(action.assign({['ruleName']: text1}, 'value'));
+    dispatch(action.assign({['ruleDescribe']: text2}, 'value'));
+  }
 };
 
 const okActionCreator = () => async (dispatch, getState) => {
@@ -49,7 +50,6 @@ const okActionCreator = () => async (dispatch, getState) => {
     helper.showError('区间下限不能大于区间上限');
     return
   }
-
   dispatch(action.assign({visible: false, ok: [value]}));
 };
 
