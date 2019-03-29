@@ -284,9 +284,22 @@ const pageSizeActionCreator = (pageSize, currentPage) => async (dispatch, getSta
 };
 
 
+const formSearchActionCreator = (key, title,keyControl) => async (dispatch, getState) => {
+  const {filters} = getSelfState(getState());
+  const json = await helper.fuzzySearchEx(title,keyControl);
+  if (!json.returnCode) {
+    const index = filters.findIndex(item => item.key == key);
+    const options = json.result;
+    dispatch(action.update({options:json.result}, 'filters', index))
+  }else {
+    helper.showError(json.returnMsg)
+  }
+
+};
 
 const actionCreators = {
   onInit: initActionCreator,
+  onSearch:formSearchActionCreator,
   onInputChange: inputChangeActionCreator,
   onClick: clickActionCreator,
   onCheck: checkActionCreator,

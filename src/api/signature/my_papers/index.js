@@ -67,5 +67,10 @@ api.post('/searchList', async (req, res) => {
   res.send(await fetchJsonByNode(req,url,postOption(body)));
 });
 
+//联系人下拉
+api.get('/userDrop', async(req,res) =>{
+  const url = `${service}/user_account/drop_list_user_account`;
+  res.send(await fetchJsonByNode(req,url));
+});
 
 export default api;

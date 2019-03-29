@@ -1,10 +1,13 @@
 import {connect} from 'react-redux';
-import UploadDialog from './UploadDialog';
+import UploadDialog from '../../personal_account_management/ShowDiaLog/UploadDialog';
 import {Action} from '../../../../../action-reducer/action';
 import showPopup from '../../../../../standard-business/showPopup';
 import helper from '../../../../../common/common';
+import execWithLoading from '../../../../../standard-business/execWithLoading';
 
 const action = new Action(['temp'], false);
+
+const URL_ADD = '/api/signature/account_management/personal_account_management/addSign';//新增
 
 const msg = [
   '背景透明签名制作过程参考：',
@@ -34,25 +37,71 @@ const buildState = async(config, items,edit) => {
     previewVisible: false,
     previewImage: '',
     msg,
-    srcImg:null
+    srcImg:null,
+    confirmLoading:false
   };
 };
 
 const okActionCreator = () => async (dispatch, getState) => {
-  const {fileList=[]} = getSelfState(getState());
-  const formData = new FormData();
-  fileList.forEach((file) => {
-    formData.append('file', file);
-  });
+  const {fileList=[],value,controls} = getSelfState(getState());
+  //企业的：生成一个圆形的企业章，尺寸要求：200*160
 
-  fetch('/api/proxy/zuul/archiver_service/file/upload/document',{
-    method: 'post',
-    body: formData,
-  }).then(function (res) {
-    return res.json()
-  }).then(function (json) {
-    console.log(json);
-  })
+  let img_url = window.URL.createObjectURL(fileList[0]);
+  let img = new Image();
+  img.src = img_url;
+  img.onload = (e) =>{
+    // 打印
+    let imgWidth = img.width;
+    let imgHeight = img.height;
+    if(imgWidth !==200 && imgHeight !== 160){
+      helper.showError('长方形的企业章，尺寸要200*160');
+      return
+    }
+
+
+    if (!helper.validValue(controls, value)) {
+      dispatch(action.assign({valid: true}));
+      return;
+    }
+    if(fileList.length === 0){
+      helper.showError('请上传文件');
+      return
+    }
+    dispatch(action.assign({confirmLoading:true}));
+    const formData = new FormData();
+    fileList.forEach((file) => {
+      formData.append('file', file);
+    });
+
+    execWithLoading(async () => {
+      fetch(`/api/proxy/fadada-service/sign_seal/upload_sign_seal`,{
+        method: 'post',
+        body: formData,
+      }).then(function (res) {
+        return res.json()
+      }).then(async function (json) {
+        if(json.returnCode !==0){
+          helper.showError(json.returnMsg);
+          return
+        }
+        const body = {
+          id:json.result,
+          signSealName:value.signSealName
+        };
+        const {result,returnCode,returnMsg} = await helper.fetchJson(URL_ADD,helper.postOption(body))
+        if(returnCode !=0){
+          helper.showError(returnMsg);
+          return
+        }
+        dispatch(action.assign({confirmLoading:false}))
+        helper.showSuccessMsg('新增成功')
+        dispatch(action.assign({visible: false, ok: true}));
+      })
+    });
+
+  }
+
+
 };
 
 const closeActionCreator = () => (dispatch) => {
@@ -78,8 +127,11 @@ const exitValidActionCreator = () => {
 
 const changeActionCreator = ({file, fileList}) => (dispatch,getState) => {
   const {fileList=[]} = getSelfState(getState());
-  if(file.size / 1024 / 1024  >  20){
-    helper.showError('图片大小需<20MB');
+  if(file.size / 1024 / 1024  >  2){
+    helper.showError('图片大小需<2MB');
+    return
+  }else if(file.type !== 'image/png'){
+    helper.showError('请上传png图片');
     return
   }
   let srcImg;
@@ -87,7 +139,7 @@ const changeActionCreator = ({file, fileList}) => (dispatch,getState) => {
   reader.readAsDataURL(file);
   reader.onload =  (result) => {
     srcImg = result.target.result;
-    file.thumbUrl = srcImg
+    file.thumbUrl = srcImg;
     const newList = [file];
     dispatch(action.assign({fileList:newList,srcImg:srcImg}))
   };
@@ -118,8 +170,13 @@ const mapStateToProps = (state) => {
   return getSelfState(state);
 };
 
+const formChangeActionCreator = (key, value) => {
+  return action.assign({[key]: value}, 'value');
+};
+
 const actionCreators = {
   onChange: changeActionCreator,
+  onFormChange:formChangeActionCreator,
   onRemove: removeActionCreator,
   onClick: clickActionCreator,
   onExitValid: exitValidActionCreator,

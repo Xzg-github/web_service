@@ -1,5 +1,7 @@
 import {pageSize, pageSizeType, description, searchConfig} from '../../gloablConfig';
 
+const user = '/api/signature/my_papers/userDrop';
+
 const isYesOrNo = [
   {title:'是',value:1},
   {title:'否',value:0}
@@ -7,7 +9,7 @@ const isYesOrNo = [
 
 const filters = [
   {key:'signFileSubject',title:'文件主题',type:"text"},
-  {key:'insertUser',title:'发起人',type:"text"},
+  {key:'insertUser',title:'发起人',type:"search",searchUrl: user},
   {key:'signStartTimeFrom',title:'发起时间',type:"date"},
   {key:'signStartTimeTo',title:'至',type:"date"},
   {key:'isAddCcSide',title:'是否抄送',type:"select",options:isYesOrNo},
