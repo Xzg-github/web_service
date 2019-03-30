@@ -86,7 +86,7 @@ const okActionCreator = ({okFunc, onClose}) => async(dispatch, getState) => {
     filterItems.forEach(item => {
       item.checked && (checkId.push(item))
     });
-    const changeItems = changeKey(filterItems, ['id', 'account', 'signPartyName']);
+    const changeItems = changeKey(filterItems, ['account', 'signPartyName']);
 	console.log(changeItems)
     const newItems = value.signPartyList.concat(changeItems);
     okFunc(newItems);
