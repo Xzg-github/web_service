@@ -11,7 +11,7 @@ const filters = [
 ];
 
 const buttons = [
-  {key: 'receipt', title: '录入收款', bsStyle: 'primary'},
+  //{key: 'receipt', title: '录入收款', bsStyle: 'primary'},
   {key: 'audit', title: '审核', confirm: '审核通过后订单生效，确定审核通过吗？'},
   {key: 'record', title: '查看消费记录'}
 ];

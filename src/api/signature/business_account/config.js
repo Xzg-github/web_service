@@ -45,8 +45,8 @@ const tableCols = [
 ];
 
 const buttons = [
-  // { key: 'order', title: '订购', bsStyle: 'primary'},
   { key: 'creditSetting', title: '信用额度设置', bsStyle: 'primary'},
+  { key: 'order', title: '代企业订购'},
   { key: 'viewQuota', title: '查看订购记录'}
 ];
 

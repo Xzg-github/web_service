@@ -38,7 +38,7 @@ const data = {
     //电子签署平台运营
     econtract_admin_role: {
       business_account: '企业账户金额',
-      // businessOrder: '企业订单',
+      businessOrder: '企业订单',
       // data_statistics: '数据统计',
       //monthly_bill: '月账单',
       businessArchives: '客户档案',
