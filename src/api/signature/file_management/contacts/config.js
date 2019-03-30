@@ -11,18 +11,18 @@ const filters = [
   {key:'companyContactPhoneNumber',title:'手机号码',type:"number"},
   {key:'companyContactAccountState',title:'状态',type:"select",options:state_options},
   {key:'companyContactGroupId',title:'所属分组',type:"search"},
-  {key:'companyContactEmail',title:'电子邮件',type:'text'}
+  //{key:'companyContactEmail',title:'电子邮件',type:'text'}
 ];
 
 const tableCols = [
   {key:'companyContactAccountState',title:'状态',options:state_options},
   {key:'companyContactName',title:'真实姓名/机构名称'},
   {key:'companyContactAccount',title:'账号'},
-  {key:'companyContactEmail',title:'电子邮件'},
+  //{key:'companyContactEmail',title:'电子邮件'},
   {key:'companyContactPhoneNumber',title:'手机号码'},
   {key:'companyContactGroupId',title:'所属分组'},
-  {key:'invitationTime',title:'发送时间'},
-  {key:'isInvitation',title:'是否发送邀请'},
+  //{key:'invitationTime',title:'发送时间'},
+  //{key:'isInvitation',title:'是否发送邀请'},
   {key:'updateTime',title:'更新时间'},
   {key:'updateUser',title:'更新人员'},
 ];
@@ -45,8 +45,8 @@ const fileButtons = [
 
 const controls = [
   {key:'companyContactName',title:'姓名/机构名称',type:'text',required:true},
-  {key:'companyContactAccount',title:'账号',type:'text'},
-  {key:'companyContactEmail',title:'电子邮件',type:'text'},
+  {key:'companyContactAccount',title:'账号(电子邮件)',type:'text',required:true},
+  //{key:'companyContactEmail',title:'电子邮件',type:'text',required:true},
   {key:'companyContactPhoneNumber',title:'手机号码',type:'number'},
   {key:'companyContactGroupId',title:'所属分组',type:'readonly',required:true},
   {key:'companyContactNote',title:'备注',type:'textArea',span:2},

@@ -60,10 +60,18 @@ const changeActionCreator = (event) => (dispatch, getState) =>{
 //修改数组对象key值
 const changeKey = (arr, key) => {
   let newArr = [];
+  console.log(arr)
+  console.log(key)
+  const kv = {"id":"id","account":"companyContactAccount","signPartyName":"companyContactName"}
   arr.forEach((item, index) => {
     let newObj = {};
+	
+	
+	
     for(let i = 0; i < key.length; i++ ){
-      newObj[key[i]] = item[Object.keys(item)[i]]
+	  console.log(key[i]+'--'+item[kv[key[i]]])
+      //newObj[key[i]] = item[Object.keys(item)[i]]
+	  newObj[key[i]]=item[kv[key[i]]]
     }
     newArr.push(newObj)
   });
@@ -79,7 +87,7 @@ const okActionCreator = ({okFunc, onClose}) => async(dispatch, getState) => {
       item.checked && (checkId.push(item))
     });
     const changeItems = changeKey(filterItems, ['id', 'account', 'signPartyName']);
-
+	console.log(changeItems)
     const newItems = value.signPartyList.concat(changeItems);
     okFunc(newItems);
     onClose();

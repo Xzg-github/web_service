@@ -21,7 +21,7 @@ class EditPage extends React.Component {
                           2、涉及土地、房屋等不动产权益转让的;
                           3、涉及停止供水、供热、供气、供电等公共事业服务的;
                           4、法律、行政法规规定的不适用电子文书的其他形式。
-                          1.仅支持 .doc 、.docx、 .wps 、.pdf 、.xls、 .xlsx格式；
+                          1.仅支持 .doc 、.docx 、.pdf 、.xls、 .xlsx格式；
                           2.文件大小需<20MB（注：上传.xls、.xlsx文档请先用Office预览，确保内容不超过A4纸范围）
                           "
     />
