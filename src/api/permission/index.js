@@ -2,7 +2,7 @@ import express from 'express';
 import {NAV_ITEMS, SIDEBARS} from './config';
 import {fetchJsonByNode, postOption} from '../../common/common';
 import {host, privilege,fadadaServiceName} from '../gloablConfig';
-const service = `${host}/auth-center-provider`;
+const service = `${host}/${fadadaServiceName}`;
 let api = express.Router();
 
 const TYPE_PAGE = 2;

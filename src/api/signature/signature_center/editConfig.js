@@ -48,7 +48,7 @@ const tableCols = [
   { key: 'index', title: '序号', type: 'index'},
   { key: 'sequence', title: '签署顺序',type: 'number', required: true, hide: true},
   { key: 'signPartyName', title: '姓名/机构',type: 'text', required: true},
-  { key: 'account', title: '账号（邮箱）', type: 'text'},
+  { key: 'account', title: '账号（邮箱）', type: 'text', required: true},
 /*  { key: 'isAllowAddSignatories', title: '允许增加签署方', type: 'select', options: isOptions},
   { key: 'signIdentity', title: '签署身份', type: 'select', options: isOptions1}*/
 ];
