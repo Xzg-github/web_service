@@ -66,8 +66,7 @@ const consumptionDetail = [
 ];
 
 const editPageButton = [
-  {key: 'close', title: '关闭'},
-  {key: 'export', title: '导出明细'}
+  {key: 'close', title: '关闭'}
 ];
 
 const editPageConfig = {
