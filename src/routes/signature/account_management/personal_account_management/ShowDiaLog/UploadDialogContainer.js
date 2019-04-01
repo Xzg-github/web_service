@@ -45,46 +45,75 @@ const buildState = async(config, items,edit) => {
 
 const okActionCreator = () => async (dispatch, getState) => {
   const {fileList=[],value,controls} = getSelfState(getState());
-  if (!helper.validValue(controls, value)) {
-    dispatch(action.assign({valid: true}));
-    return;
-  }
-  if(fileList.length === 0){
-    helper.showError('请上传文件');
-    return
-  }
-  dispatch(action.assign({confirmLoading:true}))
-  let accountId =  getCookie('accountId');
-  const formData = new FormData();
-  fileList.forEach((file) => {
-    formData.append('file', file);
-  });
+  //判断图片尺寸小于134；生成一个正方形的个人章，尺寸要求：大于60
+  //生成一个长方形的个人章，尺寸要求160*70
 
-  execWithLoading(async () => {
-    fetch(`/api/proxy/fadada-service/sign_seal/upload_sign_seal`,{
-      method: 'post',
-      body: formData,
-    }).then(function (res) {
-      return res.json()
-    }).then(async function (json) {
-      if(json.returnCode !==0){
-        helper.showError(json.returnMsg);
+  let img_url = window.URL.createObjectURL(fileList[0]);
+  let img = new Image();
+  img.src = img_url;
+  img.onload = (e) =>{
+    // 打印
+    let imgWidth = img.width;
+    let imgHeight = img.height;
+    if( imgWidth === imgHeight ){
+      if(imgWidth < 60){
+        helper.showError('正方形的个人章,尺寸要求：大于60');
+        return
+      }else if(imgWidth > 134){
+        helper.showError('正方形的个人章,尺寸要求：小于134');
         return
       }
-      const body = {
-        id:json.result,
-        signSealName:value.signSealName
-      };
-      const {result,returnCode,returnMsg} = await helper.fetchJson(URL_ADD,helper.postOption(body))
-      if(returnCode !=0){
-        helper.showError(returnMsg);
+    }else {
+      if(imgWidth !== 160 && imgHeight !==70){
+        helper.showError('长方形的个人章，尺寸要求160*70');
         return
       }
-      dispatch(action.assign({confirmLoading:false}))
-      helper.showSuccessMsg('新增成功')
-      dispatch(action.assign({visible: false, ok: true}));
-    })
-  });
+    }
+
+
+    if (!helper.validValue(controls, value)) {
+      dispatch(action.assign({valid: true}));
+      return;
+    }
+    if(fileList.length === 0){
+      helper.showError('请上传文件');
+      return
+    }
+    dispatch(action.assign({confirmLoading:true}));
+    let accountId =  getCookie('accountId');
+    const formData = new FormData();
+    fileList.forEach((file) => {
+      formData.append('file', file);
+    });
+
+    execWithLoading(async () => {
+      fetch(`/api/proxy/fadada-service/sign_seal/upload_sign_seal`,{
+        method: 'post',
+        body: formData,
+      }).then(function (res) {
+        return res.json()
+      }).then(async function (json) {
+        if(json.returnCode !==0){
+          helper.showError(json.returnMsg);
+          return
+        }
+        const body = {
+          id:json.result,
+          signSealName:value.signSealName
+        };
+        const {result,returnCode,returnMsg} = await helper.fetchJson(URL_ADD,helper.postOption(body))
+        if(returnCode !=0){
+          helper.showError(returnMsg);
+          return
+        }
+        dispatch(action.assign({confirmLoading:false}))
+        helper.showSuccessMsg('新增成功')
+        dispatch(action.assign({visible: false, ok: true}));
+      })
+    });
+
+  }
+
 
 };
 

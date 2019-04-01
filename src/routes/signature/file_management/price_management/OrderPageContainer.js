@@ -22,12 +22,12 @@ const getSelfState = (rootState) => {
 };
 
 // 页面的初始状态
-const buildPageState = (tabs, tabKey, title,value={},edit) => {
+const buildPageState = (tabs, tabKey, title,value={},edit,look) => {
   const {id} = value;
   return {
     activeKey: tabKey,
     tabs: tabs.concat({key: tabKey, title: title}),
-    [tabKey]: {tabKey,id,updateTable,edit
+    [tabKey]: {tabKey,id,updateTable,edit,look
     },
   };
 };
@@ -117,6 +117,9 @@ const editAction = async (dispatch, getState) => {
   if (index === -1) {
     helper.showError('请勾选一条记录进行编辑');
     return;
+  }else if(tableItems[index].statusType === 'status_effective_completed'){
+    helper.showError('不可编辑已生效');
+    return
   }
   const tabKey = `edit_${tableItems[index].id}`;
   const title =  '编辑';
@@ -201,6 +204,16 @@ const pageSizeActionCreator = (pageSize, currentPage) => async (dispatch, getSta
   return search2(dispatch, action, URL_LIST, currentPage, pageSize, toFormValue(searchDataBak), newState,tabKey);
 };
 
+const doubleClickActionCreator = (index) => (dispatch, getState) => {
+  const {tableItems} = getSelfState(getState());
+  const {tabs} = getPathValue(getState(), STATE_PATH);
+  const tabKey = `edit_${tableItems[index].id}`;
+  const title =  '查看';
+  if (helper.isTabExist(tabs, tabKey)) {
+    dispatch(action.assign({activeKey: tabKey}));
+  }
+  dispatch(action.assign(buildPageState (tabs, tabKey,title,tableItems[index],true,true)));
+};
 
 const mapStateToProps = (state) => {
   return getObject(getSelfState(state), OrderPage.PROPS);
@@ -215,6 +228,7 @@ const actionCreators = {
   onPageSizeChange: pageSizeActionCreator,
   onSearch: formSearchActionCreator,
   onLink: onLinkActionCreator,
+  onDoubleClick:doubleClickActionCreator
 };
 
 const Container = connect(mapStateToProps, actionCreators)(OrderPage);

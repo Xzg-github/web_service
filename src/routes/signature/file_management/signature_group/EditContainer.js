@@ -89,7 +89,6 @@ const addActionCreator = (props) => async(dispatch,getState) => {
   const arr = [];
   if (items.length > 0) {
     for(let item of items){
-
       const obj = {
         companyContactName:item.companyContactName,
         companyContactAccount:item.companyContactAccount,

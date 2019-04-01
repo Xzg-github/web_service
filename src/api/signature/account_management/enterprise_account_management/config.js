@@ -121,12 +121,16 @@ const unitOptions = [
   {value:'strip',title:'条'},
 ];
 
+const effectOptions = [
+  {value:1,title:'长期有效'}
+];
+
 const four_cols = [
   {key:'ruleName',title:'套餐名称'},
   {key:'businessItemId',title:'业务项目'},
   {key:'price',title:'价格(元)'},
   {key:'unitType',title:'单位',options:unitOptions},
-  {key:'effectiveType',title:'有效期'},
+  {key:'effectiveType',title:'有效期',options:effectOptions},
 ];
 
 

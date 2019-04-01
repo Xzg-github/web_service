@@ -18,7 +18,7 @@ const getSelfState = (state) => {
 const buildState = (config, items,edit) => {
   const controls = helper.deepCopy(config.controls);
   if(!items.companyContactGroupId){
-    controls[4].type ='search'
+    controls[3].type ='search'
   }
   return {
     ...config,
@@ -63,8 +63,8 @@ const okActionCreator = () => async (dispatch, getState) => {
     helper.showError('手机号码格式不正确')
     return
   }
-  if(state.value.companyContactEmail && !checkMail(state.value.companyContactEmail)){
-    helper.showError('邮箱格式不正确')
+  if(state.value.companyContactAccount && !checkMail(state.value.companyContactAccount)){
+    helper.showError('账号格式不正确')
     return
   }
   const body = helper.postOption(helper.convert(state.value),state.edit?'put':'post');

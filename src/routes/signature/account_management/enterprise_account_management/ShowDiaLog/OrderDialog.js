@@ -12,7 +12,8 @@ class SetDialog extends React.Component {
     afterClose: PropTypes.func,
     onClick: PropTypes.func,
     onChange: PropTypes.func,
-    onExitValid: PropTypes.func
+    onExitValid: PropTypes.func,
+    validForm:PropTypes.bool
   };
 
   onClick = (key) => {
@@ -64,6 +65,7 @@ class SetDialog extends React.Component {
         <SuperTable {...this.tableProps()} />
         <div style={{marginTop:10}}>
           <SuperForm {...this.formProps()} />
+          {this.props.validForm ? <p style={{marginTop:5,fontSize:12,color:'#f04134'}}>未匹配到套餐，请重新输入</p> : null}
         </div>
       </ModalWithDrag>
     );

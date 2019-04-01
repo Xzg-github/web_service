@@ -11,7 +11,7 @@ const data = {
       //enterprise_documents: '企业文件',
       file_management: '档案管理',
       account_management: '账号管理',
-      signature_group: '签署群组',
+      //signature_group: '签署群组',
       contacts:'联系人',
       //template_management: '模板管理',
       //personal_certification: '个人认证',
@@ -29,7 +29,7 @@ const data = {
      //enterprise_documents: '企业文件',
       worker: '企业员工',
       contacts: '联系人',
-      signature_group: '签署群组',
+      //signature_group: '签署群组',
       //template_management: '模板管理',
       //enterprise_certification: '企业认证',
       enterprise_account_management: '企业账号管理'
@@ -38,7 +38,7 @@ const data = {
     //电子签署平台运营
     econtract_admin_role: {
       business_account: '企业账户金额',
-      // businessOrder: '企业订单',
+      businessOrder: '企业订单',
       // data_statistics: '数据统计',
       //monthly_bill: '月账单',
       businessArchives: '客户档案',

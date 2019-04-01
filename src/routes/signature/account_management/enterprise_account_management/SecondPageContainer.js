@@ -4,7 +4,7 @@ import {EnhanceLoading} from '../../../../components/Enhance';
 import helper,{getObject, swapItems} from '../../../../common/common';
 import {Action} from '../../../../action-reducer/action';
 import {getPathValue} from '../../../../action-reducer/helper';
-import showDiaLog from '../personal_account_management/ShowDiaLog/UploadDialogContainer';
+import showDiaLog from './ShowDiaLog/UploadDialogContainer';
 import execWithLoading from '../../../../standard-business/execWithLoading';
 
 

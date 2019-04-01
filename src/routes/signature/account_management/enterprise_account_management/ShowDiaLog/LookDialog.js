@@ -22,8 +22,7 @@ class LookDialog extends React.Component {
   footer = (onCancel,onExport) => {
     return (
       <div style={{ textAlign: 'center' }}>
-        <Button size='small' onClick={() => onCancel()}>取消</Button>
-        <Button size='small' onClick={() => onExport()}>导出明细</Button>
+        <Button size='small' onClick={() => onCancel()}>确定</Button>
       </div>
     )
   };

@@ -42,6 +42,13 @@ const checkActionCreator = (isAll, checked, rowIndex) => {
 const addActionCreator = () => async (dispatch, getState) => {
   try {
     //获取树结构为 {title:'',children:[]}
+    const {tree} = getSelfState(getState());
+    for(let k in tree){
+      if(tree[k].edit){
+        helper.showError('当前有正在变更的节点')
+        return
+      }
+    }
     const treeData = helper.getJsonResult(await helper.fetchJson(URL_TREE_LIST));
     treeData.push({edit:'add'});
     //生成树结构
@@ -54,6 +61,12 @@ const addActionCreator = () => async (dispatch, getState) => {
 
 const delActionCreator = () => async (dispatch, getState) => {
   const {tree,select,parents,handleTree} = getSelfState(getState());
+  for(let k in tree){
+    if(tree[k].edit){
+      helper.showError('当前有正在变更的节点')
+      return
+    }
+  }
   const newTree = helper.deepCopy(tree);
   const data = newTree[select];
   if(select === '1-0'){
@@ -77,6 +90,12 @@ const delActionCreator = () => async (dispatch, getState) => {
 
 const editActionCreator = () => async (dispatch, getState) => {
   const {tree,select,parents,handleTree} = getSelfState(getState());
+  for(let k in tree){
+    if(tree[k].edit){
+      helper.showError('当前有正在变更的节点')
+      return
+    }
+  }
   const newTree = helper.deepCopy(tree);
   const data = newTree[select];
   if(select === '1-0'){
@@ -129,7 +148,8 @@ const onCancelActionCreator = (key) => async (dispatch, getState) => {
   const treeData = helper.getJsonResult(await helper.fetchJson(URL_TREE_LIST));
   //生成树结构
   const newTree = Tree.createWithInsertRoot(treeData,'全部文件', {guid: 'root', districtType:0});
-  dispatch(action.assign({tree:newTree,value:{}}))
+  dispatch(action.assign({tree:newTree,value:{},select: '1-0'}));
+  dispatch( action.assign({['1-0']: true}, 'expand'))
 };
 
 function Trim(str)
@@ -158,7 +178,6 @@ const onOkActionCreator = (key) => async (dispatch, getState) => {
     }
     case 'edit':{
       body.id = tree[select].value;
-      console.log(body);
       postBody = helper.postOption(body,'put') ;
       url = URL_EDIT;
       break;
@@ -181,7 +200,7 @@ const onOkActionCreator = (key) => async (dispatch, getState) => {
   const treeData = helper.getJsonResult(await helper.fetchJson(URL_TREE_LIST));
   //生成树结构
   const newTree = Tree.createWithInsertRoot(treeData,'全部文件', {guid: 'root', districtType:0});
-  dispatch(action.assign({tree:newTree,value:{}}));
+  dispatch(action.assign({tree:newTree,value:{},select: '1-0'}));
 };
 
 const clickActionCreator = (key) => {
