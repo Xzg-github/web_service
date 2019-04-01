@@ -4,7 +4,7 @@ import {Action} from '../../../action-reducer/action';
 import OrderPage from '../../../components/OrderPage';
 import {getPathValue} from '../../../action-reducer/helper';
 import showPopup from '../../../standard-business/showPopup';
-import helper from '../../../common/common';
+import helper, {showError} from '../../../common/common';
 import AddDialogContainer, {buildAddState} from './Credit/AddDialogContainer';
 import ViewDialogContainer,{buildViewState} from './View/ViewDialogContainer';
 
@@ -14,6 +14,7 @@ const action = new Action(STATE_PATH);
 const URL_LIST = '/api/signature/business_account/list';
 const URL_COMPANY = '/api/signature/business_account/companyName';
 const URL_ORDER = '/api/signature/business_account/viewQuota';
+const URL_RULE = '/api/signature/business_account/rule';
 
 const getSelfState = (rootState) => {
   return getPathValue(rootState, STATE_PATH);
@@ -46,15 +47,14 @@ const searchAction = async (dispatch, getState) => {
 const orderAction = async (dispatch, getState) => {
   const {editConfig, tabs, tableItems} = getSelfState(getState());
   const items = tableItems.filter(item => item.checked);
-  if(items.length !==1){
-    helper.showError('请勾选一条记录');
-    return
-  }
+  const {returnCode, returnMsg, result} = await helper.fetchJson(URL_RULE);  //获取套餐信息
+  if(returnCode !== 0){return showError(returnMsg)}
+  if(items.length !==1){return helper.showError('请勾选一条记录');}
   if(isTabExist(tabs, 'edit')){
     dispatch(action.assign({activeKey: 'edit'}));
     return
   }
-  const add = {...editConfig, value: {}};
+  const add = {...editConfig, value: items[0], rule:result};
   const tab = {key: 'edit', title: '订购'};
   dispatch(action.assign({[tab.key]: add, activeKey: tab.key, tabs: tabs.concat(tab) }))
 };

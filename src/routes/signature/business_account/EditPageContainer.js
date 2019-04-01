@@ -2,7 +2,7 @@ import { connect } from 'react-redux';
 import {EnhanceLoading} from '../../../components/Enhance';
 import {Action} from '../../../action-reducer/action';
 import {getPathValue} from '../../../action-reducer/helper';
-import helper from '../../../common/common';
+import helper, {postOption, showError} from '../../../common/common';
 import EditPage from './EditPage';
 import showPopup from '../../../standard-business/showPopup';
 import AddDialogContainer, {buildAddState} from './AddDialog/AddDialogContainer';
@@ -25,12 +25,18 @@ const changeActionCreator = (key, value) => {
 };
 
 //立即支付
-const payActionCreator = (dispatch, getState) => {
+const payActionCreator =  async (dispatch, getState) => {
+  const {value} = getSelfState(getState());
+  value.companyAccountId = value.companyId;
+  delete value.companyId;
   const {payConfig} = getParentState(getState());
-  const item = [];
-  buildAddState(payConfig, item, dispatch);
+  const URL_ORDER  = '/api/signature/business_account/order';
+  const {returnCode, returnMsg, result } = await helper.fetchJson(URL_ORDER, helper.postOption(value));
+  if(returnCode !== 0){return showError(returnMsg)}
+  buildAddState(payConfig, [result], dispatch);
   showPopup(AddDialogContainer)
 };
+
 //关闭订购页签
 const closeActionCreator = (dispatch, getState) => {
   const { activeKey, tabs } = getParentState(getState());

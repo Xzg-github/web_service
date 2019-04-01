@@ -19,17 +19,27 @@ export const buildAddState = (config, items=[], dispatch) => {
   }));
 };
 
-//Tab切换
-const tabChangeActionCreator = (tabActiveKey) => async (dispatch, getState) => {
-  dispatch(action.assign({tabActiveKey}));
-};
 
 const okActionCreator = ({onClose}) => async(dispatch, getState) => {
+  const {tableItems} = getSelfState(getState());
+  const order = tableItems[0].nativeOrderNo;
+  const URL_PAY = '/api/signature/business_account/payOrder';
+  const {returnCode, returnMsg, result} = await fetchJson(`${URL_PAY}/${order}`,'post');
+  if(returnCode !== 0){return showError(returnMsg)}
+  showSuccessMsg(returnMsg);
   onClose()
 };
 
 const cancelActionCreator = ({onClose}) => () => {
   onClose();
+};
+
+const changeActionCreator = (key, value) => {
+  return action.assign({[key]: value}, 'value');
+};
+
+const exitValidActionCreator = () => {
+  return action.assign({valid: false});
 };
 
 const mapStateToProps = (state) => {
@@ -39,7 +49,8 @@ const mapStateToProps = (state) => {
 const actionCreators = {
   onOk: okActionCreator,
   onCancel:cancelActionCreator,
-  onTabChange: tabChangeActionCreator
+  onChange: changeActionCreator,
+  onExitValid: exitValidActionCreator
 };
 
 const container = connect(mapStateToProps, actionCreators)(AddDialog);
