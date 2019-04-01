@@ -73,18 +73,37 @@ const changeKey = (arr, key) => {
 const okActionCreator = ({okFunc, onClose}) => async(dispatch, getState) => {
   const {value, groupConfig, contactConfig} = getParentState(getState());
   const {filterItems} = getSelfState(getState());
-  if(contactConfig.title === '从联系人中添加'){
+  if(contactConfig.title === '从联系人中添加' && value.signWay === '1'){
     const checkId = [];
     filterItems.forEach(item => {
       item.checked && (checkId.push(item))
     });
     const changeItems = changeKey(filterItems, ['id', 'account', 'signPartyName']);
 
+    const add = changeItems.reduce((result, item, index) => {
+      item.sequence = index + 2;
+      return result
+    },{});
+
     const newItems = value.signPartyList.concat(changeItems);
     okFunc(newItems);
     onClose();
-  }else{
-    const checkItems = [];
+  }
+  if(contactConfig.title === '从联系人中添加' && value.signWay === '0'){
+    const checkId = [];
+    filterItems.forEach(item => {
+      item.checked && (checkId.push(item))
+    });
+    const changeItems = changeKey(filterItems, ['id', 'account', 'signPartyName']);
+
+    const add = changeItems.reduce((result, item, index) => {
+      item.sequence = index + 1;
+      return result
+    },{});
+
+    const newItems = value.signPartyList.concat(changeItems);
+    okFunc(newItems);
+    onClose();
   }
 };
 

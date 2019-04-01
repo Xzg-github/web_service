@@ -140,10 +140,19 @@ const createEditPageContainer = (action, getSelfState, getTempState) => {
     const {value} = getSelfState(getState());
     if(!value.signWay){ return showError('请先选择签署方式');}
     let number;
-    const listNumber = value.signPartyList;
-    for(let i = 2; i <= listNumber.length + 1; i++){
-      number = i
+    if(value.signWay === '1' || value.signWay === 1){   //签署文件时，序号从2开始加
+      const listNumber = value.signPartyList;
+      for(let i = 2; i <= listNumber.length + 1; i++){
+        number = i
+      }
     }
+    if(value.signWay === '0' || value.signWay ===0){
+      const listNumber = value.signPartyList;
+      for(let i = 1; i <= listNumber.length + 1; i++){
+        number = i
+      }
+    }
+
     dispatch(action.add({sequence: number}, ['value', 'signPartyList']))
   };
 
@@ -276,7 +285,27 @@ const createEditPageContainer = (action, getSelfState, getTempState) => {
  //发送
   const sendAction = async (dispatch, getState) => {
     try {
-      const {value, closeFunc} = getSelfState(getState());
+      const {value, controls1, controls2, tableCols, closeFunc} = getSelfState(getState());
+      let date = moment().format('YYYY-MM-DD HH:mm:ss'); //获取当前时间
+      if(value.signExpirationTime < date){
+        return showError(('签署截至时间已过期，请重新确认！'))
+      }
+      if(!validValue(controls1, value)){   //判断from1必填
+        dispatch(action.assign({valid: true}));
+        return
+      }
+      if(!validValue(controls2, value)){   //判断from2必填
+        dispatch(action.assign({valid: true}));
+        return
+      }
+      if(!validArray(tableCols, value.signPartyList.filter(item => !item.hide))){   //判断表格必填
+        dispatch(action.assign({valid: true, from: false}));
+        return
+      }
+      if(value.signPartyList.length === 0){
+        return showError('至少添加一个签署方');
+      }
+
       let id = value.id;
       const URL_SAVE = `/api/signature/signature_center/save`;      //保存
       const URL_SUBMIT = '/api/signature/signature_center/sub';  //提交

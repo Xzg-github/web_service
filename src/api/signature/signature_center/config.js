@@ -50,7 +50,7 @@ const buttons2 = [
 ];
 
 const tableCols = [
-  {key: 'signFileOrder', title: '文件编号',link: true},
+  {key: 'signFileOrder', title: '系统编号',link: true},
   {key: 'signFileSubject', title: '文件主题'},
   {key: 'fileState', title: '状态', options: isOptions2},
   {key: 'signStartTime', title: '发起时间'},

@@ -13,7 +13,7 @@ const filters = [
   {key: 'phoneNumber', title: '手机号码', type: 'text'},
   {key: 'userAccountState', title: '状态', type: 'select', options: isOptions1},
   {key: 'email', title: '电子邮件', type: 'text'},
-  {key: 'companyId', title: '归属企业', type: 'text'},
+  {key: 'companyName', title: '归属企业', type: 'text'},
 ];
 
 const tableCols = [
@@ -23,7 +23,7 @@ const tableCols = [
   {key: 'idCard', title: '身份证号码'},
   {key: 'phoneNumber', title: '手机号码'},
   {key: 'email', title: '电子邮件'},
-  {key: 'companyId', title: '归属企业名称'},
+  {key: 'companyName', title: '归属企业名称'},
   {key: 'companyOrder', title: '企业编号'},
 ];
 
