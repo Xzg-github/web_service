@@ -20,12 +20,28 @@ const buildState = (config, items=[],pay) => {
     title:'订购',
     visible: true,
     value: {},
-    pay
+    pay,
+    validForm:false
   };
 };
 
-const changeActionCreator = (key, value) => {
-  return action.assign({[key]: value}, 'value');
+const changeActionCreator = (key, value) =>  (dispatch, getState) => {
+  const {items} = getSelfState(getState());
+  let isMoney = false;
+  for(let item of items){
+    let money = Number(value);
+    let start = Number(item.startPrice);
+    let end = typeof (item.endPrice) !== 'number' ? Number.MAX_VALUE :Number(item.endPrice);
+    if(money >= start && money <= end){
+      isMoney = true;
+    }
+  }
+  if(!isMoney){
+    dispatch(action.assign({validForm:true}));
+  }else {
+    dispatch(action.assign({validForm:false}));
+  }
+  dispatch(action.assign({[key]: value}, 'value'));
 };
 
 const okActionCreator = () => async (dispatch, getState) => {
@@ -39,14 +55,13 @@ const okActionCreator = () => async (dispatch, getState) => {
     let money = Number(value.orderMoney);
     let start = Number(item.startPrice);
     let end = typeof (item.endPrice) !== 'number' ? Number.MAX_VALUE :Number(item.endPrice);
-    console.log(end);
     if(money >= start && money <= end){
       isMoney = true;
       value.unitPrice = item.price;
     }
   }
   if(!isMoney){
-    helper.showError('请填写价格区间中的金额');
+    dispatch(action.assign({validForm:true}));
     return
   }
   const {result,returnCode,returnMsg} = await helper.fetchJson(URL_ADD,helper.postOption(value));
