@@ -10,6 +10,7 @@ import upload from './upload';
 import moment from 'moment';
 import execWithLoading from "../../../../standard-business/execWithLoading";
 import {updateTable} from '../../../../standard-business/OrderTabPage/createOrderTabPageContainer'
+import {host, privilege,fadadaServiceName} from '../../../../api/gloablConfig';
 
 /**
  * 功能：生成一个签署中心新增页面容器组件
@@ -86,7 +87,7 @@ const createEditPageContainer = (action, getSelfState, getTempState) => {
 
   //上传文件
   const uploadAction = async(dispatch, getState) => {
-    const url = `/api/proxy/fadada-service/sign_center/upload_file`;
+    const url = `/api/proxy/${fadadaServiceName}/sign_center/upload_file`;
     const start = await upload(url);
     if(start){
       execWithLoading(async () => {
