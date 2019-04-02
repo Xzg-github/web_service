@@ -15,10 +15,16 @@ const getSelfState = (rootState) => {
 };
 
 export const buildAddState = (config, item, dispatch) => {
+  const value = {
+    isOverdraft: item.isOverdraft,
+    companyCreditInit: item.companyCreditInit
+  };
   dispatch(action.create({
     ...config,
     visible: true,
-    id: item.id
+    id: item.id,
+    value: item.isOverdraft === 1 ? value : {},
+    canShow: item.isOverdraft === 1 ? true : false
   }));
 };
 
