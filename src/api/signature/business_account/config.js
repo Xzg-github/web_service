@@ -24,17 +24,17 @@ const unitOptions = [
 
 //支付方式
 const payOptions = [
-  {value:'zhifubao',title:'支付宝'},
-  {value:'weixin',title:'微信'},
-  {value:'dgzz',title:'对公转账'},
-]
+  {value:'1',title:'支付宝'},
+  {value:'2',title:'微信'},
+  {value:'3',title:'对公转账'},
+];
 
 const fourControls = [
   {key:'b',title:'请选择支付方式',type:'radioGroup',options:payOptions,required:true},
 ];
 
 const filters = [
-  { key: 'companyId', title: '企业名称',type: 'search'},
+  { key: 'companyName', title: '企业名称',type: 'search'},
   { key: 'companyOrder', title: '企业编号', type: 'text'},
   { key: 'orderTimeFrom ', title: '订购时间', type: 'date', rule: {type: '<', key: 'orderTimeTo'}},
   { key: 'orderTimeTo', title: '至', type: 'date', rule: {type: '>', key: 'orderTimeFrom'}},

@@ -91,14 +91,32 @@ const signatureAction = (tabKey) => async (dispatch, getState) =>{
   return updateTable(dispatch, action, getSelfState(getState()));
 };
 
+export const getCookie = (cookieName) =>{
+  let strCookie = document.cookie;
+  let arrCookie = strCookie.split("; ");
+  for(let i = 0; i < arrCookie.length; i++){
+    let arr = arrCookie[i].split("=");
+    if(cookieName === arr[0]){
+      return arr[1];
+    }
+  }
+  return "";
+};
+
+
 // link详情查看
 const onLinkActionCreator = (tabKey, key, rowIndex, item) => async (dispatch, getState) => {
   const {showConfig, tableItems} = getSelfState(getState());
+  let token = getCookie('token');
   const URL_RECORD = `/api/signature/signature_center/record`;
+  const URL_ACCOUNT = '/api/signature/signature_center/getName'; //当前登陆人信息
   const items = tableItems[tabKey][rowIndex];
   const {returnCode, returnMsg, result} = await helper.fetchJson(`${URL_RECORD}/${items.id}`);
+  if(returnCode !==0){return showError(returnMsg)}
+  const user = await fetchJson(`${URL_ACCOUNT}/${token}`,'get');
+  if(returnCode !== 0) return;
   const title = items.signFileSubject;
-  buildShowState(showConfig, result, dispatch, title);
+  buildShowState(showConfig, result, dispatch, title, user);
   showPopup(ShowPageContainer);
 };
 

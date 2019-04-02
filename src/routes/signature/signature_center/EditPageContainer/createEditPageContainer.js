@@ -87,7 +87,7 @@ const createEditPageContainer = (action, getSelfState, getTempState) => {
 
   //上传文件
   const uploadAction = async(dispatch, getState) => {
-    const url = `/api/proxy/${fadadaServiceName}/sign_center/upload_file`;
+    const url = `/api/proxy/fadada-service/sign_center/upload_file`;
     const start = await upload(url);
     if(start){
       execWithLoading(async () => {

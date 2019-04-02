@@ -96,6 +96,7 @@ const config = {
      // { key: 'sendLink', title: '链接', link: '发送链接'},
       //{ key: 'notice', title: '提醒', link: '点击提醒'}
     ],
+    footer: {onCancel: '关闭', reject: '撤销'}
   }
 };
 

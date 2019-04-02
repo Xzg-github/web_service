@@ -1,13 +1,13 @@
 import React from 'react';
-import withStyles from 'isomorphic-style-loader/lib/withStyles';
+/*import withStyles from 'isomorphic-style-loader/lib/withStyles';
 import s from './Person.less';
 import showPopup from '../../../../standard-business/showPopup';
 import execWithLoading from '../../../../standard-business/execWithLoading';
-import helper from '../../../../common/common';
+import helper from '../../../../common/common';*/
 import ModalWithDrag from "../../../../components/ModalWithDrag";
 import Title from "../../../../components/Title"
 import SuperTable from "../../../../components/SuperTable"
-import { Collapse } from 'antd';
+import { Collapse, Button } from 'antd';
 import SuperSteps from './SuperSteps';
 
 const Panel = Collapse.Panel;
@@ -33,18 +33,26 @@ const MESSAGE = [
 class Person extends React.Component {
   state = {visible: true};
 
+  getFooter = (config, cancel, reject) => {
+    return [
+     // <Button key='1' size='large' onClick={cancel}>{config.onCancel}</Button>,
+      <Button key='2' size='large' onClick={reject}>{config.reject}</Button>,
+    ];
+  };
 
   getProps = () => {
-    const {title, showConfig, onOk, onCancel} = this.props;
+    const {title, onCancel, footer, reject ,value, user} = this.props;
+    const userId = user.result.userId;
+    const extra =  {};
+    footer.reject && (extra.footer=this.getFooter(footer, onCancel, reject));debugger
     return {
-      title: '签署详情',
-      onOk: onOk.bind(null, this.props),
+      title,
+      reject: reject.bind(null, this.props),
       onCancel: onCancel.bind(null, this.props),
       width: 1000,
       visible: true,
       maskClosable: false,
-      cancelText: '关闭',
-      okText: '撤销'
+      footer: value.fileState === 'wait' && value.insertUser === userId ? {...extra} : ''
     };
   };
 
