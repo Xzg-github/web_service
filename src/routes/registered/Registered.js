@@ -7,6 +7,13 @@ import Page from './Page';
 import execWithLoading from '../../standard-business/execWithLoading';
 
 
+function GetQueryString(name)
+{
+  let reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+  let r = window.location.search.substr(1).match(reg);
+  if(r!=null)return  unescape(r[2]); return null;
+}
+
 const STATE_PATH = ['registered'];
 const action = new Action(STATE_PATH);
 const getSelfState = (rootState) => {
@@ -22,8 +29,13 @@ const URL_COMPANY = '/api/registered/company';       //企业注册
 const initActionCreator = () => async (dispatch) => {
   try {
     dispatch(action.assign({status: 'loading'}));
+    //如果是从邮箱进注册页面获取名字（需base64解密）
+    let name = GetQueryString('e');
+    if(name){
+      name = window.Base64.decode(name)
+    }
     const config = helper.getJsonResult(await helper.fetchJson(URL_CONFIG));
-    const payload = {...config, value: {}, loading: false, status: 'page',isRegistered:true};
+    const payload = {...config, value: {email:name,companyEmail:name}, loading: false, status: 'page',isRegistered:true};
     dispatch(action.create(payload));
   } catch (e) {
     helper.showError(e.message);
