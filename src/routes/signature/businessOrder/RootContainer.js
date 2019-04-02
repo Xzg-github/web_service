@@ -1,14 +1,12 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import {EnhanceLoading} from '../../../components/Enhance';
-import {createCommonTabPage} from '../../../standard-business/createTabPage';
 import {getPathValue} from '../../../action-reducer/helper';
 import {Action} from '../../../action-reducer/action';
 import helper from '../../../common/common';
 import {search} from '../../../common/search';
 import {buildOrderPageState} from '../../../common/state';
 import OrderPageContainer from './OrderPageContainer';
-import EditPageConatiner from './EditPageContainer';
 
 const STATE_PATH = ['businessOrder'];
 const action = new Action(STATE_PATH);
@@ -24,12 +22,11 @@ const initActionCreator = () => async (dispatch, getState) => {
   try {
     dispatch(action.assign({status: 'loading'}));
     //初始化数据
-    const { index, editDialogConfig, editPageConfig, tabs, activeKey } =
-      helper.getJsonResult(await helper.fetchJson(URL_CONFIG));
+    const { index, editDialogConfig} = helper.getJsonResult(await helper.fetchJson(URL_CONFIG));
     //页面数据
     const list = helper.getJsonResult(await search(URL_LIST, 0, index.pageSize, {}));
 
-    const newState = {tabs, editDialogConfig, editPageConfig, activeKey, status: 'page'};
+    const newState = {editDialogConfig, status: 'page'};
     const payload = buildOrderPageState(list, index, newState);
 
     dispatch(action.create(payload));
@@ -39,32 +36,14 @@ const initActionCreator = () => async (dispatch, getState) => {
   }
 };
 
-const tabChangeActionCreator = (key) => {
-  return action.assign({activeKey: key});
-};
-
-const tabCloseActionCreator = (key) => (dispatch, getState) => {
-  const {activeKey, tabs} = getSelfState(getState());
-  const newTabs = tabs.filter(tab => tab.key !== key);
-  if (activeKey === key) {
-    let index = tabs.findIndex(tab => tab.key === key);
-    (newTabs.length === index) && (index--);
-    dispatch(action.assign({tabs: newTabs, [activeKey]: undefined, activeKey: newTabs[index].key}));
-  } else {
-    dispatch(action.assign({tabs: newTabs, [key]: undefined}));
-  }
-};
-
 const actionCreators = {
-  onInit: initActionCreator,
-  onTabChange: tabChangeActionCreator,
-  onTabClose: tabCloseActionCreator
+  onInit: initActionCreator
 };
 
 const mapStateToProps = (state) => {
   return getSelfState(state)
 };
 
-const UIComponent = EnhanceLoading(createCommonTabPage(OrderPageContainer, EditPageConatiner));
+const UIComponent = EnhanceLoading(OrderPageContainer);
 
 export default connect(mapStateToProps, actionCreators)(UIComponent);

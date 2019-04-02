@@ -4,9 +4,10 @@ import {Action} from "../../../action-reducer/action";
 import {getPathValue} from "../../../action-reducer/helper";
 import {toFormValue} from "../../../common/check";
 import {search2} from "../../../common/search";
-import {fetchJson, genTabKey, getObject, postOption, showError} from "../../../common/common";
+import {fetchJson, getObject, postOption, showError} from "../../../common/common";
 import showEditDialog from './EditDialogContainer';
 import helper from "../../../common/common";
+import showLookDialog from '../account_management/enterprise_account_management/ShowDiaLog/LookDialogContainer'
 
 const STATE_PATH = ['businessOrder'];
 const action = new Action(STATE_PATH);
@@ -14,6 +15,9 @@ const action = new Action(STATE_PATH);
 const URL_LIST = '/api/signature/businessOrder/list';
 const URL_AUDIT = '/api/signature/businessOrder/audit';
 const URL_DETAIL = '/api/signature/businessOrder/detail';
+const URL_COMPANY = '/api/signature/businessOrder/company';
+const URL_LOOK = '/api/signature/account_management/enterprise_account_management/config'; //查看消费记录配置信息
+const URL_RECORD = '/api/signature/account_management/enterprise_account_management/record';//根据id获取账单信息
 
 const getSelfState = (rootstate) => {
   return getPathValue(rootstate, STATE_PATH);
@@ -41,40 +45,27 @@ const receiptActionCreator = async (dispatch, getState) => {
   }
 };
 
-//批量操作, 针对待审核状态
+//单项操作 针对待审核状态
 const auditActionCreator = async (dispatch, getState) => {
   const {tableItems} = getSelfState(getState());
-  const validItemsIdList = tableItems.reduce((result, item) => {
-    item.checked && item['orderStatus'] === 'waitAuditing' && result.push(item.id);
+  const validItem = tableItems.reduce((result, item) => {
+    item.checked && item['orderStatus'] === 0 && result.push(item);
     return result;
-  },[]);
-  if (validItemsIdList.length < 1 || validItemsIdList.length !== tableItems.filter(item => item.checked).length) {
-    return showError('至少勾选一条待审核的记录!');
-  }
-  const {returnCode, returnMsg} = await fetchJson(URL_AUDIT, postOption(validItemsIdList));
+    }, []);
+  if (validItem.length !== 1) return showError('请选择一条未支付的记录')
+  const {returnCode, returnMsg} = await fetchJson(`${URL_AUDIT}/${validItem[0]['nativeOrderNo']}`);
   return returnCode === 0 ? updateTable(dispatch, getState) : showError(returnMsg);
 };
 
 const recordActionCreator = async (dispatch, getState) => {
-  const {editPageConfig, tabs, tableItems} = getSelfState(getState());
-  const checkedItemIndex = helper.findOnlyCheckedIndex(tableItems);
-  if (checkedItemIndex === -1) return showError('请选择一条记录');
-  //依据id获取详细数据
-  const {returnCode, returnMsg,result} = await fetchJson(URL_DETAIL, postOption(tableItems[checkedItemIndex]))
+  const {four} = helper.getJsonResult(await helper.fetchJson(URL_LOOK));
+  const {tableItems} = getSelfState(getState());
+  const index = helper.findOnlyCheckedIndex(tableItems);
+  if (index === -1) return showError('请选择一条消费记录');
+  //获取详细数据
+  const {result,returnCode,returnMsg} = await helper.fetchJson(`${URL_RECORD}/${tableItems[index].id}`);
   if (returnCode !== 0) return showError(returnMsg);
-  const tabKey = `id_${tableItems[checkedItemIndex].id}}`;
-  if (helper.isTabExist(tabs, tabKey)) {
-    dispatch(action.assign({activeKey: tabKey}));
-  } else {
-    const payload = {
-      activeKey: tabKey,
-      tabs: [...tabs, {key: tabKey, title: tableItems[checkedItemIndex]['orderNumber']}],
-      [tabKey]: {
-        ...editPageConfig, value: result
-      }
-    }
-    dispatch(action.assign(payload));
-  }
+  await showLookDialog(four['look'], result);
 };
 
 const toolbarActions = {
@@ -116,6 +107,9 @@ const pageSizeActionCreator = (pageSize, currentPage) => (dispatch, getState) =>
 //filter onSearch事件
 const formSearchActionCreator = (key, filter, config) => async (dispatch, getState) => {
   console.log(key, filter, config);
+  const option = helper.postOption({maxNumber: 10, companyId: filter});
+  let {result, returnCode} = await fetchJson(URL_COMPANY, option);
+  returnCode === 0 && dispatch(action.update({options: result},'filters',{key: 'key', value: key}));
 };
 
 //展示详细
@@ -129,7 +123,7 @@ const linkActionCreator = (key, rowIndex, item) => async (dispatch, getState) =>
   } else {
     const payload = {
       activeKey: tabKey,
-      tabs: [...tabs, {key: tabKey, title: item['orderNumber']}],
+      tabs: [...tabs, {key: tabKey, title: item['nativeOrderNo']}],
       [tabKey]: {
         ...editPageConfig, value: result
       }
