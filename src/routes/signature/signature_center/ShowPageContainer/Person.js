@@ -44,7 +44,7 @@ class Person extends React.Component {
     const {title, onCancel, footer, reject ,value, user} = this.props;
     const userId = user.result.userId;
     const extra =  {};
-    footer.reject && (extra.footer=this.getFooter(footer, onCancel, reject));debugger
+    footer.reject && (extra.footer=this.getFooter(footer, onCancel, reject));
     return {
       title,
       reject: reject.bind(null, this.props),
