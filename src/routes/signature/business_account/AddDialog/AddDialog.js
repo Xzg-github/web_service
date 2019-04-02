@@ -1,7 +1,7 @@
 import React from 'react';
 import withStyles from 'isomorphic-style-loader/lib/withStyles';
 import { getObject } from '../../../../common/common';
-import {SuperTable, ModalWithDrag, Title, SuperTab2} from '../../../../components';
+import {SuperTable, ModalWithDrag, Title, SuperTab2, SuperForm} from '../../../../components';
 import s from './AddDialog.less';
 
 const TABLE_EVENTS = ['onCheck', 'onDoubleClick'];
@@ -25,17 +25,6 @@ class AddDialog extends React.Component {
     return <SuperTab2 {...props}/>;
   };
 
-  toShow = () => {
-    const {tabActiveKey} = this.props;
-    if(tabActiveKey === 'alipay'){
-      return <div>支付宝</div>
-    }else if(tabActiveKey === 'weChat'){
-      return <div>微信</div>
-    }else{
-      return <div>银行长账号</div>
-    }
-  };
-
   getWidth = () => {
     const {size} = this.props;
     if (size === 'small') {
@@ -49,8 +38,21 @@ class AddDialog extends React.Component {
     }
   };
 
+  formProps = () => {
+    return {
+      colNum: 1,
+      controls: this.props.controls,
+      value: this.props.value,
+      valid: this.props.valid,
+      options: this.props.options,
+      onChange: this.props.onChange,
+      onExitValid: this.props.onExitValid,
+      onClick:this.props.onClick
+    };
+  };
+
   getProps = () => {
-    const {title, contactConfig, onOk, onCancel} = this.props;
+    const {title, contactConfig, onOk, onCancel, tableItems} = this.props;
     return {
       title: '订单编号',
       onOk: onOk.bind(null, this.props),
@@ -58,7 +60,7 @@ class AddDialog extends React.Component {
       width: this.getWidth(),
       visible: true,
       maskClosable: false,
-      okText: '返回下单',
+      okText: '确定',
       cancelText: '关闭'
     };
   };
@@ -69,8 +71,7 @@ class AddDialog extends React.Component {
         <ModalWithDrag {...this.getProps()}>
           <Title title="套餐列表" />
           {this.toTable()}
-          {this.toTabs()}
-          {this.toShow()}
+          <SuperForm {...this.formProps()} />
         </ModalWithDrag>
       </div>
     );

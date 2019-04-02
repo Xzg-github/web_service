@@ -17,12 +17,21 @@ const effectiveOptions = [
   {value: 1, title: '长期有效'}
 ];
 
+const unitOptions = [
+  {value:'second',title:'次'},
+  {value:'strip',title:'条'},
+];
+
 //支付方式
 const payOptions = [
-  {value: 1, title: '微信'},
-  {value: 2, title: '支付宝'},
-  {value: 3, title: '网银'}
+  {value:'zhifubao',title:'支付宝'},
+  {value:'weixin',title:'微信'},
+  {value:'dgzz',title:'对公转账'},
 ]
+
+const fourControls = [
+  {key:'b',title:'请选择支付方式',type:'radioGroup',options:payOptions,required:true},
+];
 
 const filters = [
   { key: 'companyId', title: '企业名称',type: 'search'},
@@ -55,21 +64,23 @@ const index = {filters, buttons, tableCols, pageSize, pageSizeType, description,
 
 //订购页面 Form1配置
 const customerControls = [
-  { key: 'customerName', title: '客户名称', type: 'text'},
-  { key: 'customerCode', title: '客户编码', type: 'readonly'},
-  { key: 'remarks', title: '备注', type: 'textArea', span: 4},
+  { key: 'companyName', title: '客户名称', type: 'text'},
+  { key: 'companyOrder', title: '客户编码', type: 'readonly', span: 2},
+  //{ key: 'remarks', title: '备注', type: 'textArea', span: 4},
 ];
 
 //订购页面 SuperTable配置
 const packageTableCols = [
-  { key: 'orderAmount', title: '订购金额'},
-  { key: 'unitPrice', title: '文件签署单价'},
-  { key: 'validityPeriod', title: '有效期'}
+  {key:'ruleName',title:'套餐名称'},
+  {key:'businessItemId',title:'业务项目'},
+  {key:'price',title:'价格(元)'},
+  {key:'unitType',title:'单位',options:unitOptions},
+  {key:'effectiveType',title:'有效期',options:effectiveOptions},
 ];
 
 //订购页面 Form2配置
 const orderControls = [
-  {key: 'orderAmount', title: '订购金额', required: true, type: 'text'}
+  {key: 'orderMoney', title: '订购金额', required: true, type: 'number'}
 ];
 
 const config = {
@@ -106,7 +117,16 @@ const config = {
       { key: 'usedMoney', title: '已用金额'},
       { key: 'leftMoney', title: '余额'},
     ]
-  }
+  },
+
+  pay: {
+    tableCols: [
+      {key:'unitPrice',title:'文件签署单价(元/份)'},
+      {key:'number',title:'数量(份)'},
+      {key:'orderMoney',title:'订购金额(元)'},
+    ],
+    controls: fourControls
+  },
 };
 
 export default config;

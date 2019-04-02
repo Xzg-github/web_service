@@ -23,7 +23,7 @@ const getSelfState = (rootState) => {
 const initActionCreator = () => async (dispatch) => {
   try{
     dispatch(action.assign({status: 'loading'}));
-    const {index, edit, credits, viewQuota} = helper.getJsonResult(await helper.fetchJson(URL_CONFIG));
+    const {index, edit, credits, viewQuota, pay} = helper.getJsonResult(await helper.fetchJson(URL_CONFIG));
     const list = helper.getJsonResult(await search(URL_LIST, 0, index.pageSize, {}));
     const other = {
       tabs: [{key: 'index', title: '企业账户列表', close: false}],
@@ -34,6 +34,7 @@ const initActionCreator = () => async (dispatch) => {
       editConfig: edit,
       creditSettingConfig: credits,
       viewQuotaConfig: viewQuota,
+      payConfig: pay
     };
     const payload = buildOrderPageState(list, index, other);
     dispatch(action.create(payload));

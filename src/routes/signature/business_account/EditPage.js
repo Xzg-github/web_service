@@ -13,8 +13,8 @@ class EditPage extends React.Component {
   };
 
   toTable = () => {
-    const {tableCols,} = this.props;
-    const props = {cols: tableCols, items: []};
+    const {tableCols, rule} = this.props;
+    const props = {cols: tableCols, items: rule};
     return <SuperTable {...props}/>
   };
 
