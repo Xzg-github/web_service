@@ -10,6 +10,7 @@ import App from './components/App';
 import { ErrorReporter, deepForceUpdate } from './core/devUtils';
 import getStore from './store';
 import E from 'wangeditor'
+import { Base64 } from 'js-base64';
 global.store = getStore(window.initState);
 
 // Global (context) variables that can be easily accessed from any React component
@@ -92,6 +93,7 @@ let onRenderComplete = function initialRenderComplete() {
     // or scroll to top of the page
     window.scrollTo(scrollX, scrollY);
     window.E = E;
+    window.Base64 = Base64;
 
     // Google Analytics tracking. Don't send 'pageview' event after
     // the initial rendering, as it was already sent

@@ -75,7 +75,7 @@ const changeActionCreator = (key, value) => (dispatch,getState) =>{
 
 const formSearchActionCreator = (key, title,keyControl) => async (dispatch, getState) => {
   const {filters,tabKey} = getSelfState(getState());
-  const json = await helper.fuzzySearch(keyControl.searchType, title);
+  const json = await helper.fuzzySearchEx(title,keyControl);
   if (!json.returnCode) {
     const index = filters.findIndex(item => item.key == key);
     dispatch(action.update({options:json.result}, [tabKey,'filters'], index));
