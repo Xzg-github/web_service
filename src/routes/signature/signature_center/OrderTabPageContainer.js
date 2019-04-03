@@ -168,8 +168,9 @@ const clickActionCreator = (tabKey, key) => {
 
 // 认证
 //企业登录 弹出modal，个人登录跳转去个人认证
+const url = '/api/signature/signature_center/authentication';
 const onAuthenticationActionCreator = () => async(dispatch, getState) => {
-  const {role} = getSelfState(getState());
+  const {role,authenticationState} = getSelfState(getState());
 
   if(role === 'econtract_personal_role'){
     const {result,returnCode,returnMsg} =await helper.fetchJson(urlPerson);
@@ -180,10 +181,21 @@ const onAuthenticationActionCreator = () => async(dispatch, getState) => {
     window.open(result);
     return
   }
+
+  if(authenticationState === 2){
+    const {result,returnCode,returnMsg} =await helper.fetchJson(url,helper.postOption({}));
+    if(returnCode !== 0) {
+      helper.showError(returnMsg);
+      return
+    }
+    window.open(result);
+    return
+  }
+
   const options = [
     {value:1,title:'法人'},
     {value:2,title:'代理人'},
-  ]
+  ];
 
   const controls = [
     {key:'companyPrincipalType',title:'企业负责人信息 ',type:'select',options,required:true},
