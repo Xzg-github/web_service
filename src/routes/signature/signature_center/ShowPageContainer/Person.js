@@ -44,7 +44,8 @@ class Person extends React.Component {
     const {title, onCancel, footer, reject ,value, user} = this.props;
     const userId = user.result.userId;
     const extra =  {};
-    footer.reject && (extra.footer=this.getFooter(footer, onCancel, reject));
+    footer.reject && (extra.footer=value.fileState === 'wait' && value.insertUser === userId ? this.getFooter(footer, onCancel, reject) : '');
+    //footer.reject && (extra.footer=this.getFooter(footer, onCancel, reject));
     return {
       title,
       reject: reject.bind(null, this.props),
@@ -52,7 +53,7 @@ class Person extends React.Component {
       width: 1000,
       visible: true,
       maskClosable: false,
-      footer: value.fileState === 'wait' && value.insertUser === userId ? {...extra} : ''
+      ...extra
     };
   };
 
