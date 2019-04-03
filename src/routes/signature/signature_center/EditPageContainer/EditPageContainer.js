@@ -10,13 +10,13 @@ const getSelfState = (rootState) => {
   return state[state.activeKey];
 };
 
-const STATE_TEMP = ['temp'];
-const tempAction = new Action(STATE_TEMP);
+const STATE_PARENT = ['signature_center'];
+const parentAction = new Action(STATE_PARENT);
 
-const getTempState = (rootState) => {
-  return getPathValue(rootState, STATE_TEMP);
+const getParentState = (rootState) => {
+  return getPathValue(rootState, STATE_PARENT);
 };
 
-const Container = createEditPageContainer(action, getSelfState, getTempState);
+const Container = createEditPageContainer(action, getSelfState, getParentState);
 export default Container;
 

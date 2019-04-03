@@ -65,7 +65,7 @@ const changeKey = (arr, key) => {
     for(let i = 0; i < key.length; i++ ){
       newObj[key[i]] = item[Object.keys(item)[i]]
     }
-    newArr.push(newObj)
+    newArr.push(newObj);
   });
   return newArr
 };
@@ -78,10 +78,11 @@ const okActionCreator = ({okFunc, onClose}) => async(dispatch, getState) => {
     filterItems.forEach(item => {
       item.checked && (checkId.push(item))
     });
-    const changeItems = changeKey(filterItems, ['id', 'account', 'signPartyName']);
+    const changeItems = changeKey(filterItems, ['id', 'signPartyName', 'account']);
 
-    const add = changeItems.reduce((result, item, index) => {
+    changeItems.reduce((result, item, index) => {
       item.sequence = index + 2;
+      delete item.id;
       return result
     },{});
 
@@ -94,10 +95,11 @@ const okActionCreator = ({okFunc, onClose}) => async(dispatch, getState) => {
     filterItems.forEach(item => {
       item.checked && (checkId.push(item))
     });
-    const changeItems = changeKey(filterItems, ['id', 'account', 'signPartyName']);
+    const changeItems = changeKey(filterItems, ['id', 'signPartyName', 'account',]);
 
-    const add = changeItems.reduce((result, item, index) => {
+    changeItems.reduce((result, item, index) => {
       item.sequence = index + 1;
+      delete item.id;
       return result
     },{});
 

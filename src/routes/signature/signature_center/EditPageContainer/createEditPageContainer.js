@@ -38,7 +38,7 @@ export const getCookie = (cookieName) =>{
   return "";
 };
 
-const createEditPageContainer = (action, getSelfState, getTempState) => {
+const createEditPageContainer = (action, getSelfState, getParentState) => {
   const buildEditState = async ({id, closeFunc,}) => {
     try{
       let url = '/api/signature/signature_center/editConfig';
@@ -172,7 +172,6 @@ const createEditPageContainer = (action, getSelfState, getTempState) => {
   //从联系人中添加
   const contactAction = async (dispatch, getState) => {
     const {contactConfig, value}  = getSelfState(getState());
-    const {tableItems}  = getTempState(getState());
     if(!value.signWay){ return showError('请先选择签署方式');}
     const url = '/api/signature/signature_center/name';
     const json = await fetchJson(url, 'post');
@@ -217,6 +216,7 @@ const createEditPageContainer = (action, getSelfState, getTempState) => {
   //保存
   const saveAction = async (dispatch, getState) => {
     const {value, closeFunc} = getSelfState(getState());
+    const selfState = getParentState(getState());
     const URL_SAVE = `/api/signature/signature_center/save`;
     const postData = {
       signContractId: value.signContractId,
@@ -236,6 +236,8 @@ const createEditPageContainer = (action, getSelfState, getTempState) => {
       showError(returnMsg);
       return
     }
+
+    updateTable(dispatch, action, selfState, ['mySign', 'hisSign', 'draft', 'other'])
     closeFunc && closeFunc();
     //upDatePage(result.id)(dispatch, getState);
   };
