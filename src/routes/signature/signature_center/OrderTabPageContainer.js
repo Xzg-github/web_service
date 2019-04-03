@@ -182,7 +182,7 @@ const onAuthenticationActionCreator = () => async(dispatch, getState) => {
     return
   }
 
-  if(authenticationState === 2){
+  if(authenticationState == 2){
     const {result,returnCode,returnMsg} =await helper.fetchJson(url,helper.postOption({}));
     if(returnCode !== 0) {
       helper.showError(returnMsg);

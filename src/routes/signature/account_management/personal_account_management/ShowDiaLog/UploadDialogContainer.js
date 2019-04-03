@@ -62,7 +62,7 @@ const okActionCreator = () => async (dispatch, getState) => {
         return
       }
     }else {
-      if(imgWidth !== 160 && imgHeight !==70){
+      if(imgWidth !== 160 || imgHeight !==70){
         helper.showError('长方形的个人章，尺寸要求160*70');
         return
       }

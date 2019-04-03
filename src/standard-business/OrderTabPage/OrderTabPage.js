@@ -132,18 +132,18 @@ class OrderTabPage extends React.Component {
   toAlert = () => {
     const {onAuthentication,authenticationState} = this.props;
     console.log(authenticationState);
-    const msg = ['待认证','正在认证','已认证','认证失败'];
+    const msg = ['待认证','完成认证','已认证','重新认证'];
     const pMsg = [
       '您的账号还未完成实名认证，请先认证,以获取专属CA证书、订购套餐、签发文件资格等服务。',
-      '您的账号正在实名认证,请继续认证。',
+      '您的账号正在实名认证,请完成认证流程，以获取专属CA证书、订购套餐、签发文件资格等服务。。',
       '认证成功',
-      '您的账号认证失败,请重新认证。'
+      '您的账号认证失败，请重新认证，以获取专属CA证书、订购套餐、签发文件资格等服务。。'
     ];
     const messageStr = () => {
       return (
         <p>
           {pMsg[authenticationState-1]}
-          <span className={authenticationState == 1?s.hearder_box1:s.hearder_box2} onClick={onAuthentication}>{msg[authenticationState-1]}</span>
+          <span className={s.hearder_box1} onClick={onAuthentication}>{msg[authenticationState-1]}</span>
         </p>
       )
 

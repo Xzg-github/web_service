@@ -1,7 +1,7 @@
 import React , {PropTypes}from 'react';
 import ReactDOM from 'react-dom';
 import withStyles from 'isomorphic-style-loader/lib/withStyles';
-import {Upload, Icon,Radio,Checkbox} from 'antd';
+import {Upload, Icon,Radio,Checkbox,Tooltip} from 'antd';
 import helper from '../../../../../common/common';
 import s from './UploadDialog.less';
 
@@ -41,7 +41,9 @@ class UploadDialog extends React.Component {
       <div className={s.root}>
         <div className={s.box}>
           <div className={s.box_head}>
-            {signSealName}
+            <Tooltip placement="topLeft" title={signSealName}>
+              {signSealName}
+            </Tooltip>
           </div>
           <Checkbox className={s.checkbox} checked={checkValue[index]} onChange={(e)=>onCheck(e.target.checked,index)}/>
           <div className={s.boxTop}>
