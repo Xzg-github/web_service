@@ -33,7 +33,6 @@ const rejectActionCreator = ({onClose}) => async(dispatch, getState) => {
   if (returnCode !== 0) {
     return showError(returnMsg)
   }
-  onClose();
   showSuccessMsg(returnMsg);
 };
 
