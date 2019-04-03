@@ -116,15 +116,16 @@ const createEditPageContainer = (action, getSelfState, getParentState) => {
     const URL_ACCOUNT = '/api/signature/signature_center/getName';
     let list = value.signPartyList;
     if(key === 'signWay' && values === '1'){
+      let newList = [];
       const {returnCode, returnMsg, result} = await fetchJson(`${URL_ACCOUNT}/${token}`,'get');
       if(returnCode !== 0) return;
       const account = result.account;
       const email = result.userEmail;
       const signPartyName = result.username;
       if(JSON.stringify(list).indexOf(JSON.stringify(email))===-1){
-        list.unshift({account:email, signPartyName, sequence: 1, readonly: true});
+        newList.unshift({account:email, signPartyName, sequence: 1, readonly: true});
       }
-      dispatch(action.assign({signPartyList: list}, 'value'))
+      dispatch(action.assign({signPartyList: newList}, 'value'))
     }else if(key === 'signWay' && values === '0'){
       dispatch(action.assign({signPartyList: []}, 'value'))
     }
