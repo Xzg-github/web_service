@@ -51,7 +51,7 @@ const okActionCreator = () => async (dispatch, getState) => {
     // 打印
     let imgWidth = img.width;
     let imgHeight = img.height;
-    if(imgWidth !==200 && imgHeight !== 160){
+    if(imgWidth !==200 || imgHeight !== 160){
       helper.showError('长方形的企业章，尺寸要200*160');
       return
     }

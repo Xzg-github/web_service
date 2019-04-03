@@ -10,10 +10,13 @@
    float:left;
    overflow: hidden;
    .box_head{
+     width:80%;
      height: 25px;
      line-height: 25px;
      padding-left: 4px;
-     border-bottom: 1px solid #d9d9d9;
+     overflow:hidden;
+     text-overflow:ellipsis;
+     white-space:nowrap
    }
    .checkbox{
      position: absolute;
@@ -24,6 +27,7 @@
    .boxTop{
      position: relative;
      height:131px;
+     border-top: 1px solid #d9d9d9;
      img{
        position:absolute;
        z-index:0;
