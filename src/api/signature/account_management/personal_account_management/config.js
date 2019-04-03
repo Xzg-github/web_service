@@ -207,7 +207,7 @@ const config = {
       title:'绑定所属企业',
       controls:[
         {key: 'companyOrder', title: '所属企业编号',type:'text',required:true, btn:{title:"获取企业信息",key:'get'}},
-        {key: 'companyName', title: '所属企业名称',type:'readonly'},
+        {key: 'companyName', title: '所属企业名称',type:'readonly',required:true},
       ]
     }
   },
