@@ -113,22 +113,11 @@ const formSearchActionCreator = (key, filter) => async (dispatch, getState) => {
 
 //展示详细
 const linkActionCreator = (key, rowIndex, item) => async (dispatch, getState) => {
-  const {tabs, editPageConfig} = getSelfState(getState());
-  const {returnCode, returnMsg,result} = await fetchJson(URL_DETAIL, postOption(item))
+  const {four} = helper.getJsonResult(await helper.fetchJson(URL_LOOK));debugger
+  //获取详细数据
+  const {result,returnCode,returnMsg} = await helper.fetchJson(`${URL_RECORD}/${item.id}`);
   if (returnCode !== 0) return showError(returnMsg);
-  const tabKey = `id_${item.id}}`;
-  if (helper.isTabExist(tabs, tabKey)) {
-    dispatch(action.assign({activeKey: tabKey}));
-  } else {
-    const payload = {
-      activeKey: tabKey,
-      tabs: [...tabs, {key: tabKey, title: item['nativeOrderNo']}],
-      [tabKey]: {
-        ...editPageConfig, value: result
-      }
-    }
-    dispatch(action.assign(payload));
-  }
+  await showLookDialog(four['look'], result);
 };
 
 const actionCreators = {
