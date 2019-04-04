@@ -114,7 +114,7 @@ const onLinkActionCreator = (tabKey, key, rowIndex, item) => async (dispatch, ge
   const {returnCode, returnMsg, result} = await helper.fetchJson(`${URL_RECORD}/${items.id}`);
   if(returnCode !==0){return showError(returnMsg)}
   const user = await fetchJson(`${URL_ACCOUNT}/${token}`,'get');
-  if(returnCode !== 0) return;
+  if(user.returnCode !== 0) {return showError(user.returnMsg)};
   const title = items.signFileSubject;
   buildShowState(showConfig, result, dispatch, title, user);
   showPopup(ShowPageContainer);
