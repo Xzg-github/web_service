@@ -38,7 +38,7 @@ api.post('/detail', async (req, res) => {
 
 //客户名称
 api.post('/company', async (req, res) => {
-  const url = `${service}/company_account/drop_list`;
+  const url = `${service}/company_account/select_enabled_drop_list`;
   res.send(await fetchJsonByNode(req, url, postOption(req.body)));
 });
 

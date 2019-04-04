@@ -105,8 +105,7 @@ const pageSizeActionCreator = (pageSize, currentPage) => (dispatch, getState) =>
 };
 
 //filter onSearch事件
-const formSearchActionCreator = (key, filter, config) => async (dispatch, getState) => {
-  console.log(key, filter, config);
+const formSearchActionCreator = (key, filter) => async (dispatch, getState) => {
   const option = helper.postOption({maxNumber: 10, companyId: filter});
   let {result, returnCode} = await fetchJson(URL_COMPANY, option);
   returnCode === 0 && dispatch(action.update({options: result},'filters',{key: 'key', value: key}));
