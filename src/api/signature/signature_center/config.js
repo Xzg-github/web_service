@@ -57,7 +57,7 @@ const tableCols = [
   {key: 'signStartTime', title: '发起时间'},
   {key: 'launchAccountId', title: '签署人'},
   {key: 'signFinishTime', title: '签完时间'},
-  {key: 'signExpirationTime', title: '签署截止时间'},
+  {key: 'signExpirationTime', title: '签署截止日期'},
   {key: 'isAddCcSide', title: '是否抄送', options: isOptions},
   {key: 'insertUser', title: '创建人'},
 ];
