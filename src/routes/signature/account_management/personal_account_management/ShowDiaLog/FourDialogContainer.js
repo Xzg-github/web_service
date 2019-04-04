@@ -60,8 +60,13 @@ const getActionCreator = () => async(dispatch,getState) => {
     helper.showError('所属企业编号不能为空');
     return
   }
-  const {result,returnCode,returnMsg} = await helper.fetchJson(`${URL_ACCOUNT}/${value.companyOrder}`)
+  const body = {
+    param:value.companyOrder
+  };
+  const {result,returnCode,returnMsg} = await helper.fetchJson(`${URL_ACCOUNT}`,helper.postOption(body));
   if(returnCode !=0){
+    dispatch(action.assign({['companyName']: ''}, 'value'));
+    dispatch(action.assign({['companyAccountId']:''}, 'value'));
     helper.showError(returnMsg);
     return
   }

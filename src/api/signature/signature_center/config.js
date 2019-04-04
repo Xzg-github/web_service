@@ -29,7 +29,8 @@ const filters = [
   //{key: 'fileState', title: '状态', type: 'select', options: isOptions2},
   {key: 'signFinishTimeFrom', title: '完成时间', type: 'date', rule: {type: '<', key: 'signExpirationTimeTo '}},
   {key: 'signFinishTimeTo', title: '至', type: 'date', rule: {type: '>', key: 'signExpirationTimeFrom'}},
-  {key: 'isAddCcSide', title: '是否抄送', type: 'select', options: isOptions}
+  {key: 'isAddCcSide', title: '是否抄送', type: 'select', options: isOptions},
+  {key: 'signFileOrder', title: '系统编号', type: 'text'},
 ];
 
 const buttons = [
@@ -96,6 +97,7 @@ const config = {
      // { key: 'sendLink', title: '链接', link: '发送链接'},
       //{ key: 'notice', title: '提醒', link: '点击提醒'}
     ],
+    footer: {onCancel: '关闭', reject: '撤销'}
   }
 };
 

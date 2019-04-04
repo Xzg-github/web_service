@@ -27,6 +27,12 @@ const changeActionCreator = (key, value) => {
 //立即支付
 const payActionCreator =  async (dispatch, getState) => {
   const {value} = getSelfState(getState());
+  if(!value.orderMoney){
+    return showError('请填写订购金额！')
+  }
+  if(!value.companyName){
+    return showError('客户名称不能为空')
+  }
   value.companyAccountId = value.companyId;
   delete value.companyId;
   const {payConfig} = getParentState(getState());

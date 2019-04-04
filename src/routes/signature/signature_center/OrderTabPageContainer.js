@@ -91,14 +91,32 @@ const signatureAction = (tabKey) => async (dispatch, getState) =>{
   return updateTable(dispatch, action, getSelfState(getState()));
 };
 
+export const getCookie = (cookieName) =>{
+  let strCookie = document.cookie;
+  let arrCookie = strCookie.split("; ");
+  for(let i = 0; i < arrCookie.length; i++){
+    let arr = arrCookie[i].split("=");
+    if(cookieName === arr[0]){
+      return arr[1];
+    }
+  }
+  return "";
+};
+
+
 // link详情查看
 const onLinkActionCreator = (tabKey, key, rowIndex, item) => async (dispatch, getState) => {
   const {showConfig, tableItems} = getSelfState(getState());
+  let token = getCookie('token');
   const URL_RECORD = `/api/signature/signature_center/record`;
+  const URL_ACCOUNT = '/api/signature/signature_center/getName'; //当前登陆人信息
   const items = tableItems[tabKey][rowIndex];
   const {returnCode, returnMsg, result} = await helper.fetchJson(`${URL_RECORD}/${items.id}`);
+  if(returnCode !==0){return showError(returnMsg)}
+  const user = await fetchJson(`${URL_ACCOUNT}/${token}`,'get');
+  if(user.returnCode !== 0) {return showError(user.returnMsg)};
   const title = items.signFileSubject;
-  buildShowState(showConfig, result, dispatch, title);
+  buildShowState(showConfig, result, dispatch, title, user);
   showPopup(ShowPageContainer);
 };
 
@@ -150,8 +168,9 @@ const clickActionCreator = (tabKey, key) => {
 
 // 认证
 //企业登录 弹出modal，个人登录跳转去个人认证
+const url = '/api/signature/signature_center/authentication';
 const onAuthenticationActionCreator = () => async(dispatch, getState) => {
-  const {role} = getSelfState(getState());
+  const {role,authenticationState} = getSelfState(getState());
 
   if(role === 'econtract_personal_role'){
     const {result,returnCode,returnMsg} =await helper.fetchJson(urlPerson);
@@ -162,10 +181,21 @@ const onAuthenticationActionCreator = () => async(dispatch, getState) => {
     window.open(result);
     return
   }
+
+  if(authenticationState == 2){
+    const {result,returnCode,returnMsg} =await helper.fetchJson(url,helper.postOption({}));
+    if(returnCode !== 0) {
+      helper.showError(returnMsg);
+      return
+    }
+    window.open(result);
+    return
+  }
+
   const options = [
     {value:1,title:'法人'},
     {value:2,title:'代理人'},
-  ]
+  ];
 
   const controls = [
     {key:'companyPrincipalType',title:'企业负责人信息 ',type:'select',options,required:true},

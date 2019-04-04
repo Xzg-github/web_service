@@ -38,7 +38,7 @@ export const getCookie = (cookieName) =>{
   return "";
 };
 
-const createEditPageContainer = (action, getSelfState, getTempState) => {
+const createEditPageContainer = (action, getSelfState, getParentState) => {
   const buildEditState = async ({id, closeFunc,}) => {
     try{
       let url = '/api/signature/signature_center/editConfig';
@@ -87,7 +87,7 @@ const createEditPageContainer = (action, getSelfState, getTempState) => {
 
   //上传文件
   const uploadAction = async(dispatch, getState) => {
-    const url = `/api/proxy/${fadadaServiceName}/sign_center/upload_file`;
+    const url = `/api/proxy/fadada-service/sign_center/upload_file`;
     const start = await upload(url);
     if(start){
       execWithLoading(async () => {
@@ -116,15 +116,16 @@ const createEditPageContainer = (action, getSelfState, getTempState) => {
     const URL_ACCOUNT = '/api/signature/signature_center/getName';
     let list = value.signPartyList;
     if(key === 'signWay' && values === '1'){
+      let newList = [];
       const {returnCode, returnMsg, result} = await fetchJson(`${URL_ACCOUNT}/${token}`,'get');
       if(returnCode !== 0) return;
       const account = result.account;
       const email = result.userEmail;
       const signPartyName = result.username;
       if(JSON.stringify(list).indexOf(JSON.stringify(email))===-1){
-        list.unshift({account:email, signPartyName, sequence: 1, readonly: true});
+        newList.unshift({account:email, signPartyName, sequence: 1, readonly: true});
       }
-      dispatch(action.assign({signPartyList: list}, 'value'))
+      dispatch(action.assign({signPartyList: newList}, 'value'))
     }else if(key === 'signWay' && values === '0'){
       dispatch(action.assign({signPartyList: []}, 'value'))
     }
@@ -168,21 +169,35 @@ const createEditPageContainer = (action, getSelfState, getTempState) => {
     dispatch(action.assign({signPartyList: newItems}, 'value'))
   };
 
+  //输出两个数组对比后数据
+  const getMoreData = (objArr1, objArr2) => {
+    let bolKey = {};
+    let newArr = [];
+
+    objArr1.arr.map((item) => bolKey[item[objArr1.key]] = true);
+    objArr2.arr.map((item) => {
+      if (!bolKey[item[objArr2.key]]) {
+        newArr.push(item);
+      }
+    });
+    return newArr;
+  };
+
 
   //从联系人中添加
   const contactAction = async (dispatch, getState) => {
     const {contactConfig, value}  = getSelfState(getState());
-    const {tableItems}  = getTempState(getState());
     if(!value.signWay){ return showError('请先选择签署方式');}
     const url = '/api/signature/signature_center/name';
     const json = await fetchJson(url, 'post');
     if(json.returnCode !== 0) return showError(json.returnMsg);
     const selectItems = json.result;
     const filterItems = json.result;
+    const newItems = getMoreData({key: 'account', arr:value.signPartyList}, {key: 'companyContactAccount', arr:filterItems});
     const okFunc = (addItems = []) => {
       dispatch(action.assign({signPartyList: addItems}, 'value'))
     };
-    buildAddState(contactConfig, filterItems, selectItems, true, dispatch, okFunc);
+    buildAddState(contactConfig, filterItems, newItems, true, dispatch, okFunc);
     showPopup(AddDialogContainer)
   };
 
@@ -214,9 +229,21 @@ const createEditPageContainer = (action, getSelfState, getTempState) => {
     dispatch(action.assign({value: list}))
   };
 
+const arrOnly = (arr, key) => {
+  let first;
+  if(arr.length>0){   //获取第一个元素的对应的属性
+    first = arr[0][key];
+    return arr.every((item) =>{    //都跟第一个元素做比对，只要有一个不对应，那说明不是唯一属性值了
+      return item[key] === first;
+    });
+  }
+  return true;
+};
+
   //保存
   const saveAction = async (dispatch, getState) => {
     const {value, closeFunc} = getSelfState(getState());
+    const selfState = getParentState(getState());
     const URL_SAVE = `/api/signature/signature_center/save`;
     const postData = {
       signContractId: value.signContractId,
@@ -236,6 +263,8 @@ const createEditPageContainer = (action, getSelfState, getTempState) => {
       showError(returnMsg);
       return
     }
+
+    updateTable(dispatch, action, selfState, ['mySign', 'hisSign', 'draft', 'other'])
     closeFunc && closeFunc();
     //upDatePage(result.id)(dispatch, getState);
   };
@@ -262,6 +291,10 @@ const createEditPageContainer = (action, getSelfState, getTempState) => {
      }
      if(value.signPartyList.length === 0){
        return showError('至少添加一个签署方');
+     }
+
+     if(arrOnly(value.signPartyList, 'account') === true){
+       return showError('表格签署人账号（邮箱）不能重复！')
      }
 
      const URL_SAVE = `/api/signature/signature_center/save`;      //保存

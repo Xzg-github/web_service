@@ -16,8 +16,6 @@ const msg = [
   '2、手机拍下刚刚的盖章/签章',
   '3、传到电脑使用PS，对图章/签章抠图（去掉白色背景）',
   '4、生成背景透明的PNG格式图片',
-  " ",
-  '仅支持.png格式，文件大小<=2MB，长、宽均<200像素，必须上传背景透明的图'
 ];
 
 const getSelfState = (state) => {
@@ -64,7 +62,7 @@ const okActionCreator = () => async (dispatch, getState) => {
         return
       }
     }else {
-      if(imgWidth !== 160 && imgHeight !==70){
+      if(imgWidth !== 160 || imgHeight !==70){
         helper.showError('长方形的个人章，尺寸要求160*70');
         return
       }
@@ -94,6 +92,7 @@ const okActionCreator = () => async (dispatch, getState) => {
         return res.json()
       }).then(async function (json) {
         if(json.returnCode !==0){
+          dispatch(action.assign({confirmLoading:false}));
           helper.showError(json.returnMsg);
           return
         }
@@ -103,6 +102,7 @@ const okActionCreator = () => async (dispatch, getState) => {
         };
         const {result,returnCode,returnMsg} = await helper.fetchJson(URL_ADD,helper.postOption(body))
         if(returnCode !=0){
+          dispatch(action.assign({confirmLoading:false}));
           helper.showError(returnMsg);
           return
         }

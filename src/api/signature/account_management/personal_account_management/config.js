@@ -18,7 +18,7 @@ const LABELS = [
   {key: 'grzh', title: '个人账号'},
   //{key: 'accountPassword', title: '登录密码',type:'edit'},
   {key: 'realName', title: '真实姓名'},
-  {key: 'idNumber', title: '身份账号'},
+  {key: 'idCard', title: '身份号'},
   {key: 'notifyPhone', title: '手机号码'},
   {key: 'notifyEmail', title: '电子邮件'},
   {key: 'companyName', title: '归属企业',type:'edit'},
@@ -207,7 +207,7 @@ const config = {
       title:'绑定所属企业',
       controls:[
         {key: 'companyOrder', title: '所属企业编号',type:'text',required:true, btn:{title:"获取企业信息",key:'get'}},
-        {key: 'companyName', title: '所属企业名称',type:'readonly'},
+        {key: 'companyName', title: '所属企业名称',type:'readonly',required:true},
       ]
     }
   },
