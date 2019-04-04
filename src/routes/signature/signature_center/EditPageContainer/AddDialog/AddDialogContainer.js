@@ -33,7 +33,7 @@ export const buildAddState = (config, filterItems, items=[], add, dispatch, okFu
 //Input搜索框change监听
 const changeActionCreator = (event) => (dispatch, getState) =>{
   const {value, groupConfig} = getParentState(getState());
-  if(groupConfig.title === '从联系人中添加'){
+  if(groupConfig.title === '从签署群组添加'){
     dispatch(action.assign({formValue: event.target.value}));
     const { filterItems, formValue} = getSelfState(getState());
     let newTableItems = [];

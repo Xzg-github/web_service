@@ -226,13 +226,28 @@ const arrOnly = (arr, key) => {
   return true;
 };
 
+//验证邮箱
+  const checkMail= (mail) => {
+    if(!(/^[a-zA-Z0-9_.-]+@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*\.[a-zA-Z0-9]{2,6}$/.test(mail))){
+      return false;
+    }else {
+      return true
+    }
+  };
+
   //保存
   const saveAction = async (dispatch, getState) => {
     const {value, closeFunc} = getSelfState(getState());
     const selfState = getParentState(getState());
     const URL_SAVE = `/api/signature/signature_center/save`;
-      for(let i = 0; i<value.signPartyList.length; i++){
+      for(let i = 0; i<value.signPartyList.length; i++){  //对表格数据进行排序
         value.signPartyList[i].sequence = i+1
+      }
+
+      for(let i = 0; i<value.signPartyList.length; i++){   //验证表格邮箱格式
+        if(value.signPartyList[i].account && !checkMail(value.signPartyList[i].account)){
+          return showError('表格中有账号（邮箱）格式不正确！')
+        }
       }
     const postData = {
       signContractId: value.signContractId,
@@ -281,10 +296,15 @@ const arrOnly = (arr, key) => {
        return showError('至少添加一个签署方');
      }
 
-     if(arrOnly(value.signPartyList, 'account') === true){
-       return showError('表格签署人账号（邮箱）不能重复！')
+     for(let i = 0; i<value.signPartyList.length; i++){  //对表格数据进行排序
+       value.signPartyList[i].sequence = i+1
      }
 
+     for(let i = 0; i<value.signPartyList.length; i++){   //验证表格邮箱格式
+       if(value.signPartyList[i].account && !checkMail(value.signPartyList[i].account)){
+         return showError('表格中有账号（邮箱）格式不正确！')
+       }
+     }
      const URL_SAVE = `/api/signature/signature_center/save`;      //保存
      const URL_SUBMIT = '/api/signature/signature_center/sub';  //提交
      const URL_SIGN =  '/api/signature/signature_center/sign';   //签署
@@ -329,6 +349,16 @@ const arrOnly = (arr, key) => {
       }
       if(value.signPartyList.length === 0){
         return showError('至少添加一个签署方');
+      }
+
+      for(let i = 0; i<value.signPartyList.length; i++){  //对表格数据进行排序
+        value.signPartyList[i].sequence = i+1
+      }
+
+      for(let i = 0; i<value.signPartyList.length; i++){   //验证表格邮箱格式
+        if(value.signPartyList[i].account && !checkMail(value.signPartyList[i].account)){
+          return showError('表格中有账号（邮箱）格式不正确！')
+        }
       }
 
       let id = value.id;
