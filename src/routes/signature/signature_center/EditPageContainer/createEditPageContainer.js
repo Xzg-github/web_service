@@ -141,21 +141,7 @@ const createEditPageContainer = (action, getSelfState, getParentState) => {
   const increaseAction = (dispatch, getState) => {
     const {value} = getSelfState(getState());
     if(!value.signWay){ return showError('请先选择签署方式');}
-    let number;
-    if(value.signWay === '1' || value.signWay === 1){   //签署文件时，序号从2开始加
-      const listNumber = value.signPartyList;
-      for(let i = 2; i <= listNumber.length + 1; i++){
-        number = i
-      }
-    }
-    if(value.signWay === '0' || value.signWay ===0){
-      const listNumber = value.signPartyList;
-      for(let i = 1; i <= listNumber.length + 1; i++){
-        number = i
-      }
-    }
-
-    dispatch(action.add({sequence: number}, ['value', 'signPartyList']))
+    dispatch(action.add({}, ['value', 'signPartyList']))
   };
 
   //删除行
@@ -245,6 +231,9 @@ const arrOnly = (arr, key) => {
     const {value, closeFunc} = getSelfState(getState());
     const selfState = getParentState(getState());
     const URL_SAVE = `/api/signature/signature_center/save`;
+      for(let i = 0; i<value.signPartyList.length; i++){
+        value.signPartyList[i].sequence = i+1
+      }
     const postData = {
       signContractId: value.signContractId,
       id: value.id,
@@ -259,11 +248,7 @@ const arrOnly = (arr, key) => {
       signFileSubject: value.signFileSubject
       };
     const {result, returnCode, returnMsg} = await fetchJson(URL_SAVE,postOption(postData, 'post'));
-    if(returnCode !== 0 ){
-      showError(returnMsg);
-      return
-    }
-
+    if(returnCode !== 0 ){return showError(returnMsg);}
     updateTable(dispatch, action, selfState, ['mySign', 'hisSign', 'draft', 'other'])
     closeFunc && closeFunc();
     //upDatePage(result.id)(dispatch, getState);
@@ -274,6 +259,9 @@ const arrOnly = (arr, key) => {
    try {
      const {value, controls1, controls2, tableCols, closeFunc} = getSelfState(getState());
      let date = moment().format('YYYY-MM-DD HH:mm:ss'); //获取当前时间
+     for(let i = 0; i<value.signPartyList.length; i++){
+       value.signPartyList[i].sequence = i+1
+     }
      if(value.signExpirationTime < date){
        return showError(('签署截至时间已过期，请重新确认！'))
      }
@@ -321,6 +309,9 @@ const arrOnly = (arr, key) => {
     try {
       const {value, controls1, controls2, tableCols, closeFunc} = getSelfState(getState());
       let date = moment().format('YYYY-MM-DD HH:mm:ss'); //获取当前时间
+      for(let i = 0; i<value.signPartyList.length; i++){
+        value.signPartyList[i].sequence = i+1
+      }
       if(value.signExpirationTime < date){
         return showError(('签署截至时间已过期，请重新确认！'))
       }

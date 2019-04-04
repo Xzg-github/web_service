@@ -73,40 +73,17 @@ const changeKey = (arr, key) => {
 const okActionCreator = ({okFunc, onClose}) => async(dispatch, getState) => {
   const {value, groupConfig, contactConfig} = getParentState(getState());
   const {filterItems} = getSelfState(getState());
-  if(contactConfig.title === '从联系人中添加' && value.signWay === '1'){
     const checkId = [];
     filterItems.forEach(item => {
       item.checked && (checkId.push(item))
     });
     const changeItems = changeKey(filterItems, ['id', 'signPartyName', 'account']);
-
-    changeItems.reduce((result, item, index) => {
-      item.sequence = index + 2;
-      delete item.id;
-      return result
-    },{});
-
+    for(let i=0; i< changeItems.length; i++){
+      delete changeItems[i].id
+    }
     const newItems = value.signPartyList.concat(changeItems);
     okFunc(newItems);
     onClose();
-  }
-  if(contactConfig.title === '从联系人中添加' && value.signWay === '0'){
-    const checkId = [];
-    filterItems.forEach(item => {
-      item.checked && (checkId.push(item))
-    });
-    const changeItems = changeKey(filterItems, ['id', 'signPartyName', 'account',]);
-
-    changeItems.reduce((result, item, index) => {
-      item.sequence = index + 1;
-      delete item.id;
-      return result
-    },{});
-
-    const newItems = value.signPartyList.concat(changeItems);
-    okFunc(newItems);
-    onClose();
-  }
 };
 
 const checkActionCreator = (isAll, checked, rowIndex) => (dispatch,getState) => {
