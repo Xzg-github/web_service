@@ -32,7 +32,7 @@ const changeActionCreator = (key, value) =>  (dispatch, getState) => {
     let money = Number(value);
     let start = Number(item.startPrice);
     let end = typeof (item.endPrice) !== 'number' ? Number.MAX_VALUE :Number(item.endPrice);
-    if(money >= start && money <= end){
+    if(money >= start && money < end){
       isMoney = true;
     }
   }

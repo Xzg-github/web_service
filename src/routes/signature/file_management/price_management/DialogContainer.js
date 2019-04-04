@@ -29,7 +29,7 @@ const changeActionCreator = (key, keyValue) => (dispatch, getState) => {
     let startPrice = value.startPrice ? value.startPrice : '0';
     let endPrice = value.endPrice ? value.endPrice : '∞';
     let text1 = `${rule}: ${startPrice}~${endPrice}`;
-    let text2 = `${rule} > ${startPrice} & ${rule} < ${endPrice}`;
+    let text2 = `${rule} >= ${startPrice} & ${rule} < ${endPrice}`;
     dispatch(action.assign({['ruleName']: text1}, 'value'));
     dispatch(action.assign({['ruleDescribe']: text2}, 'value'));
   }
