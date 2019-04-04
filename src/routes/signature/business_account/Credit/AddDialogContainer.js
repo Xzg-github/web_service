@@ -23,7 +23,7 @@ export const buildAddState = (config, item, dispatch) => {
     ...config,
     visible: true,
     id: item.id,
-    value: item.isOverdraft === 1 ? value : {},
+    value,
     canShow: item.isOverdraft === 1 ? true : false
   }));
 };

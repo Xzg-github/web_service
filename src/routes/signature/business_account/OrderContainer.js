@@ -67,6 +67,7 @@ const creditSettingAction = async (dispatch, getState) => {
     helper.showError('请勾选一条');
     return
   }
+  if (items[0].isOverdraft === 0 && items[0]['companyAccountAmount'] < 0) return showError('当前记录不允许修改信用额度');
   buildAddState(creditSettingConfig, items[0], dispatch);
   showPopup(AddDialogContainer)
 };
