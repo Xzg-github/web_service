@@ -1,8 +1,10 @@
 import React, {PropTypes} from 'react';
 import {ModalWithDrag} from '../../../../../components';
+import withStyles from 'isomorphic-style-loader/lib/withStyles';
+import s from './AddDialog.less';
 import SuperForm from '../../enterprise_certification/components/SuperForm'
 
-class SetDialog extends React.Component {
+class AddDialog extends React.Component {
   static propTypes = {
     title: PropTypes.string,
     visible: PropTypes.bool,
@@ -21,6 +23,7 @@ class SetDialog extends React.Component {
 
   modalProps = () => {
     return {
+      className: s.root,
       title: this.props.title,
       visible: this.props.visible,
       maskClosable: false,
@@ -40,17 +43,22 @@ class SetDialog extends React.Component {
       options: this.props.options,
       onChange: this.props.onChange,
       onExitValid: this.props.onExitValid,
-      onClick:this.props.onClick
+      onClick:this.props.onClick,
+      onSearch:this.props.onSearch
     };
   };
 
   render() {
+    const {imgBase} = this.props;
     return (
       <ModalWithDrag {...this.modalProps()}>
         <SuperForm {...this.formProps()} />
+        <div className={s.imgDiv}>
+          {imgBase && <img src={imgBase}/>}
+        </div>
       </ModalWithDrag>
     );
   }
 }
 
-export default SetDialog;
+export default withStyles(s)(AddDialog);
