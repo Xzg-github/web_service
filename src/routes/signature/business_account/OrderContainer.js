@@ -12,7 +12,7 @@ const STATE_PATH = ['business_account'];
 const action = new Action(STATE_PATH);
 
 const URL_LIST = '/api/signature/business_account/list';
-const URL_COMPANY = '/api/signature/business_account/companyName';
+const URL_COMPANY = '/api/signature/businessOrder/company';
 const URL_ORDER = '/api/signature/business_account/viewQuota';
 const URL_RULE = '/api/signature/business_account/rule';
 
@@ -129,7 +129,7 @@ const checkAction = (isAll, checked, rowIndex) => {
 };
 
 const filterSearchActionCreator = (key, value) => async (dispatch)=> {
-  if(key === 'companyId'){
+  if(key === 'companyName'){
     const option = helper.postOption({maxNumber: 10, companyName: value});
     let data = await helper.fetchJson(URL_COMPANY, option);
     if (data.returnCode === 0) {
