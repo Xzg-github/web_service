@@ -30,7 +30,7 @@ const changeActionCreator = (key, value) =>  (dispatch, getState) => {
   let isMoney = false;
   for(let item of items){
     let money = Number(value);
-    let start = Number(item.startPrice);
+    let start = typeof(item.startPrice)!== 'number' ? 0 : Number(item.startPrice);
     let end = typeof (item.endPrice) !== 'number' ? Number.MAX_VALUE :Number(item.endPrice);
     if(money >= start && money < end){
       isMoney = true;
@@ -53,7 +53,7 @@ const okActionCreator = () => async (dispatch, getState) => {
   let isMoney = false;
   for(let item of items){
     let money = Number(value.orderMoney);
-    let start = Number(item.startPrice);
+    let start = typeof(item.startPrice)!== 'number' ? 0 : Number(item.startPrice);
     let end = typeof (item.endPrice) !== 'number' ? Number.MAX_VALUE :Number(item.endPrice);
     if(money >= start && money <= end){
       isMoney = true;

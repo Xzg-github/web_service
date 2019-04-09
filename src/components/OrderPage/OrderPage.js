@@ -90,11 +90,11 @@ class OrderPage extends React.Component {
   };
 
   render() {
+    const {filters} = this.props;
     return (
       <div className={s.root}>
-        <Card>
-          {this.toSearch()}
-        </Card>
+        {filters.length > 0 && <Card>{this.toSearch()}</Card>
+        }
         <Card>
           {this.props.buttons.length > 0 ? this.toToolbar() : null}
           {this.toTable()}

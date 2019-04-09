@@ -1,5 +1,6 @@
 import {pageSize, pageSizeType, description, searchConfig} from '../../../gloablConfig';
 
+const person = '/api/signature/account_management/enterprise_account_management/dropPerson';
 
 const oneControls = [
 
@@ -38,33 +39,32 @@ const three_buttons = [
   {key:'add',title:'新增',bsStyle:'primary'},
   {key:'edit',title:'编辑'},
   {key:'del',title:'删除'},
+  {key:'enable',title:'启用'},
   {key:'disable',title:'禁用'},
 ];
 
 
+const authOptions = [
+  {value:0,title:'禁用'},
+  {value:1,title:'启用'},
+];
 
 const three_tableCols = [
-  {key:'a',title:'状态'},
-  {key:'b',title:'真实姓名'},
-  {key:'c',title:'账号'},
-  {key:'d',title:'手机号'},
-  {key:'e',title:'电子邮件'},
-  {key:'f',title:'授权签章名称'},
-  {key:'g',title:'授权开始日期'},
-  {key:'h',title:'授权截止日期'},
-  {key:'i',title:'操作人'},
-  {key:'w',title:'操作时间'},
+  {key:'authStatus',title:'状态',options:authOptions},
+  {key:'userAccountId',title:'真实姓名'},
+  {key:'account',title:'账号'},
+  {key:'signSealId',title:'授权签章名称'},
+  {key:'updateUser',title:'操作人'},
+  {key:'updateTime',title:'操作时间'},
+  {key:'insertUser',title:'创建人'},
+  {key:'insertTime',title:'创建时间'},
 
 ];
 
 const three_controls = [
-  {key:'a',title:'请选择被授权人',type:'select',required:true},
-  {key:'b',title:'授权人账号',type:'search'},
-  {key:'c',title:'授权人手机号',type:'number'},
-  {key:'d',title:'授权人所属部门',type:'search'},
-  {key:'e',title:'授权开始日期',type:'date',required:true},
-  {key:'f',title:'授权截止日期',type:'date',required:true},
-  {key:'g',title:'授权签章',type:'select',required:true},
+  {key:'userAccountId',title:'请选择被授权人',type:'search',searchUrl:person,required:true},
+  {key:'account',title:'授权人账号',type:'readonly'},
+  {key:'signSealId',title:'授权签章',type:'select',required:true},
 ];
 
 const statusOptions = [
@@ -257,7 +257,12 @@ const config = {
     tableCols:three_tableCols,
     controls:three_controls,
     buttons:three_buttons,
+    pageSize,
+    pageSizeType,
+    description,
+    searchConfig,
     filters:[],
+    searchData:{},
     tableItems:[]
   },
   four:{
@@ -300,7 +305,7 @@ const config = {
   tabs:[
     {key: 'one', title:'账号设置', close: false},
     {key: 'two', title:'签章管理', close: false},
-    // {key: 'three',title:'授权管理', close: false},
+    {key: 'three',title:'授权管理', close: false},
     {key: 'four', title:'订单管理', close: false},
   ]
 };

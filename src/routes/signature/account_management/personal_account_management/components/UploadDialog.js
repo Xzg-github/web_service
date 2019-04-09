@@ -13,6 +13,7 @@ const RadioGroup = Radio.Group;
  * checkValue: 对象，判断是哪一个box被勾选
  * radioValue: 对象，判断是哪一个box被勾选
  * signSealName:名字
+ * isAuthSeal:是否是企业授权签章
  *
  */
 
@@ -25,7 +26,8 @@ class UploadDialog extends React.Component {
     radioValue:PropTypes.object,
     result:PropTypes.object,
     imgUrl:PropTypes.string,
-    signSealName:PropTypes.string
+    signSealName:PropTypes.string,
+    isAuthSeal:PropTypes.bool,
   };
 
 
@@ -36,7 +38,7 @@ class UploadDialog extends React.Component {
 
 
   render() {
-    const { checkValue,index,onCheck,onRadio,radioValue ,imgUrl,signSealName} = this.props;
+    const { checkValue,index,onCheck,onRadio,radioValue ,imgUrl,signSealName,isAuthSeal} = this.props;
     return (
       <div className={s.root}>
         <div className={s.box}>
@@ -53,6 +55,7 @@ class UploadDialog extends React.Component {
             <RadioGroup value={radioValue[index]} onChange={(e)=>onRadio(e.target.checked,index)}>
               <Radio value={true}>默认签章</Radio>
             </RadioGroup>
+            {isAuthSeal && <span>企业授权</span>}
           </div>
         </div>
       </div>
