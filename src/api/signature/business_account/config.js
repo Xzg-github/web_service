@@ -43,9 +43,10 @@ const filters = [
 const tableCols = [
   { key: 'companyName', title: '企业名称'},
   { key: 'companyOrder', title: '企业编号'},
+   { key: 'companyAccountAmount', title: '帐户可用总额'},
   { key: 'companyAccountBuyAmount', title: '累计订购金额'},
   { key: 'companyAccountUsedAmount', title: '累计已用金额'},
-  { key: 'companyAccountAmount', title: '剩余金额'},
+  { key: 'companyBuyLeftAmount', title: '订购剩余总额'},
   { key: 'isOverdraft', title: '允许透支', options: creditSettingOptions},
   { key: 'companyCreditInit', title: '信用额度上限'},
   { key: 'companyCreditUsed', title: ' 透支金额'},
