@@ -75,8 +75,32 @@ const passwordAction = () => async (dispatch, getState) => {
 
 const companyNameAction = () => async (dispatch, getState) => {
   const {diaLogFour,value} = getSelfState(getState());
-
-  if (await showDiaLogFour(diaLogFour,{id:value.id})) {
+  let companyOrder = value.companyOrder ? value.companyOrder : null;
+  let companyName = value.companyName ? value.companyName : null;
+  let isLook = true;
+  switch (value.companyAuditState){
+    case 0:{
+      isLook = false;
+      break
+    }
+    case 1:{
+      isLook = false
+      break
+    }
+    case 2:{
+      break
+    }
+    case 3:{
+      break
+    }
+    case 4: {
+      break
+    }
+    default :{
+      break
+    }
+  }
+  if (await showDiaLogFour(diaLogFour,{id:value.id,companyOrder,companyName},isLook)) {
     return updateTable(dispatch, getState)
   }
 };

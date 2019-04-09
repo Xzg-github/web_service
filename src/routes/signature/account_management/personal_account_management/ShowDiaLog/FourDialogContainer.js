@@ -12,13 +12,13 @@ const getSelfState = (state) => {
   return state.temp || {};
 };
 
-const buildState = (config, items={}) => {
-  console.log(items);
+const buildState = (config, items={},isLook) => {
   return {
     ...config,
     items,
     visible: true,
-    value: items
+    value: items,
+    isLook
   };
 };
 
@@ -102,10 +102,10 @@ const actionCreators = {
   onExitValid: exitValidActionCreator
 };
 
-export default async (config, items) => {
+export default async (config, items,isLook) => {
 
   const Container = connect(mapStateToProps, actionCreators)(Dialog);
-  global.store.dispatch(action.create(buildState(config, items)));
+  global.store.dispatch(action.create(buildState(config, items,isLook)));
   await showPopup(Container, {}, true);
 
   const state = getSelfState(global.store.getState());
