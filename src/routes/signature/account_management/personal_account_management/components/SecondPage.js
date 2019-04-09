@@ -28,7 +28,6 @@ class SecondPage extends React.Component {
   };
 
   toUpload = (item) => {
-
     const props = {
       onCheck:this.props.onCheck,
       onRadio:this.props.onRadio,
@@ -38,7 +37,8 @@ class SecondPage extends React.Component {
       checkValue:this.props.checkValue,
       radioValue:this.props.radioValue,
       imgUrl:item.signSealImgBase64,
-      signSealName:item.signSealName
+      signSealName:item.signSealName,
+      isAuthSeal:item.isAuthSeal === '1' ? true : false
     };
     return <UploadBox {...props} />;
   };

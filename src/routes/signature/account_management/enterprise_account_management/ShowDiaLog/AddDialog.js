@@ -27,7 +27,7 @@ class AddDialog extends React.Component {
       title: this.props.title,
       visible: this.props.visible,
       maskClosable: false,
-      width: 650,
+      width: 300,
       onOk: this.onClick.bind(null, 'ok'),
       onCancel: this.onClick.bind(null, 'close'),
       afterClose: this.props.afterClose
@@ -36,7 +36,7 @@ class AddDialog extends React.Component {
 
   formProps = () => {
     return {
-      colNum: 3,
+      colNum: 1,
       controls: this.props.controls,
       value: this.props.value,
       valid: this.props.valid,
