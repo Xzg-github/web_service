@@ -40,8 +40,8 @@ const buttons = [
   {key:'examine',title:'审核', bsStyle: 'primary'},
   //{key:'edit',title:'编辑'},
   //{key:'del',title:'删除'},
-  {key:'enable',title:'启用'},
-  {key:'disable',title:'禁用'},
+  //{key:'enable',title:'启用'},
+  //{key:'disable',title:'禁用'},
 ];
 
 const config = {

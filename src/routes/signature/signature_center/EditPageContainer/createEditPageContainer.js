@@ -115,19 +115,16 @@ const createEditPageContainer = (action, getSelfState, getParentState) => {
     let token = getCookie('token');
     const URL_ACCOUNT = '/api/signature/signature_center/getName';
     let list = value.signPartyList;
+    let newList = [];
     if(key === 'signWay' && values === '1'){
-      let newList = [];
       const {returnCode, returnMsg, result} = await fetchJson(`${URL_ACCOUNT}/${token}`,'get');
       if(returnCode !== 0) return;
-      const account = result.account;
       const email = result.userEmail;
       const signPartyName = result.username;
-      if(JSON.stringify(list).indexOf(JSON.stringify(email))===-1){
-        newList.unshift({account:email, signPartyName, sequence: 1, readonly: true});
-      }
+      newList.unshift({account:email, signPartyName, readonly: true});
       dispatch(action.assign({signPartyList: newList}, 'value'))
     }else if(key === 'signWay' && values === '0'){
-      dispatch(action.assign({signPartyList: []}, 'value'))
+      dispatch(action.assign({signPartyList: newList }, 'value'))
     }
     dispatch (action.assign({[key]: values}, 'value'));
   };
@@ -235,6 +232,20 @@ const arrOnly = (arr, key) => {
     }
   };
 
+  //验证表格数据唯一性
+  const only = (array, key) => {
+    if(array.length === 1){
+      return true
+    }else if(array.length > 1){
+      let first = array[0][key];
+      return array.some((item) => {
+        return item[key] !== first;
+      })
+    }else{
+      return true
+    }
+  };
+
   //保存
   const saveAction = async (dispatch, getState) => {
     const {value, closeFunc} = getSelfState(getState());
@@ -248,6 +259,9 @@ const arrOnly = (arr, key) => {
         if(value.signPartyList[i].account && !checkMail(value.signPartyList[i].account)){
           return showError('表格中有账号（邮箱）格式不正确！')
         }
+      }
+      if(only(value.signPartyList, 'account') === false){
+        return showError('表格账号（邮箱）保持唯一')
       }
     const postData = {
       signContractId: value.signContractId,
@@ -264,7 +278,6 @@ const arrOnly = (arr, key) => {
       };
     const {result, returnCode, returnMsg} = await fetchJson(URL_SAVE,postOption(postData, 'post'));
     if(returnCode !== 0 ){return showError(returnMsg);}
-    updateTable(dispatch, action, selfState, ['mySign', 'hisSign', 'draft', 'other'])
     closeFunc && closeFunc();
     //upDatePage(result.id)(dispatch, getState);
   };
@@ -277,9 +290,9 @@ const arrOnly = (arr, key) => {
      for(let i = 0; i<value.signPartyList.length; i++){
        value.signPartyList[i].sequence = i+1
      }
-     if(value.signExpirationTime < date){
+/*     if(value.signExpirationTime < date){
        return showError(('签署截至时间已过期，请重新确认！'))
-     }
+     }*/
      if(!validValue(controls1, value)){   //判断from1必填
        dispatch(action.assign({valid: true}));
        return
