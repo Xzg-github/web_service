@@ -16,7 +16,7 @@ const isWay = [
 const isStrategy = [
   { value: 0, title: '无序签署'},
   { value: 1, title: '顺序签署(签署顺序为表格序号)'},
-  { value: 2, title: '每个单独签'}
+ // { value: 2, title: '每个单独签'}
 ];
 
 const uploadButtons = [
