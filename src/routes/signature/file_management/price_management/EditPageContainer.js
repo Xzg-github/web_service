@@ -67,31 +67,31 @@ const delAction  = (props) =>(dispatch, getState) => {
 
 const saveAction  = (props) =>async(dispatch, getState) => {
   const {tableItems,tabKey,value,controls,cols,updateTable,edit} = getSelfState(getState());
-  if (!helper.validValue(controls, value)) {
-    dispatch(action.assign({valid: true},tabKey));
-    return;
-  }
-  if(tableItems.length == 0 ){
-    helper.showError('报价明细信息不能为空');
-    return
-  }
-  //若存在固定价格，不可同时存在第二条固定价格或阶梯价格
-  for(let item of tableItems){
-    if(item.chargeWay === 'fixedPrice'){
-     const filterItems = tableItems.filter(i => {
-       return i.businessItemId.value === item.businessItemId.value
-     });
-      if(filterItems.length>1){
-       helper.showError('报价记录已存在，不可重填添加');
-       return
-      }
-    }
-  }
-
-  if(!helper.validArray(cols,tableItems)){
-    dispatch(action.assign({valid: true},tabKey));
-    return;
-  }
+  // if (!helper.validValue(controls, value)) {
+  //   dispatch(action.assign({valid: true},tabKey));
+  //   return;
+  // }
+  // if(tableItems.length == 0 ){
+  //   helper.showError('报价明细信息不能为空');
+  //   return
+  // }
+  // //若存在固定价格，不可同时存在第二条固定价格或阶梯价格
+  // for(let item of tableItems){
+  //   if(item.chargeWay === 'fixedPrice'){
+  //    const filterItems = tableItems.filter(i => {
+  //      return i.businessItemId.value === item.businessItemId.value
+  //    });
+  //     if(filterItems.length>1){
+  //      helper.showError('报价记录已存在，不可重填添加');
+  //      return
+  //     }
+  //   }
+  // }
+  //
+  // if(!helper.validArray(cols,tableItems)){
+  //   dispatch(action.assign({valid: true},tabKey));
+  //   return;
+  // }
   if(value.companyId){
     delete value.companyId
   }

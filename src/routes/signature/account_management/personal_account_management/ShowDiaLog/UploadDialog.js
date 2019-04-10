@@ -8,6 +8,7 @@ const inputAccept = [
   'image/png'
 ];
 
+
 class UploadDialog extends React.Component {
 
   onClick = (key) => {
@@ -85,15 +86,22 @@ class UploadDialog extends React.Component {
   };
 
 
+
+
   Alert = () => {
-    const {msg} = this.props;
-    const messageStr = (str) => {
-      return (<p>{msg.map((it, i) => (<span key={i}>{it}<br/></span>))}</p>)
+    const {msg,titleMsg} = this.props;
+    const messageStr = (str,title) => {
+      return (
+        <div className={s.alert}>
+          {title.map((it, i) => (<p key={i}>{it}<br/></p>))}
+          {msg.map((it, i) => (<span key={i}>{it}<br/></span>))}
+        </div>
+      )
 
     };
     const props = {
       type:'warning',
-      message:messageStr(msg),
+      message:messageStr(msg,titleMsg),
       closable:true
     };
     return (
