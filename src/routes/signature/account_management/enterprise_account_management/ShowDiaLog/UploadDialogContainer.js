@@ -9,14 +9,6 @@ const action = new Action(['temp'], false);
 
 const URL_ADD = '/api/signature/account_management/personal_account_management/addSign';//新增
 
-const msg = [
-  '背景透明签名制作过程参考：',
-  '1、在一张白纸上盖章/签章',
-  '2、手机拍下刚刚的盖章/签章',
-  '3、传到电脑使用PS，对图章/签章抠图（去掉白色背景）',
-  '4、生成背景透明的PNG格式图片',
-];
-
 const getSelfState = (state) => {
   return state.temp || {};
 };
@@ -34,7 +26,6 @@ const buildState = async(config, items,edit) => {
     edit,
     previewVisible: false,
     previewImage: '',
-    msg,
     srcImg:null,
     confirmLoading:false
   };
@@ -42,7 +33,7 @@ const buildState = async(config, items,edit) => {
 
 const okActionCreator = () => async (dispatch, getState) => {
   const {fileList=[],value,controls} = getSelfState(getState());
-  //企业的：生成一个圆形的企业章，尺寸要求：200*160
+  //企业的：生成一个圆形的企业章，尺寸要求：200*166
 
   let img_url = window.URL.createObjectURL(fileList[0]);
   let img = new Image();
@@ -51,10 +42,11 @@ const okActionCreator = () => async (dispatch, getState) => {
     // 打印
     let imgWidth = img.width;
     let imgHeight = img.height;
-    if(imgWidth !==200 || imgHeight !== 160){
-      helper.showError('长方形的企业章，尺寸要200*160');
+    if(imgWidth > 200 || imgHeight > 166){
+      helper.showError('企业章尺寸不符合要求,建议166*166像素');
       return
     }
+
 
 
     if (!helper.validValue(controls, value)) {

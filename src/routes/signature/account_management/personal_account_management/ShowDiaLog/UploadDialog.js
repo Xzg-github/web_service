@@ -8,6 +8,21 @@ const inputAccept = [
   'image/png'
 ];
 
+const titleMsg = [
+  '上传图片须知：',
+  '  仅支持.png格式，图片尺寸小于200*160像素，建议166*166像素，必须上传背景透明的图',
+  ' ',
+  '背景透明签名制作过程参考：'
+];
+
+const msg = [
+  '1、在一张白纸上盖章/签章',
+  '2、手机拍下刚刚的盖章/签章',
+  '3、传到电脑使用PS，对图章/签章抠图（去掉白色背景）',
+  '4、生成背景透明的PNG格式图片',
+];
+
+
 class UploadDialog extends React.Component {
 
   onClick = (key) => {
@@ -85,15 +100,21 @@ class UploadDialog extends React.Component {
   };
 
 
+
+
   Alert = () => {
-    const {msg} = this.props;
-    const messageStr = (str) => {
-      return (<p>{msg.map((it, i) => (<span key={i}>{it}<br/></span>))}</p>)
+    const messageStr = (str,title) => {
+      return (
+        <div className={s.alert}>
+          {title.map((it, i) => (<p key={i}>{it}<br/></p>))}
+          {msg.map((it, i) => (<span key={i}>{it}<br/></span>))}
+        </div>
+      )
 
     };
     const props = {
       type:'warning',
-      message:messageStr(msg),
+      message:messageStr(msg,titleMsg),
       closable:true
     };
     return (
