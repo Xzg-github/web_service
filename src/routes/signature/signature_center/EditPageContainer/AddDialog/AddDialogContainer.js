@@ -77,7 +77,7 @@ const okActionCreator = ({okFunc, onClose}) => async(dispatch, getState) => {
     filterItems.forEach(item => {
       item.checked && (checkId.push(item))
     });
-    const changeItems = changeKey(filterItems, ['id', 'signPartyName', 'account']);
+    const changeItems = changeKey(checkId, ['id', 'signPartyName', 'account']);
     for(let i=0; i< changeItems.length; i++){
       delete changeItems[i].id
     }

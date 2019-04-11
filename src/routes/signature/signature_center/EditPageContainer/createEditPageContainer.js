@@ -118,7 +118,7 @@ const createEditPageContainer = (action, getSelfState, getParentState) => {
     let newList = [];
     if(key === 'signWay' && values === '1'){
       const {returnCode, returnMsg, result} = await fetchJson(`${URL_ACCOUNT}/${token}`,'get');
-      if(returnCode !== 0) return;
+      if(returnCode !== 0) return showError('当前发起人获取失败');
       const email = result.userEmail;
       const signPartyName = result.username;
       newList.unshift({account:email, signPartyName, readonly: true});
