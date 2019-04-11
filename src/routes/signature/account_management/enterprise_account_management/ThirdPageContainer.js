@@ -91,11 +91,7 @@ const editAction = () => async (dispatch, getState) => {
     return
   }
   const id = tableItems[index].id;
-  const authStatus = tableItems[index].authStatus;
-  if(authStatus == 0){
-    helper.showError('禁用不能编辑');
-    return
-  }
+
   const {result,returnCode,returnMsg} = await helper.fetchJson(`${URL_EDIT}/${id}`);
   if(returnCode!==0){
     helper.showError(returnMsg);
@@ -238,11 +234,7 @@ const checkActionCreator = (isAll, checked, rowIndex) => {
 const doubleClickActionCreator = (index) => async (dispatch, getState) => {
   const {tableItems,controls} = getSelfState(getState());
   const id = tableItems[index].id;
-  const authStatus = tableItems[index].authStatus;
-  if(authStatus == 0){
-    helper.showError('禁用不能编辑');
-    return
-  }
+
   const {result,returnCode,returnMsg} = await helper.fetchJson(`${URL_EDIT}/${id}`);
   if(returnCode!==0){
     helper.showError(returnMsg);
