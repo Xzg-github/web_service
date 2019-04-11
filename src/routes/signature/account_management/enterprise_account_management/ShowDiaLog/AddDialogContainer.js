@@ -16,7 +16,7 @@ const buildState = (controls, items,title,edit) => {
   let imgBase = '';
   if(edit){
     for(let word of controls[2].options){
-      if(items.signSealId.value === word.value){
+      if(typeof items.signSealId == 'object' && items.signSealId.value === word.value){
         items.signSealId = word.value;
         imgBase = word.imgBase
       }
