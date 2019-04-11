@@ -60,7 +60,7 @@ class Person extends React.Component {
   toTable = () => {
     const {tableCols, value, onLink} = this.props;
     const props = {cols: tableCols,
-                  items: value.signPartyList,
+                  items: value.signPartyList || [],
                callback: { onLink: onLink ? onLink.bind(null) : undefined}
     };
     return <SuperTable {...props} />
