@@ -256,6 +256,20 @@ const arrOnly = (arr, key) => {
     if(JSON.stringify(value) === "{}"){
       return showError('空白页面')
     }else{
+      if(value.signPartyList){
+        for(let i = 0; i<value.signPartyList.length; i++){  //对表格数据进行排序
+          value.signPartyList[i].sequence = i+1
+        }
+
+        for(let i = 0; i<value.signPartyList.length; i++){   //验证表格邮箱格式
+          if(value.signPartyList[i].account && !checkMail(value.signPartyList[i].account)){
+            return showError('表格中有账号（邮箱）格式不正确！')
+          }
+        }
+        if(only(value.signPartyList, 'account') === false){
+          return showError('表格账号（邮箱）保持唯一')
+        }
+      }
       const postData = {
         signContractId: value.signContractId,
         id: value.id,
