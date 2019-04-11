@@ -55,7 +55,10 @@ const okActionCreator = () => async (dispatch, getState) => {
   const {fileList=[],value,controls} = getSelfState(getState());
   //小于200*160
   //生成一个长方形的个人章，尺寸要求160*70
-
+  if(fileList.length === 0){
+    helper.showError('请上传文件');
+    return
+  }
   let img_url = window.URL.createObjectURL(fileList[0]);
   let img = new Image();
   img.src = img_url;
@@ -73,10 +76,7 @@ const okActionCreator = () => async (dispatch, getState) => {
       dispatch(action.assign({valid: true}));
       return;
     }
-    if(fileList.length === 0){
-      helper.showError('请上传文件');
-      return
-    }
+
     dispatch(action.assign({confirmLoading:true}));
     let accountId =  getCookie('accountId');
     const formData = new FormData();

@@ -36,17 +36,17 @@ const maxSearchCount = 20;
 //let hostname = '192.168.202.33';
 let hostname = '10.10.10.76';
 let trackMapUrl;
-let fadadaURL = '10.10.10.76';
-let fadadaPort = 3000;
+let epldURL = '10.10.10.76';
+let epldPort = 3000;
 const readConfig = () => {
   try {
     const filePath = path.join(__dirname, 'api_config.json');
     const config = JSON.parse(fs.readFileSync(filePath,'utf-8'));
     hostname = config.hostname;
     trackMapUrl = config.trackMapUrl;
-    const fadada = config.fadada;
-    fadadaURL = fadada.host;
-    fadadaPort = fadada.port;
+    const epld = config.epld;
+    epldURL = epld.host;
+    epldPort = epld.port;
   }catch (e) {
     console.log('can not read config file');
   }
@@ -59,7 +59,7 @@ const port = '5555';
 const fadadaServiceName = 'fadada-service';
 //const fadadaServiceName = '';
 const host = `http://${hostname}:${port}`;
-const fadada = `http://${fadadaURL}:${fadadaPort}`;
+const epld = `http://${epldURL}:${epldPort}`;
 
 
 
@@ -81,5 +81,5 @@ export {
   privilege,
   maxSearchCount,
   trackMapUrlEx,
-  fadada
+  epld
 };
