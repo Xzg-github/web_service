@@ -254,7 +254,7 @@ const arrOnly = (arr, key) => {
       }*/
 
     if(JSON.stringify(value) === "{}"){
-      return showError('空白页面')
+      closeFunc && closeFunc();                //新增页为空，直接关闭页面
     }else{
       if(value.signPartyList){
         for(let i = 0; i<value.signPartyList.length; i++){  //对表格数据进行排序
@@ -356,9 +356,9 @@ const arrOnly = (arr, key) => {
       for(let i = 0; i<value.signPartyList.length; i++){
         value.signPartyList[i].sequence = i+1
       }
-      if(value.signExpirationTime < date){
+/*      if(value.signExpirationTime < date){
         return showError(('签署截至时间已过期，请重新确认！'))
-      }
+      }*/
       if(!validValue(controls1, value)){   //判断from1必填
         dispatch(action.assign({valid: true}));
         return

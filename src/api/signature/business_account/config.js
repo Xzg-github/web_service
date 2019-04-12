@@ -34,10 +34,10 @@ const fourControls = [
 ];
 
 const filters = [
-  { key: 'companyName', title: '企业名称',type: 'search'},
+  { key: 'companyId', title: '企业名称',type: 'search'},
   { key: 'companyOrder', title: '企业编号', type: 'text'},
-  { key: 'orderTimeFrom ', title: '订购时间', type: 'date', rule: {type: '<', key: 'orderTimeTo'}},
-  { key: 'orderTimeTo', title: '至', type: 'date', rule: {type: '>', key: 'orderTimeFrom'}},
+  { key: 'orderTimeFrom ', title: '订购时间', type: 'date', rule: {type: '<', key: 'orderTimeTo'}, props:{showTime: true}},
+  { key: 'orderTimeTo', title: '至', type: 'date', rule: {type: '>', key: 'orderTimeFrom'}, props:{showTime: true}},
 ];
 
 const tableCols = [

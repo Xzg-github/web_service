@@ -116,7 +116,10 @@ const onLinkActionCreator = (tabKey, key, rowIndex, item) => async (dispatch, ge
   const user = await fetchJson(`${URL_ACCOUNT}/${token}`,'get');
   if(user.returnCode !== 0) {return showError(user.returnMsg)}
   const title = items.signFileSubject || '签署详情';
-  buildShowState(showConfig, result, dispatch, title, user);
+  const closeFunc = () => {
+    return updateTable(dispatch, action, getSelfState(getState()), ['mySign', 'hisSign', 'draft', 'other']);
+  };
+  buildShowState(showConfig, result, dispatch, title, user, closeFunc);
   showPopup(ShowPageContainer);
 };
 

@@ -7,7 +7,7 @@ import {Button} from 'antd';
 const Meta = Card.Meta;
 
 const MESSAGE = [
-  {key: 'idNumber', title: '身份证号'},
+  {key: 'idCard', title: '身份证号'},
   {key: 'realName', title: '真实姓名'},
   {key: 'notifyEmail', title: '电子邮件'},
   {key: 'notifyPhone', title: '手机号码'},
