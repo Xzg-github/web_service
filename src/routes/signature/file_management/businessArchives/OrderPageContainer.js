@@ -6,12 +6,14 @@ import {toFormValue} from "../../../../common/check";
 import {search2} from "../../../../common/search";
 import {commonExport, exportExcelFunc} from "../../../../common/exportExcelSetting";
 import {fetchJson, genTabKey, getObject, showError, deepCopy} from "../../../../common/common";
+import helper from "../../../../common/common";
 
 const STATE_PATH = ['businessArchives'];
 const action = new Action(STATE_PATH);
 
 const URL_LIST = '/api/signature/file_management/businessArchives/list';
 const URL_DETAIL = '/api/signature/file_management/businessArchives/detail';
+const URL_COMPANY = '/api/signature/businessOrder/company';
 
 const getSelfState = (rootstate) => {
   return getPathValue(rootstate, STATE_PATH);
@@ -81,8 +83,14 @@ const pageSizeActionCreator = (pageSize, currentPage) => (dispatch, getState) =>
 };
 
 //filter onSearch事件
-const formSearchActionCreator = (key, title) => async (dispatch, getState) => {
-
+const formSearchActionCreator = (key, value) => async (dispatch, getState) => {
+  if(key === 'companyId'){
+    const option = helper.postOption({maxNumber: 10, companyId: value});
+    let data = await helper.fetchJson(URL_COMPANY, option);
+    if (data.returnCode === 0) {
+      dispatch(action.update({options: data.result},'filters',{key: 'key', value: key}));
+    }
+  }
 };
 
 //设置controls为只读
