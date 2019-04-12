@@ -16,7 +16,7 @@ const isWay = [
 const isStrategy = [
   { value: 0, title: '无序签署'},
   { value: 1, title: '顺序签署(签署顺序为表格序号)'},
-  { value: 2, title: '每个单独签'}
+ // { value: 2, title: '每个单独签'}
 ];
 
 const uploadButtons = [
@@ -24,7 +24,7 @@ const uploadButtons = [
 ];
 
 const controls1 = [
-  { key: 'signFileSubject', title: '文件主题', type: 'text', span: 2, required: true},
+  { key: 'signFileSubject', title: '文件主题', type: 'text', span: 2},
   { key: 'signExpirationTime', title: '签署截止日期', type: 'date'},
   { key: 'note', title: '备注', type: 'textArea', span: 4},
 ];

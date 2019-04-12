@@ -131,7 +131,6 @@ class OrderTabPage extends React.Component {
  // * 帐号状态 1：待认证，2：认证失败 3:已认证
   toAlert = () => {
     const {onAuthentication,authenticationState} = this.props;
-    console.log(authenticationState);
     const msg = ['待认证','完成认证','已认证','重新认证'];
     const pMsg = [
       '您的账号还未完成实名认证，请先认证,以获取专属CA证书、订购套餐、签发文件资格等服务。',

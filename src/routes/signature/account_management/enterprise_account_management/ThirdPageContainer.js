@@ -91,6 +91,7 @@ const editAction = () => async (dispatch, getState) => {
     return
   }
   const id = tableItems[index].id;
+
   const {result,returnCode,returnMsg} = await helper.fetchJson(`${URL_EDIT}/${id}`);
   if(returnCode!==0){
     helper.showError(returnMsg);
@@ -230,6 +231,38 @@ const checkActionCreator = (isAll, checked, rowIndex) => {
   return action.update({checked}, [TAB_KEY,'tableItems'], index);
 };
 
+const doubleClickActionCreator = (index) => async (dispatch, getState) => {
+  const {tableItems,controls} = getSelfState(getState());
+  const id = tableItems[index].id;
+
+  const {result,returnCode,returnMsg} = await helper.fetchJson(`${URL_EDIT}/${id}`);
+  if(returnCode!==0){
+    helper.showError(returnMsg);
+    return
+  }
+
+  let options = [];
+  // execWithLoading(async () => {
+  const json = await helper.fetchJson(URL_SIGN);
+  if(json.returnCode !=0){
+    helper.showError(json.returnMsg);
+    return
+  }
+  for(let item of json.result){
+    options.push(
+      {
+        title:item.signSealName,
+        value:item.id,
+        imgBase:item.signSealImgBase64
+      }
+    )
+  }
+  //});
+  controls[2].options = options;
+  if (await showDiaLog(controls,result,'编辑',true)) {
+    return updateTable(dispatch, getState)
+  }
+};
 
 
 const actionCreators = {
@@ -240,6 +273,7 @@ const actionCreators = {
   onPageNumberChange: pageNumberActionCreator,
   onPageSizeChange: pageSizeActionCreator,
   onExitValid: exitValidActionCreator,
+  onDoubleClick:doubleClickActionCreator
 };
 const Container = connect(mapStateToProps, actionCreators)(EnhanceLoading(OrderPage));
 export default Container;

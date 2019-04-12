@@ -43,7 +43,7 @@ class UploadDialog extends React.Component {
       <div className={s.root}>
         <div className={s.box}>
           <div className={s.box_head}>
-            <Tooltip placement="topLeft" title={signSealName}>
+            <Tooltip placement="bottomLeft" title={signSealName}>
               {signSealName}
             </Tooltip>
           </div>

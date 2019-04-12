@@ -20,7 +20,7 @@ import api from './api';
 import './less/index.less';
 import WsServer from './standard-business/wsServer';
 import WebSocketProxy from './api/wsProxy';
-import {fadada} from "./api/gloablConfig";
+import {epld} from "./api/gloablConfig";
 
 const app = express();
 
@@ -71,7 +71,7 @@ app.get('*', async (req, res, next) => {
 
     //跳转去epld
     if (req.path === '/epldLogin'){
-      res.redirect(302, fadada);
+      res.redirect(302, epld);
       return;
     }
 

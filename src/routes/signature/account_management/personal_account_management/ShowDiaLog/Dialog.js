@@ -20,8 +20,8 @@ class SetDialog extends React.Component {
   };
 
   modalProps = () => {
-    const {width} = this.props;
-    return {
+    const {width,isLook} = this.props;
+    const props = {
       title: this.props.title,
       visible: this.props.visible,
       maskClosable: false,
@@ -30,11 +30,17 @@ class SetDialog extends React.Component {
       onCancel: this.onClick.bind(null, 'close'),
       afterClose: this.props.afterClose
     };
+    if(!isLook){
+      props.footer = null;
+    }
+    return props
   };
 
   formProps = () => {
+    const {isLook} = this.props;
     return {
       colNum: 1,
+      readonly:!isLook,
       controls: this.props.controls,
       value: this.props.value,
       valid: this.props.valid,

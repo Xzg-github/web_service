@@ -174,8 +174,11 @@ const four_look_tableCols1 = [
 const four_look_tableCols2 = [
   {key:'itemName',title:'业务项目'},
   {key:'consumerTime',title:'时间'},
+  {key:'predictPrice',title:'价格'},
   {key:'unitType',title:'单位',options:unitOptions},
-  {key:'price',title:'费用'},
+  {key:'price',title:'实际扣费'},
+  {key:'fileNo',title:'关联系统编号'},
+  {key:'executor',title:'发起人'},
 ];
 
 const optionApp = [

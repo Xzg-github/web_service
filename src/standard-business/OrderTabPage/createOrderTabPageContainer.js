@@ -8,7 +8,7 @@ import {exportExcelFunc, commonExport} from '../../common/exportExcelSetting';
 
 //实现搜索公共业务
 const mySearch = async (dispatch, action, selfState, currentPage, pageSize, filter, newState={}) => {
-  const {subActiveKey, urlList, isTotal, subTabs, fixedFilters={}} = selfState;
+  const {subActiveKey, urlList, isTotal, subTabs, fixedFilters={}, URL_TABSLIST} = selfState;
   const from = (currentPage - 1) * pageSize;
   const to = from + pageSize;
   let signUser,fileState, isAll;
@@ -36,6 +36,7 @@ const mySearch = async (dispatch, action, selfState, currentPage, pageSize, filt
       return
   }
   const {returnCode, returnMsg, result} = await search(urlList, from, to, {...filter,signUser,fileState,isAll}, false);
+  const json = await helper.fetchJson(URL_TABSLIST, 'post');
   if (returnCode === 0) {
     if (!result.tags && result.tabTotal) { //转成统一结构
       result.tags = Object.keys(result.tabTotal).map(item => ({tag: item, count: result.tabTotal[item]}));
@@ -51,7 +52,8 @@ const mySearch = async (dispatch, action, selfState, currentPage, pageSize, filt
         return obj;
       }, {}) : {[subActiveKey]: result.returnTotalItem || result.returnTotalItems},
       sortInfo: {},
-      filterInfo:{}
+      filterInfo:{},
+      tabsNumber: json.result
     };
     dispatch(action.assign(payload));
   } else {
@@ -265,6 +267,7 @@ const buildOrderTabPageCommonState = async (urlConfig, urlList, statusNames=[]) 
       searchDataBak: {},
       ...config,
       urlList,
+      URL_TABSLIST,
       pageSize,
       currentPage,
       maxRecords,

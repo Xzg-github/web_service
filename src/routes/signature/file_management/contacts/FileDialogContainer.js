@@ -110,6 +110,7 @@ const editActionCreator = () => async (dispatch, getState) => {
     }
   }
   dispatch(action.assign({tree:newTree}))
+  dispatch(action.assign({[data.key]: data.title}, 'value'))
 };
 
 const closeActionCreator = () => (dispatch) => {

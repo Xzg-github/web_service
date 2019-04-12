@@ -18,9 +18,6 @@ import {host, privilege,fadadaServiceName} from '../../../../api/gloablConfig';
  *       getSelfState - [必需] 获取容器组件在state对应路径下的自身节点状态
  * 返回：运单编辑页面容器组件
  * 初始化状态initState：{
- *     id - 运单标识，新增时为空
- *     isAppend - true为补录运单，默认false，为false且id不为空时跟据运单数据自动设置
- *     readonly - true为页面只读
  *     closeFunc - 页面为tab页且存在按钮操作时，操作完成后的关闭页面回调函数，无按钮操作时可无
  * }
  */
@@ -43,8 +40,7 @@ const createEditPageContainer = (action, getSelfState, getParentState) => {
     try{
       let url = '/api/signature/signature_center/editConfig';
       const editConfig = getJsonResult(await fetchJson(url));
-      let data = {signPartyList: []};
-      //let data = {signExpirationTime:moment().format('YYYY-MM-DD HH:mm:ss'), signPartyList: []};  //获取当前时间
+      let data = {};
       if(id){
         const URL_LIST_ONE = '/api/signature/signature_center/getOne';
         const list = getJsonResult(await fetchJson(`${URL_LIST_ONE}/${id}`,'get'));
@@ -77,11 +73,6 @@ const createEditPageContainer = (action, getSelfState, getParentState) => {
       dispatch(action.create({...initState, status: 'retry'}));
     }else{
       dispatch(action.create(state));
-      if(helper.getRouteKey() === 'index'){
-        let [...pageTitle] = helper.getPageTitle();
-        pageTitle.push('新增');
-        helper.setPageTitle(pageTitle)
-      }
     }
   };
 
@@ -114,20 +105,16 @@ const createEditPageContainer = (action, getSelfState, getParentState) => {
     const {value} = getSelfState(getState());
     let token = getCookie('token');
     const URL_ACCOUNT = '/api/signature/signature_center/getName';
-    let list = value.signPartyList;
+    let newList = [];
     if(key === 'signWay' && values === '1'){
-      let newList = [];
       const {returnCode, returnMsg, result} = await fetchJson(`${URL_ACCOUNT}/${token}`,'get');
-      if(returnCode !== 0) return;
-      const account = result.account;
+      if(returnCode !== 0) return showError('当前发起人获取失败');
       const email = result.userEmail;
       const signPartyName = result.username;
-      if(JSON.stringify(list).indexOf(JSON.stringify(email))===-1){
-        newList.unshift({account:email, signPartyName, sequence: 1, readonly: true});
-      }
+      newList.unshift({account:email, signPartyName, readonly: true});
       dispatch(action.assign({signPartyList: newList}, 'value'))
     }else if(key === 'signWay' && values === '0'){
-      dispatch(action.assign({signPartyList: []}, 'value'))
+      dispatch(action.assign({signPartyList: newList }, 'value'))
     }
     dispatch (action.assign({[key]: values}, 'value'));
   };
@@ -235,12 +222,25 @@ const arrOnly = (arr, key) => {
     }
   };
 
+  //验证表格数据唯一性
+  const only = (array, key) => {
+    if(array.length === 1){
+      return true
+    }else if(array.length > 1){
+      let first = array[0][key];
+      return array.some((item) => {
+        return item[key] !== first;
+      })
+    }else{
+      return true
+    }
+  };
+
   //保存
   const saveAction = async (dispatch, getState) => {
     const {value, closeFunc} = getSelfState(getState());
-    const selfState = getParentState(getState());
     const URL_SAVE = `/api/signature/signature_center/save`;
-      for(let i = 0; i<value.signPartyList.length; i++){  //对表格数据进行排序
+/*      for(let i = 0; i<value.signPartyList.length; i++){  //对表格数据进行排序
         value.signPartyList[i].sequence = i+1
       }
 
@@ -249,24 +249,44 @@ const arrOnly = (arr, key) => {
           return showError('表格中有账号（邮箱）格式不正确！')
         }
       }
-    const postData = {
-      signContractId: value.signContractId,
-      id: value.id,
-      isAddCcSide: value.isAddCcSide,
-      note: value.note,
-      isSignInSpecifiedLocation:value.isSignInSpecifiedLocation,
-      signExpirationTime: value.signExpirationTime,
-      signFinishTime: value.signFinishTime,
-      signOrderStrategy: value.signOrderStrategy,
-      signPartyList: value.signPartyList,
-      signWay: value.signWay,
-      signFileSubject: value.signFileSubject
+      if(only(value.signPartyList, 'account') === false){
+        return showError('表格账号（邮箱）保持唯一')
+      }*/
+
+    if(JSON.stringify(value) === "{}"){
+      return showError('空白页面')
+    }else{
+      if(value.signPartyList){
+        for(let i = 0; i<value.signPartyList.length; i++){  //对表格数据进行排序
+          value.signPartyList[i].sequence = i+1
+        }
+
+        for(let i = 0; i<value.signPartyList.length; i++){   //验证表格邮箱格式
+          if(value.signPartyList[i].account && !checkMail(value.signPartyList[i].account)){
+            return showError('表格中有账号（邮箱）格式不正确！')
+          }
+        }
+        if(only(value.signPartyList, 'account') === false){
+          return showError('表格账号（邮箱）保持唯一')
+        }
+      }
+      const postData = {
+        signContractId: value.signContractId,
+        id: value.id,
+        isAddCcSide: value.isAddCcSide,
+        note: value.note,
+        isSignInSpecifiedLocation:value.isSignInSpecifiedLocation,
+        signExpirationTime: value.signExpirationTime,
+        signFinishTime: value.signFinishTime,
+        signOrderStrategy: value.signOrderStrategy,
+        signPartyList: value.signPartyList,
+        signWay: value.signWay,
+        signFileSubject: value.signFileSubject
       };
-    const {result, returnCode, returnMsg} = await fetchJson(URL_SAVE,postOption(postData, 'post'));
-    if(returnCode !== 0 ){return showError(returnMsg);}
-    updateTable(dispatch, action, selfState, ['mySign', 'hisSign', 'draft', 'other'])
-    closeFunc && closeFunc();
-    //upDatePage(result.id)(dispatch, getState);
+      const {result, returnCode, returnMsg} = await fetchJson(URL_SAVE,postOption(postData, 'post'));
+      if(returnCode !== 0 ){return showError(returnMsg);}
+      closeFunc && closeFunc();
+    }
   };
 
   //下一步
@@ -277,9 +297,9 @@ const arrOnly = (arr, key) => {
      for(let i = 0; i<value.signPartyList.length; i++){
        value.signPartyList[i].sequence = i+1
      }
-     if(value.signExpirationTime < date){
+/*     if(value.signExpirationTime < date){
        return showError(('签署截至时间已过期，请重新确认！'))
-     }
+     }*/
      if(!validValue(controls1, value)){   //判断from1必填
        dispatch(action.assign({valid: true}));
        return
@@ -304,6 +324,10 @@ const arrOnly = (arr, key) => {
        if(value.signPartyList[i].account && !checkMail(value.signPartyList[i].account)){
          return showError('表格中有账号（邮箱）格式不正确！')
        }
+     }
+
+     if(only(value.signPartyList, 'account') === false){       //验证发起人唯一
+       return showError('表格账号（邮箱）保持唯一')
      }
      const URL_SAVE = `/api/signature/signature_center/save`;      //保存
      const URL_SUBMIT = '/api/signature/signature_center/sub';  //提交

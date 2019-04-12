@@ -14,7 +14,7 @@ const getSelfState = (state) => {
 const buildState = (config, value={}) => {
   let newItems;
   if(value.detailResponses && value.detailResponses.length > 10){
-    newItems = value.slice(0,10)
+    newItems = value.detailResponses.slice(0,10)
   }else {
     newItems = value.detailResponses ? value.detailResponses : [];
   }

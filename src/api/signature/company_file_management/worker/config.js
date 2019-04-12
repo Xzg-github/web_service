@@ -30,7 +30,7 @@ const tableCols = [
   {key:'notifyEmail',title:'电子邮件'},
   {key:'notifyPhone',title:'手机号码'},
   {key:'userAccountNote',title:'备注'},
-  {key:'insertUser',title:'操作人'},
+  {key:'updateUser',title:'操作人'},
   {key:'insertTime',title:'操作时间'},
 ];
 
@@ -40,8 +40,8 @@ const buttons = [
   {key:'examine',title:'审核', bsStyle: 'primary'},
   //{key:'edit',title:'编辑'},
   //{key:'del',title:'删除'},
-  {key:'enable',title:'启用'},
-  {key:'disable',title:'禁用'},
+  //{key:'enable',title:'启用'},
+  //{key:'disable',title:'禁用'},
 ];
 
 const config = {
