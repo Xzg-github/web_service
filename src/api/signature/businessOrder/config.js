@@ -25,8 +25,8 @@ const payWayOptions = [
 const filters = [
   {key: 'nativeOrderNo', title: '订单编号', type: 'text'},
   {key: 'companyId', title: '企业名称', type: 'search'},
-  {key: 'orderTimeFrom', title: '订购时间', type: 'date'},
-  {key: 'orderTimeTo', title: '至', type: 'date'},
+  {key: 'orderTimeFrom', title: '订购时间', type: 'date',props:{showTime:true}},
+  {key: 'orderTimeTo', title: '至', type: 'date',props:{showTime:true}},
   {key: 'orderStatus', title: '订单状态', type: 'select', options: orderStatusOptions},
   {key: 'invoiceStatus', title: '发票状态', type: 'select', options: invoiceStatusOptions}
 ];

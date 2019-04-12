@@ -103,7 +103,7 @@ const inputChangeActionCreator = (value) => {
 const searchTreeAction = () =>  (dispatch, getState) => {
   const {allItems, tree, inputValue} = getSelfState(getState());
   if (inputValue) {
-    const indexTableItems = allItems.filter(item => item.id.title.includes(inputValue));
+    const indexTableItems = allItems.filter(item => item.title.includes(inputValue));
     dispatch(action.assign({searchValue: inputValue, expand: Tree.search(tree, inputValue), indexTableItems}));
   } else {
     dispatch(action.assign({searchValue: inputValue, indexTableItems: allItems}));
