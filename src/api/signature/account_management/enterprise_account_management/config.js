@@ -87,7 +87,6 @@ const four_tableCols = [
   {key:'orderStatus',title:'订单状态',options:statusOptions},
   {key:'nativeOrderNo',title:'订单编号'},
   {key:'orderMoney',title:'订购金额'},
-  {key:'orderTime',title:'有效期'},
   {key:'insertTime',title:'订购时间'},
   {key:'payWay',title:'支付方式',options:payOptions},
   {key:'outerOrderNo',title:'付款流水号'},
