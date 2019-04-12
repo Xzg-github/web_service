@@ -8,7 +8,7 @@ const statusTypeOptions = [
 ];
 
 const filters = [
-  {key: 'companyName', title: '企业名称', type: 'text'},
+  {key: 'companyId', title: '企业名称', type: 'search'},
   {key: 'account', title: '企业账号', type: 'text'},
   {key: 'companyOrder', title: '企业编号', type: 'text'},
   {key: 'companyAccountState', title: '状态', type: 'select', options: statusTypeOptions},
