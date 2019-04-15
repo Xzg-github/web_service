@@ -6,7 +6,7 @@ import helper, {postOption} from '../../common/common';
 import Layout from './Layout';
 import {EnhanceLoading} from '../Enhance';
 import Link, {jump} from '../Link';
-import getWsClient from '../../standard-business/wsClient';
+//import getWsClient from '../../standard-business/wsClient';
 import {notification} from 'antd';
 import showPerson from './Person';
 import showMode from './Mode';
@@ -61,13 +61,13 @@ const showGlobalMessage = (type=0, message) => {
   });
 };
 
-// 建立WS连接
-const connectWsServer = () => {
-  const wsClient = getWsClient();
-  wsClient.onMessage('global', ({body}) => {
-    showGlobalMessage(body.type, body.content);
-  });
-};
+// // 建立WS连接
+// const connectWsServer = () => {
+//   const wsClient = getWsClient();
+//   wsClient.onMessage('global', ({body}) => {
+//     showGlobalMessage(body.type, body.content);
+//   });
+// };
 
 const initActionCreator = () => async (dispatch) => {
   dispatch(action.assign({status: 'loading'}));
@@ -85,7 +85,7 @@ const initActionCreator = () => async (dispatch) => {
       } else {
           jump(window.location.pathname + window.location.search);
       }
-    connectWsServer();
+    /*connectWsServer();*/
   } else {
     if (returnCode !== 9998) {
       dispatch(action.assign({status: 'retry'}));
