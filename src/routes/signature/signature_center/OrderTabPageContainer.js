@@ -87,8 +87,43 @@ const signatureAction = (tabKey) => async (dispatch, getState) =>{
   const URL_SIGN =  '/api/signature/signature_center/sign';
   const {returnCode, returnMsg, result } = await helper.fetchJson(URL_SIGN, helper.postOption(id));
   if (returnCode !== 0) return helper.showError(returnMsg);
-  window.open(result);
-  return updateTable(dispatch, action, getSelfState(getState()));
+  //window.open(result);
+   var timer=""
+   layer.open({
+      type: 2,
+      title: '请签署',
+      maxmin: true, //开启最大化最小化按钮
+      area: [($(window).width()-50)+'px', ($(window).height()-50)+'px'],
+      content: result
+	 ,cancel: function(){
+		clearInterval(timer)
+      //右上角关闭回调
+		updateTable(dispatch, action, getSelfState(getState()));
+     }
+	 ,success: function(layero, index){
+		 timer=setInterval(function(){
+			try{
+				var body = layer.getChildFrame('body', index);
+				var iframeWin = window[layero.find('iframe')[0]['name']]; //得到iframe页的窗口对象，执行iframe页的方法：iframeWin.method();
+				var t = iframeWin.document.getElementById("time")
+				if (typeof (t) == "undefined" || t === undefined || t==null) {
+					return
+				}	
+				var timeE = t.innerHTML
+				if(timeE==""){
+					clearInterval(timer)
+					updateTable(dispatch, action, getSelfState(getState()));
+					layer.close(index)
+				}
+			}
+			catch(err){
+			}
+		 },500);
+
+	  }
+    });
+	
+	
 };
 
 export const getCookie = (cookieName) =>{
