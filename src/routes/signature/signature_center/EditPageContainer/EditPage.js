@@ -2,7 +2,7 @@ import React, { PropTypes } from 'react';
 import withStyles from 'isomorphic-style-loader/lib/withStyles';
 import s from './EditPage.less';
 import {SuperTable2, SuperForm, Card, Title, SuperToolbar} from '../../../../components/index';
-import {getObject} from "../../../../common/common";
+import helper,{getObject} from "../../../../common/common";
 import MyUploadContainer from './MyUpload/MyUploadContainer';
 import { Alert } from 'antd';
 

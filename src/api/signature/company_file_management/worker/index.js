@@ -14,8 +14,8 @@ api.get('/config', async (req, res) => {
 // 获取主列表数据
 api.post('/list', async (req, res) => {
   const url = `${service}/user_account/list`;
-  const {filter, ...other} = req.body;
-  res.send(await fetchJsonByNode(req, url, postOption({...filter, ...other})));
+  const {filters, ...other} = req.body;
+  res.send(await fetchJsonByNode(req, url, postOption({...filters, ...other})));
 });
 
 //启用/禁用

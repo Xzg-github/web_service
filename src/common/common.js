@@ -444,6 +444,32 @@ const setPageTitle = (titleArr=[]) => {
   global.store.dispatch(layoutAction.assign({[getRouteKey()]: titleArr}, 'pageTitles'));
 };
 
+/**
+ * 功能: 依据值的变化动态设置哪些字段为只读，此函数最好用在UI组件中
+ *  cascade: 对象，级联信息，属性值为keys数组或对象; 属性值为对象时，包含value和keys两个属性
+ *  value: 对象，当和cascade对应的key的值为空或者与级联对象的value相等时，cascade中的keys会包含在返回值中
+ * 返回值：false或true或keys数组
+ */
+const getReadonlyKeys = (cascade, value, readonly=false) => {
+  if (cascade && (!readonly || Array.isArray(readonly))) {
+    readonly = readonly ? [...readonly] : [];
+    const keys = Object.keys(cascade);
+    for (const key of keys) {
+      if (Array.isArray(cascade[key])) {
+        if (!value[key]) {
+          readonly.push(...cascade[key]);
+        }
+      } else {
+        const obj = cascade[key];
+        if (!value[key] || (value[key] === obj.value)) {
+          readonly.push(...obj.keys);
+        }
+      }
+    }
+  }
+  return readonly;
+};
+
 const helper = {
   postOption,
   fetchJson,
@@ -477,7 +503,8 @@ const helper = {
   getRouteKey,
   getToken,
   getPageTitle,
-  setPageTitle
+  setPageTitle,
+  getReadonlyKeys
 };
 
 export {

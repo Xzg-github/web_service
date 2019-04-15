@@ -9,16 +9,16 @@ const isOptions = [
 ];
 
 const isOptions1 = [
-  {value: 0, title: '待审核'},
-  {value: 1, title: '已通过'},
-  {value: 2, title: '未通过'},
+  {value: '0', title: '待审核'},
+  {value: '1', title: '已通过'},
+  {value: '2', title: '未通过'},
 ];
 
 const filters = [
   {key:'realName',title:'真实姓名',type:'text'},
   {key:'account',title:'注册账号',type:'text'},
   {key:'notifyPhone',title:'手机号码',type:'number'},
-  {key:'userAccountState',title:'账号状态',type: 'select', options: isOptions},
+  {key:'companyAuditState',title:'企业审核状态',type: 'select', options: isOptions1},
   {key:'notifyEmail',title:'电子邮件',type:'text'},
 ];
 

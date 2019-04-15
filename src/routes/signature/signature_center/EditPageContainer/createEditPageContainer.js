@@ -9,7 +9,6 @@ import AddDialogContainer, {buildAddState} from './AddDialog/AddDialogContainer'
 import upload from './upload';
 import moment from 'moment';
 import execWithLoading from "../../../../standard-business/execWithLoading";
-import {updateTable} from '../../../../standard-business/OrderTabPage/createOrderTabPageContainer'
 import {host, privilege,fadadaServiceName} from '../../../../api/gloablConfig';
 
 /**
@@ -166,7 +165,7 @@ const createEditPageContainer = (action, getSelfState, getParentState) => {
     if(json.returnCode !== 0) return showError(json.returnMsg);
     const selectItems = json.result;
     const filterItems = json.result;
-    const newItems = getMoreData({key: 'account', arr:value.signPartyList}, {key: 'companyContactAccount', arr:filterItems});
+    const newItems = getMoreData({key: 'account', arr:value.signPartyList || []}, {key: 'companyContactAccount', arr:filterItems});
     const okFunc = (addItems = []) => {
       dispatch(action.assign({signPartyList: addItems}, 'value'))
     };
@@ -190,34 +189,20 @@ const createEditPageContainer = (action, getSelfState, getParentState) => {
     showPopup(AddDialogContainer)
   };
 
-  //刷新页面
-  const upDatePage = (guid) => async (dispatch, getState) => {
-    showSuccessMsg('保存成功');
-    const selfState = getSelfState(getState());
-    const URL_LIST_ONE = '/api/signature/signature_center/getOne';
-    const list = getJsonResult(await fetchJson(`${URL_LIST_ONE}/${guid}`,'get'));
-    if(!list){
-      return showError(`刷新页面数据失败`)
-    }
-    dispatch(action.assign({value: list}))
-  };
-
-const arrOnly = (arr, key) => {
-  let first;
-  if(arr.length>0){   //获取第一个元素的对应的属性
-    first = arr[0][key];
-    return arr.every((item) =>{    //都跟第一个元素做比对，只要有一个不对应，那说明不是唯一属性值了
-      return item[key] === first;
-    });
-  }
-  return true;
-};
-
 //验证邮箱
   const checkMail= (mail) => {
     if(!(/^[a-zA-Z0-9_.-]+@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*\.[a-zA-Z0-9]{2,6}$/.test(mail))){
       return false;
     }else {
+      return true
+    }
+  };
+
+  //验证手机号码
+  const checkPhone = (number) => {
+    if(!(/^[1][3,4,5,7,8][0-9]{9}$/.test(number))){
+      return false;
+    }else{
       return true
     }
   };
@@ -262,8 +247,8 @@ const arrOnly = (arr, key) => {
         }
 
         for(let i = 0; i<value.signPartyList.length; i++){   //验证表格邮箱格式
-          if(value.signPartyList[i].account && !checkMail(value.signPartyList[i].account)){
-            return showError('表格中有账号（邮箱）格式不正确！')
+          if(value.signPartyList[i].account && !checkMail(value.signPartyList[i].account) && !checkPhone(value.signPartyList[i].account)){
+            return showError('请输入正确的账号(手机号或邮箱)！')
           }
         }
         if(only(value.signPartyList, 'account') === false){
@@ -297,9 +282,6 @@ const arrOnly = (arr, key) => {
      for(let i = 0; i<value.signPartyList.length; i++){
        value.signPartyList[i].sequence = i+1
      }
-/*     if(value.signExpirationTime < date){
-       return showError(('签署截至时间已过期，请重新确认！'))
-     }*/
      if(!validValue(controls1, value)){   //判断from1必填
        dispatch(action.assign({valid: true}));
        return
@@ -321,8 +303,8 @@ const arrOnly = (arr, key) => {
      }
 
      for(let i = 0; i<value.signPartyList.length; i++){   //验证表格邮箱格式
-       if(value.signPartyList[i].account && !checkMail(value.signPartyList[i].account)){
-         return showError('表格中有账号（邮箱）格式不正确！')
+       if(value.signPartyList[i].account && !checkMail(value.signPartyList[i].account) && !checkPhone(value.signPartyList[i].account)){
+         return showError('请输入正确的账号(手机号或邮箱)！')
        }
      }
 
@@ -352,13 +334,9 @@ const arrOnly = (arr, key) => {
   const sendAction = async (dispatch, getState) => {
     try {
       const {value, controls1, controls2, tableCols, closeFunc} = getSelfState(getState());
-      let date = moment().format('YYYY-MM-DD HH:mm:ss'); //获取当前时间
-      for(let i = 0; i<value.signPartyList.length; i++){
-        value.signPartyList[i].sequence = i+1
+      if(value.signPartyList.length === 0){
+        return showError('至少添加一个签署方');
       }
-/*      if(value.signExpirationTime < date){
-        return showError(('签署截至时间已过期，请重新确认！'))
-      }*/
       if(!validValue(controls1, value)){   //判断from1必填
         dispatch(action.assign({valid: true}));
         return
@@ -371,17 +349,14 @@ const arrOnly = (arr, key) => {
         dispatch(action.assign({valid: true, from: false}));
         return
       }
-      if(value.signPartyList.length === 0){
-        return showError('至少添加一个签署方');
-      }
 
       for(let i = 0; i<value.signPartyList.length; i++){  //对表格数据进行排序
         value.signPartyList[i].sequence = i+1
       }
 
       for(let i = 0; i<value.signPartyList.length; i++){   //验证表格邮箱格式
-        if(value.signPartyList[i].account && !checkMail(value.signPartyList[i].account)){
-          return showError('表格中有账号（邮箱）格式不正确！')
+        if(value.signPartyList[i].account && !checkMail(value.signPartyList[i].account) && !checkPhone(value.signPartyList[i].account)){
+          return showError('请确认表格中邮箱或手机格式正确！')
         }
       }
 

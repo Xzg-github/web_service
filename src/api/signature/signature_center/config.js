@@ -24,11 +24,11 @@ const isOptions2 = [
 const filters = [
   {key: 'signFileSubject', title: '文件主题', type: 'text'},
   //{key: 'launchAccountId', title: '发起人', type: 'text'},
-  {key: 'signStartTimeFrom', title: '发起时间', type: 'date', rule: {type: '<', key: 'signStartTimeTo'}},
-  {key: 'signStartTimeTo', title: '至', type: 'date', rule: {type: '>', key: 'signStartTimeFrom'}},
+  {key: 'signStartTimeFrom', title: '发起时间', type: 'date', rule: {type: '<', key: 'signStartTimeTo'}, props:{showTime: true}},
+  {key: 'signStartTimeTo', title: '至', type: 'date', rule: {type: '>', key: 'signStartTimeFrom'}, props:{showTime: true}},
   //{key: 'fileState', title: '状态', type: 'select', options: isOptions2},
-  {key: 'signFinishTimeFrom', title: '完成时间', type: 'date', rule: {type: '<', key: 'signExpirationTimeTo '}},
-  {key: 'signFinishTimeTo', title: '至', type: 'date', rule: {type: '>', key: 'signExpirationTimeFrom'}},
+  {key: 'signFinishTimeFrom', title: '完成时间', type: 'date', rule: {type: '<', key: 'signExpirationTimeTo '}, props:{showTime: true}},
+  {key: 'signFinishTimeTo', title: '至', type: 'date', rule: {type: '>', key: 'signExpirationTimeFrom'}, props:{showTime: true}},
   {key: 'isAddCcSide', title: '是否抄送', type: 'select', options: isOptions},
   {key: 'signFileOrder', title: '系统编号', type: 'text'},
 ];
