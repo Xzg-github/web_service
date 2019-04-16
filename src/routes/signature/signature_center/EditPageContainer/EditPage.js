@@ -62,9 +62,20 @@ class EditPage extends React.Component {
     }
   };
 
+  getReadonly = (readonly) => {
+    const {value, cascade} = this.props;
+    return helper.getReadonlyKeys(cascade, value, readonly)
+  };
+
   toForm1 = () => {
-    const {controls1, onChange, value, onExitValid, valid} = this.props;
-    const props = {controls: controls1, value, onChange, onExitValid, valid};
+    const {controls1, onChange, value, onExitValid, valid, edit} = this.props;
+    const props = {controls: controls1,
+      value,
+      onChange,
+      onExitValid,
+      valid,
+      readonly:this.getReadonly((edit === false) || (edit === true))
+    };
     return <SuperForm {...props} />
   };
 
