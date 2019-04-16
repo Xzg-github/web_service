@@ -26,12 +26,9 @@ class Html extends React.Component {
           <title>{title}</title>
           <meta name="description" content={description} />
           <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no"/>
-		  <link href="/plugin/layer.css" rel="stylesheet"/>
           <link rel="stylesheet" type="text/css" href="/assets/index.css" />
           {style && <style id="css" dangerouslySetInnerHTML={{ __html: style }} />}
           <script dangerouslySetInnerHTML={sendStateToBrowser()} />
-		  <script src="/plugin/jquery.min.js"></script>
-		  <script src="/plugin/layer.js"></script>
         </head>
         <body>
           <div id="app" dangerouslySetInnerHTML={{ __html: children }} style={{height:'100%'}}/>

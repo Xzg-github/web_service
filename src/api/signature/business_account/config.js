@@ -36,8 +36,8 @@ const fourControls = [
 const filters = [
   { key: 'companyId', title: '企业名称',type: 'search'},
   { key: 'companyOrder', title: '企业编号', type: 'text'},
-  { key: 'orderTimeFrom ', title: '订购时间', type: 'date', rule: {type: '<', key: 'orderTimeTo'}, props:{showTime: true}},
-  { key: 'orderTimeTo', title: '至', type: 'date', rule: {type: '>', key: 'orderTimeFrom'}, props:{showTime: true}},
+/*  { key: 'orderTimeFrom ', title: '订购时间', type: 'date', rule: {type: '<', key: 'orderTimeTo'}, props:{showTime: true}},
+  { key: 'orderTimeTo', title: '至', type: 'date', rule: {type: '>', key: 'orderTimeFrom'}, props:{showTime: true}},*/
 ];
 
 const tableCols = [
@@ -51,7 +51,7 @@ const tableCols = [
   { key: 'companyCreditInit', title: '信用额度上限'},
   { key: 'companyCreditUsed', title: ' 已用额度'},
   { key: 'companyCreditLeft', title: '剩余可用额度'},
-  { key: 'recentOrderingTime', title: '最近订购时间 '}
+  //{ key: 'recentOrderingTime', title: '最近订购时间 '}
 ];
 
 const buttons = [

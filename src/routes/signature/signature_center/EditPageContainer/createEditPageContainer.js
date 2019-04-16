@@ -10,6 +10,7 @@ import upload from './upload';
 import moment from 'moment';
 import execWithLoading from "../../../../standard-business/execWithLoading";
 import {host, privilege,fadadaServiceName} from '../../../../api/gloablConfig';
+import ShowSignContainer, {buildSignState} from '../signDialog/ShowSignContainer'
 
 /**
  * 功能：生成一个签署中心新增页面容器组件
@@ -323,7 +324,8 @@ const createEditPageContainer = (action, getSelfState, getParentState) => {
      }
      const {returnCode, returnMsg, result } = await helper.fetchJson(URL_SIGN, helper.postOption(save.id)); //签署
      if (returnCode !== 0) return helper.showError(returnMsg);
-     window.open(result);
+     buildSignState(dispatch, value.signFileSubject, closeFunc, result);
+     showPopup(ShowSignContainer)
      closeFunc && closeFunc();
    }catch (e){
      helper.showError(e.message)

@@ -6,6 +6,7 @@ import helper, {fetchJson, showError} from '../../../common/common';
 import { getObject } from '../../../common/common';
 import createOrderTabPageContainer, {buildOrderTabPageCommonState, updateTable} from "../../../standard-business/OrderTabPage/createOrderTabPageContainer";
 import ShowPageContainer,{buildShowState} from "./ShowPageContainer/ShowPageContainer";
+import ShowSignContainer, {buildSignState} from './signDialog/ShowSignContainer'
 import showPopup from '../../../standard-business/showPopup';
 import showDiaLog from './showDiaLog/AddDialogContainer';
 import {jump} from '../../../components/Link';
@@ -78,52 +79,20 @@ const delAction = (tabKey) => async (dispatch, getState) => {
   return updateTable(dispatch, action, getSelfState(getState()));
 };
 
-//签署
 const signatureAction = (tabKey) => async (dispatch, getState) =>{
   const {tableItems} = getSelfState(getState());
   const checkedItems = tableItems[tabKey].filter(item => item.checked === true);
   if(checkedItems.length !== 1)return helper.showError('请勾选一条记录');
   const id = checkedItems[0].id;
+  const title = checkedItems[0].signFileSubject;
   const URL_SIGN =  '/api/signature/signature_center/sign';
   const {returnCode, returnMsg, result } = await helper.fetchJson(URL_SIGN, helper.postOption(id));
   if (returnCode !== 0) return helper.showError(returnMsg);
-  //window.open(result);
-   var timer=""
-   layer.open({
-      type: 2,
-      title: '请签署',
-      maxmin: true, //开启最大化最小化按钮
-      area: [($(window).width()-50)+'px', ($(window).height()-50)+'px'],
-      content: result
-	 ,cancel: function(){
-		clearInterval(timer)
-      //右上角关闭回调
-		updateTable(dispatch, action, getSelfState(getState()));
-     }
-	 ,success: function(layero, index){
-		 timer=setInterval(function(){
-			try{
-				var body = layer.getChildFrame('body', index);
-				var iframeWin = window[layero.find('iframe')[0]['name']]; //得到iframe页的窗口对象，执行iframe页的方法：iframeWin.method();
-				var t = iframeWin.document.getElementById("time")
-				if (typeof (t) == "undefined" || t === undefined || t==null) {
-					return
-				}	
-				var timeE = t.innerHTML
-				if(timeE==""){
-					clearInterval(timer)
-					updateTable(dispatch, action, getSelfState(getState()));
-					layer.close(index)
-				}
-			}
-			catch(err){
-			}
-		 },500);
-
-	  }
-    });
-	
-	
+  const closeFunc = () => {
+    return updateTable(dispatch, action, getSelfState(getState()), ['mySign', 'hisSign', 'draft', 'other']);
+  };
+  buildSignState(dispatch, title, closeFunc, result);
+  showPopup(ShowSignContainer)
 };
 
 export const getCookie = (cookieName) =>{
