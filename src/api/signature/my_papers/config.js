@@ -45,6 +45,8 @@ const config = {
     buttons,
     tableCols,
     pageSize,
+    currentPage:1,
+    searchData:{},
     pageSizeType,
     description,
     searchConfig,
