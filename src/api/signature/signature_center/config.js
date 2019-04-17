@@ -26,7 +26,7 @@ const filters = [
   //{key: 'launchAccountId', title: '发起人', type: 'text'},
   {key: 'signStartTimeFrom', title: '发起时间', type: 'date', rule: {type: '<', key: 'signStartTimeTo'}},
   {key: 'signStartTimeTo', title: '至', type: 'date', rule: {type: '>', key: 'signStartTimeFrom'}},
-  //{key: 'fileState', title: '状态', type: 'select', options: isOptions2},
+  {key: 'fileState', title: '状态', type: 'select', options: isOptions2},
   {key: 'signFinishTimeFrom', title: '完成时间', type: 'date', rule: {type: '<', key: 'signExpirationTimeTo '}},
   {key: 'signFinishTimeTo', title: '至', type: 'date', rule: {type: '>', key: 'signExpirationTimeFrom'}},
   {key: 'isAddCcSide', title: '是否抄送', type: 'select', options: isOptions},
