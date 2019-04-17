@@ -146,11 +146,17 @@ const linePreviewAction = (tabKey) => async (dispatch, getState) => {
   const checkedItems = tableItems[tabKey].filter(item => item.checked === true);
   if(checkedItems.length !== 1){return helper.showError('请勾选一条记录')}
   const URL_VIEW = checkedItems[0].urlOfSignedFileViewpdf;
+  const title = checkedItems[0].signFileSubject;
   if(!URL_VIEW){
     helper.showError('请先完成签署操作！');
     return
   }
-  window.open(URL_VIEW)
+  const closeFunc = () => {
+    return updateTable(dispatch, action, getSelfState(getState()), ['mySign', 'hisSign', 'draft', 'other']);
+  };
+  buildSignState(dispatch, title, closeFunc, URL_VIEW);
+  showPopup(ShowSignContainer)
+  //window.open(URL_VIEW)
 };
 
 

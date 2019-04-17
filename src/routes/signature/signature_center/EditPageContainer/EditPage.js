@@ -2,8 +2,7 @@ import React, { PropTypes } from 'react';
 import withStyles from 'isomorphic-style-loader/lib/withStyles';
 import s from './EditPage.less';
 import {SuperTable2, SuperForm, Card, Title, SuperToolbar} from '../../../../components/index';
-import helper,{getObject} from "../../../../common/common";
-import MyUploadContainer from './MyUpload/MyUploadContainer';
+import {getObject} from "../../../../common/common";
 import { Alert } from 'antd';
 
 
@@ -65,10 +64,10 @@ class EditPage extends React.Component {
     }
   };
 
-  getReadonly = (readonly) => {
+/*  getReadonly = (readonly) => {
     const {value, cascade} = this.props;
     return helper.getReadonlyKeys(cascade, value, readonly)
-  };
+  };*/
 
   toForm1 = () => {
     const {controls1, onChange, value, onExitValid, valid, edit} = this.props;
@@ -77,7 +76,6 @@ class EditPage extends React.Component {
       onChange,
       onExitValid,
       valid,
-      readonly:this.getReadonly((edit === false) || (edit === true))
     };
     return <SuperForm {...props} />
   };
