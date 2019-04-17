@@ -112,12 +112,12 @@ const searchTreeAction = () =>  (dispatch, getState) => {
 
 
 const searchClickActionCreator = () => async (dispatch, getState) => {
-  const {searchData} = getSelfState(getState());
+  const {searchData={}} = getSelfState(getState());
   return updateTable(dispatch,getState,helper.convert(searchData))
 };
 
 const resetActionCreator = () => (dispatch,getState) =>{
-  const {searchData} = getSelfState(getState());
+  const {searchData={}} = getSelfState(getState());
   if(searchData.signFileFolderId){
     dispatch( action.assign({searchData: {}}) );
     return

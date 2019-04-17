@@ -1,5 +1,5 @@
 import React, {PropTypes} from 'react';
-import {ModalWithDrag,SuperTable,Title} from '../../../../../components';
+import {ModalWithDrag,SuperTable} from '../../../../../components';
 import SuperForm from '../../../../../components/SuperForm'
 
 class SetDialog extends React.Component {
@@ -33,7 +33,6 @@ class SetDialog extends React.Component {
 
   tableProps = () => {
     const {cols, items, sortInfo, filterInfo,hasUnreadTable} = this.props;
-    console.log(items);
     return {
       hasUnreadTable,
       sortInfo,
@@ -62,9 +61,9 @@ class SetDialog extends React.Component {
     return (
       <ModalWithDrag {...this.modalProps()}>
         <SuperTable {...this.tableProps()} />
-        <div style={{marginTop:10}}>
-          <SuperForm {...this.formProps()} />
-        </div>
+        {/*<div style={{marginTop:10}}>*/}
+          {/*<SuperForm {...this.formProps()} />*/}
+        {/*</div>*/}
       </ModalWithDrag>
     );
   }
