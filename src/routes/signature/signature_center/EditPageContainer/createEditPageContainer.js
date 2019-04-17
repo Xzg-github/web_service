@@ -40,18 +40,12 @@ const createEditPageContainer = (action, getSelfState, getParentState) => {
     try{
       let url = '/api/signature/signature_center/editConfig';
       const editConfig = getJsonResult(await fetchJson(url));
-      const controls1 = helper.deepCopy(editConfig.controls1);
       let data = {};
       if(id){
         const URL_LIST_ONE = '/api/signature/signature_center/getOne';
         const list = getJsonResult(await fetchJson(`${URL_LIST_ONE}/${id}`,'get'));
         if(list.signWay === '1' || list.signWay === 1){
           list.signPartyList[0].readonly = true         //签署文件时，发起人信息设为只读
-        }
-        if(!list.signContractId){
-          controls1[0].type = 'readonly'
-        }else{
-          controls1[0].type = 'text'
         }
           data = list;
       }
@@ -61,7 +55,6 @@ const createEditPageContainer = (action, getSelfState, getParentState) => {
         status: 'page',
         closeFunc,
         value: data,
-        controls1
       }
     }catch (e){
       helper.showError(e.message);

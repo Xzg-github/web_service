@@ -71,6 +71,9 @@ class EditPage extends React.Component {
 
   toForm1 = () => {
     const {controls1, onChange, value, onExitValid, valid, edit} = this.props;
+    if(value.signContractId){
+      controls1[0].signFileSubject.type = 'text'
+    }
     const props = {controls: controls1,
       value,
       onChange,
