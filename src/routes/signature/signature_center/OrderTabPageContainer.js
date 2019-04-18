@@ -205,13 +205,7 @@ const onAuthenticationActionCreator = () => async(dispatch, getState) => {
     return
   }
 
-  const options = [
-    {value:1,title:'法人'},
-    {value:2,title:'代理人'},
-  ];
-
   const controls = [
-    {key:'companyPrincipalType',title:'企业负责人信息 ',type:'select',options,required:true},
     {key:'name',title:'法人信息',type:'text',required:true},
   ];
   if (await showDiaLog(controls, {} ,false)) {
