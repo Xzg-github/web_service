@@ -11,6 +11,7 @@ import moment from 'moment';
 import execWithLoading from "../../../../standard-business/execWithLoading";
 import {host, privilege,fadadaServiceName} from '../../../../api/gloablConfig';
 import ShowSignContainer, {buildSignState} from '../signDialog/ShowSignContainer'
+import {toFormValue} from "../../../../common/check";
 
 /**
  * 功能：生成一个签署中心新增页面容器组件
@@ -261,8 +262,7 @@ const createEditPageContainer = (action, getSelfState, getParentState) => {
    try {
      const {value, controls1, controls2, tableCols, closeFunc} = getSelfState(getState());
      if(JSON.stringify(value) === "{}"){         //没有填写任何内容是，直接关闭
-       closeFunc && closeFunc();
-       return
+       return showError('请上传签署文件！')
      }
      if(!validValue(controls1, value)){   //判断from1必填
        dispatch(action.assign({valid: true}));
@@ -272,14 +272,23 @@ const createEditPageContainer = (action, getSelfState, getParentState) => {
        dispatch(action.assign({valid: true}));
        return
      }
-     if(!validArray(tableCols, value.signPartyList.filter(item => !item.hide))){   //判断表格必填
-       dispatch(action.assign({valid: true, from: false}));
-       return
+     let isRepeat = false;
+     let msg = '';
+     if(value.signPartyList){
+       value.signPartyList.forEach(item => {
+         item = toFormValue(item);
+         if(!item.signPartyName){
+           isRepeat = true;
+           msg = '姓名/机构不能为空！'
+         }else if(!item.account){
+           isRepeat = true;
+           msg = '账号（邮箱）不能为空！'
+         }
+       });
+       if(isRepeat){
+         return showError(msg)
+       }
      }
-     if(value.signPartyList.length === 0){
-       return showError('至少添加一个签署方');
-     }
-
      for(let i = 0; i<value.signPartyList.length; i++){  //对表格数据进行排序
        value.signPartyList[i].sequence = i+1
      }
@@ -319,22 +328,37 @@ const createEditPageContainer = (action, getSelfState, getParentState) => {
       const {value, controls1, controls2, tableCols, closeFunc} = getSelfState(getState());
       const URL_SAVE = `/api/signature/signature_center/save`;      //保存
       const URL_SUBMIT = '/api/signature/signature_center/sub';  //提交
-      if(!value.signPartyList.length){
-        return showError('签署人不能为空！')
-      }else{
         if(!validValue(controls1, value)){   //判断from1必填
           dispatch(action.assign({valid: true}));
           return
-        } else if(!validValue(controls2, value)){   //判断from2必填
+        }
+        if(!validValue(controls2, value)){   //判断from2必填
           dispatch(action.assign({valid: true}));
           return
-        } else if(!validArray(tableCols, value.signPartyList)){   //判断表格必填
-          dispatch(action.assign({valid: true}, value));
-          return
+        }
+        if(value.signPartyList.length === 0){
+          return showError('签署人不能为空！')
+        }
+        let isRepeat = false;
+        let msg = '';
+        if(value.signPartyList){
+          value.signPartyList.forEach(item => {
+            item = toFormValue(item);
+            if(!item.signPartyName){
+              isRepeat = true;
+              msg = '姓名/机构不能为空！'
+            }else if(!item.account){
+              isRepeat = true;
+              msg = '账号（邮箱）不能为空！'
+            }
+          });
+          if(isRepeat){
+            return showError(msg)
+          }
         }
         for(let i = 0; i<value.signPartyList.length; i++){  //对表格数据进行排序
-          value.signPartyList[i].sequence = i+1
-        }
+            value.signPartyList[i].sequence = i+1;
+          }
         for(let i = 0; i<value.signPartyList.length; i++){   //验证表格邮箱格式
           if(value.signPartyList[i].account && !checkMail(value.signPartyList[i].account) && !checkPhone(value.signPartyList[i].account)){
             return showError('请确认表格中邮箱或手机格式正确！')
@@ -345,7 +369,6 @@ const createEditPageContainer = (action, getSelfState, getParentState) => {
         if(submit.returnCode !== 0){return showError(submit.returnMsg);}
         showSuccessMsg(submit.returnMsg);
         closeFunc && closeFunc();                   //发送成功后关闭当前页
-      }
     }catch (e){
       helper.showError(e.message)
     }

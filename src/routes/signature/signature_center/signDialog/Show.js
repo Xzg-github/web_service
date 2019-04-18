@@ -52,7 +52,7 @@ class Show extends React.Component {
     const {result} = this.props;
     return (
       <ModalWithDrag {...this.getProps()}>
-        <iframe src = {result} style={{width: winWidth - 30, height: winHeight - 150}} />
+        <iframe src = {result} style={{width: winWidth - 30, height: '600px'}} />
       </ModalWithDrag>
     );
   }
