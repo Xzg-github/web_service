@@ -72,6 +72,10 @@ const showGlobalMessage = (type=0, message) => {
 const initActionCreator = () => async (dispatch) => {
   dispatch(action.assign({status: 'loading'}));
   const role = await helper.fetchJson(`${ROLE_URL}`);
+  if(role.returnCode != 0){
+    window.location.href = '/epldLogin';
+    return
+  }
   const {returnCode, returnMsg, result} = await helper.fetchJson(`${PRIVILEGE_URL}/${role.result}`);
   //设置用户名
   document.cookie = 'username'+ '=' + escape(role.username);

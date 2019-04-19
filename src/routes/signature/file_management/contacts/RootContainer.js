@@ -252,7 +252,7 @@ const selectActionCreator = (key) => async (dispatch, getState) => {
         helper.showError(returnMsg);
         return
       }
-      dispatch(action.assign({maxRecords: result.returnTotalItem,searchData:{companyContactGroupId},tableItems:result.data, select: key,parents:{title:tree[key].title,value:tree[key].value}}));
+      dispatch(action.assign({currentPage:1,maxRecords: result.returnTotalItem,searchData:{companyContactGroupId},tableItems:result.data, select: key,parents:{title:tree[key].title,value:tree[key].value}}));
     }else {
       const body = {
         filter:{
@@ -266,7 +266,7 @@ const selectActionCreator = (key) => async (dispatch, getState) => {
         helper.showError(returnMsg);
         return
       }
-      dispatch(action.assign({maxRecords: result.returnTotalItem,searchData:{},tableItems:result.data, select: key,parents:null}));
+      dispatch(action.assign({currentPage:1,maxRecords: result.returnTotalItem,searchData:{},tableItems:result.data, select: key,parents:null}));
     }
 
   }catch (e){
@@ -282,15 +282,15 @@ const changeActionCreator = (key, value) => (dispatch) =>{
 };
 
 const pageNumberActionCreator = (currentPage) => (dispatch, getState) => {
-  const {pageSize, searchDataBak={}} = getSelfState(getState());
+  const {pageSize, searchData={}} = getSelfState(getState());
   const newState = {currentPage};
-  return search2(dispatch, action, URL_LIST, currentPage, pageSize, toFormValue(searchDataBak), newState);
+  return search2(dispatch, action, URL_LIST, currentPage, pageSize, toFormValue(searchData), newState);
 };
 
 const pageSizeActionCreator = (pageSize, currentPage) => async (dispatch, getState) => {
-  const {searchDataBak={}} = getSelfState(getState());
+  const {searchData={}} = getSelfState(getState());
   const newState = {pageSize, currentPage};
-  return search2(dispatch, action, URL_LIST, currentPage, pageSize, toFormValue(searchDataBak), newState);
+  return search2(dispatch, action, URL_LIST, currentPage, pageSize, toFormValue(searchData), newState);
 };
 
 

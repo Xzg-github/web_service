@@ -69,8 +69,8 @@ const okActionCreator = () => async (dispatch, getState) => {
     helper.showError(returnMsg);
     return
   }
-  result.number = Math.floor(result.orderMoney/result.unitPrice);
-  const res = await showPayDiaLog(pay,[result],result.nativeOrderNo);
+  // result.number = Math.floor(result.orderMoney/result.unitPrice);
+  // const res = await showPayDiaLog(pay,[result],result.nativeOrderNo);
 
   dispatch(action.assign({visible: false, ok: true}));
 };

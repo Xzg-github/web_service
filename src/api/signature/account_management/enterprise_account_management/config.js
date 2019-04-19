@@ -104,7 +104,7 @@ const four_controls = [
 
 const four_buttons = [
   {key:'order',title:'订购',bsStyle:'primary'},
-  {key:'pay',title:'支付订单'},
+  // {key:'pay',title:'支付订单'},
   {key:'look',title:'查看消费记录'},
 ];
 
