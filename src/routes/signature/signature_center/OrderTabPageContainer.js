@@ -206,7 +206,7 @@ const onAuthenticationActionCreator = () => async(dispatch, getState) => {
   }
 
   const controls = [
-    {key:'name',title:'法人信息',type:'text',required:true},
+    {key:'name',title:'法人姓名',type:'text',required:true},
   ];
   if (await showDiaLog(controls, {} ,false)) {
   }
