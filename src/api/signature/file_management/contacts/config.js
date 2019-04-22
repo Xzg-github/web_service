@@ -10,7 +10,7 @@ const filters = [
   {key:'companyContactAccount',title:'联系人账号',type:"text"},
   {key:'companyContactPhoneNumber',title:'手机号码',type:"number"},
   {key:'companyContactAccountState',title:'状态',type:"select",options:state_options},
-  {key:'companyContactGroupId',title:'所属分组',type:"search"},
+  {key:'companyContactGroupId',title:'所属分组',type:"search",props:{searchWhenClick:true}},
   //{key:'companyContactEmail',title:'电子邮件',type:'text'}
 ];
 

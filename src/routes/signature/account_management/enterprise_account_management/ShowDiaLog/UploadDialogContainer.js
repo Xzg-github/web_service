@@ -81,9 +81,8 @@ const okActionCreator = () => async (dispatch, getState) => {
     fileList.forEach((file) => {
       formData.append('file', file);
     });
-
     execWithLoading(async () => {
-      fetch(`/api/proxy/fadada-service/sign_seal/upload_sign_seal`,{
+      fetch(`/api/proxy/fadada-service/sign_seal/upload_sign_seal/${value.signSealName}`,{
         method: 'post',
         body: formData,
       }).then(function (res) {
@@ -94,18 +93,9 @@ const okActionCreator = () => async (dispatch, getState) => {
           helper.showError(json.returnMsg);
           return
         }
-        const body = {
-          id:json.result,
-          signSealName:value.signSealName
-        };
-        const {result,returnCode,returnMsg} = await helper.fetchJson(URL_ADD,helper.postOption(body))
-        if(returnCode !=0){
-          dispatch(action.assign({confirmLoading:false}));
-          helper.showError(returnMsg);
-          return
-        }
-        dispatch(action.assign({confirmLoading:false}))
-        helper.showSuccessMsg('新增成功')
+
+        dispatch(action.assign({confirmLoading:false}));
+        helper.showSuccessMsg('新增成功');
         dispatch(action.assign({visible: false, ok: true}));
       })
     });
