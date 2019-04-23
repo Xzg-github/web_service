@@ -3,7 +3,6 @@ import withStyles from 'isomorphic-style-loader/lib/withStyles';
 import s from './EditPage.less';
 import {SuperTable2, SuperForm, Card, Title, SuperToolbar} from '../../../../components/index';
 import {getObject} from "../../../../common/common";
-import MyUploadContainer from './MyUpload/MyUploadContainer';
 import { Alert } from 'antd';
 
 
@@ -12,25 +11,28 @@ const TOOLBAR_EVENTS = ['onClick']; // 工具栏点击事件
 class EditPage extends React.Component {
 
   toAlert = () => {
-    const {value} = this.props;
-    if(value.signContractId){
-      return ''
-    }else{
-      return <Alert
-        message="电子签名不适用以下文书："
-        type="warning"
-        showIcon
-        closable
-        description="1、涉及婚姻、继承、收养等人身关系的;
-                          2、涉及土地、房屋等不动产权益转让的;
-                          3、涉及停止供水、供热、供气、供电等公共事业服务的;
-                          4、法律、行政法规规定的不适用电子文书的其他形式。
-                          1.仅支持 .doc 、.docx 、.pdf 、.xls、 .xlsx格式；
-                          2.文件大小需<20MB（注：上传.xls、.xlsx文档请先用Office预览，确保内容不超过A4纸范围）
-                          "
-      />
-    }
-
+    return (
+      <div style ={{overflow: 'hidden'}}>
+        <div style={{float: 'left', width: '600px', marginRight: '10px'}}>
+          <Alert
+            message="电子签名不适用以下文书："
+            type="warning"
+            showIcon
+            description="1、涉及婚姻、继承、收养等人身关系的;
+                        2、涉及土地、房屋等不动产权益转让的;
+                        3、涉及停止供水、供热、供气、供电等公共事业服务的;
+                        4、法律、行政法规规定的不适用电子文书的其他形式。"/>
+        </div>
+        <div style={{float: 'left', width: '600px'}}>
+          <Alert
+            message="上传文件须知："
+            type="warning"
+            showIcon
+            description="1.仅支持 .doc 、.docx 、.pdf 、.xls、 .xlsx格式；
+                        2.文件大小需<20MB（注：上传.xls、.xlsx文档请先用Office预览，确保内容不超过A4纸范围）"/>
+        </div>
+      </div>
+    )
   };
 
   toButtons1 = (buttons) => {
@@ -62,9 +64,22 @@ class EditPage extends React.Component {
     }
   };
 
+/*  getReadonly = (readonly) => {
+    const {value, cascade} = this.props;
+    return helper.getReadonlyKeys(cascade, value, readonly)
+  };*/
+
   toForm1 = () => {
-    const {controls1, onChange, value, onExitValid, valid} = this.props;
-    const props = {controls: controls1, value, onChange, onExitValid, valid};
+    const {controls1, onChange, value, onExitValid, valid, edit} = this.props;
+    if(value.signContractId){
+      controls1[0].type = 'text'
+    }
+    const props = {controls: controls1,
+      value,
+      onChange,
+      onExitValid,
+      valid,
+    };
     return <SuperForm {...props} />
   };
 

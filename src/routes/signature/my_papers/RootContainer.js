@@ -103,7 +103,7 @@ const inputChangeActionCreator = (value) => {
 const searchTreeAction = () =>  (dispatch, getState) => {
   const {allItems, tree, inputValue} = getSelfState(getState());
   if (inputValue) {
-    const indexTableItems = allItems.filter(item => item.id.title.includes(inputValue));
+    const indexTableItems = allItems.filter(item => item.title.includes(inputValue));
     dispatch(action.assign({searchValue: inputValue, expand: Tree.search(tree, inputValue), indexTableItems}));
   } else {
     dispatch(action.assign({searchValue: inputValue, indexTableItems: allItems}));
@@ -112,12 +112,12 @@ const searchTreeAction = () =>  (dispatch, getState) => {
 
 
 const searchClickActionCreator = () => async (dispatch, getState) => {
-  const {searchData} = getSelfState(getState());
+  const {searchData={}} = getSelfState(getState());
   return updateTable(dispatch,getState,helper.convert(searchData))
 };
 
 const resetActionCreator = () => (dispatch,getState) =>{
-  const {searchData} = getSelfState(getState());
+  const {searchData={}} = getSelfState(getState());
   if(searchData.signFileFolderId){
     dispatch( action.assign({searchData: {}}) );
     return
@@ -242,7 +242,7 @@ const selectActionCreator = (key) => async (dispatch, getState) => {
         helper.showError(returnMsg);
         return
       }
-      dispatch(action.assign({maxRecords: result.returnTotalItem,searchData:{signFileFolderId},tableItems:result.data, select: key,parents:{title:tree[key].title,value:tree[key].value}}));
+      dispatch(action.assign({currentPage:1,maxRecords: result.returnTotalItem,searchData:{signFileFolderId},tableItems:result.data, select: key,parents:{title:tree[key].title,value:tree[key].value}}));
     }else {
       const body = {
         filter:{
@@ -256,7 +256,7 @@ const selectActionCreator = (key) => async (dispatch, getState) => {
         helper.showError(returnMsg);
         return
       }
-      dispatch(action.assign({maxRecords: result.returnTotalItem,searchData:{},tableItems:result.data, select: key,parents:null}));
+      dispatch(action.assign({currentPage:1,maxRecords: result.returnTotalItem,searchData:{},tableItems:result.data, select: key,parents:null}));
     }
 
   }catch (e){
@@ -272,15 +272,15 @@ const changeActionCreator = (key, value) => (dispatch) =>{
 };
 
 const pageNumberActionCreator = (currentPage) => (dispatch, getState) => {
-  const {pageSize, searchDataBak={}} = getSelfState(getState());
+  const {pageSize, searchData={}} = getSelfState(getState());
   const newState = {currentPage};
-  return search2(dispatch, action, URL_LIST, currentPage, pageSize, toFormValue(searchDataBak), newState);
+  return search2(dispatch, action, URL_LIST, currentPage, pageSize, toFormValue(searchData), newState);
 };
 
 const pageSizeActionCreator = (pageSize, currentPage) => async (dispatch, getState) => {
-  const {searchDataBak={}} = getSelfState(getState());
+  const {searchData={}} = getSelfState(getState());
   const newState = {pageSize, currentPage};
-  return search2(dispatch, action, URL_LIST, currentPage, pageSize, toFormValue(searchDataBak), newState);
+  return search2(dispatch, action, URL_LIST, currentPage, pageSize, toFormValue(searchData), newState);
 };
 
 

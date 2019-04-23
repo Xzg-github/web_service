@@ -24,7 +24,7 @@ const uploadButtons = [
 ];
 
 const controls1 = [
-  { key: 'signFileSubject', title: '文件主题', type: 'text', span: 2},
+  { key: 'signFileSubject', title: '文件主题', type: 'readonly', span: 2, required: true},
   { key: 'signExpirationTime', title: '签署截止日期', type: 'date'},
   { key: 'note', title: '备注', type: 'textArea', span: 4},
 ];

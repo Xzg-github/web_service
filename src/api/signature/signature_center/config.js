@@ -19,6 +19,7 @@ const isOptions2 = [
   {value: 'cancel', title: '已拒签'},
   {value: 'overdue', title: '已过期'},
   {value: 'revoke', title: '已撤销'},
+  {value: 'reject', title: '已拒签'}
 ];
 
 const filters = [
@@ -26,7 +27,7 @@ const filters = [
   //{key: 'launchAccountId', title: '发起人', type: 'text'},
   {key: 'signStartTimeFrom', title: '发起时间', type: 'date', rule: {type: '<', key: 'signStartTimeTo'}},
   {key: 'signStartTimeTo', title: '至', type: 'date', rule: {type: '>', key: 'signStartTimeFrom'}},
-  //{key: 'fileState', title: '状态', type: 'select', options: isOptions2},
+  {key: 'fileState', title: '状态', type: 'select', options: isOptions2},
   {key: 'signFinishTimeFrom', title: '完成时间', type: 'date', rule: {type: '<', key: 'signExpirationTimeTo '}},
   {key: 'signFinishTimeTo', title: '至', type: 'date', rule: {type: '>', key: 'signExpirationTimeFrom'}},
   {key: 'isAddCcSide', title: '是否抄送', type: 'select', options: isOptions},
@@ -47,7 +48,8 @@ const buttons2 = [
   //{key: 'del', title: '删除', confirm:'是否确定删除'},
   {key: 'signature', title: '签署'},
   {key: 'upload', title: '下载文件'},
-  {key: 'view', title: '在线预览'}
+  {key: 'view', title: '在线预览'},
+  {key: 'reject', title:'拒签'}
 ];
 
 const tableCols = [

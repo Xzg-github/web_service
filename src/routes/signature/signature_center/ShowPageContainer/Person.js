@@ -15,6 +15,7 @@ const Panel = Collapse.Panel;
 const LABELS = [
   {key: 'urlOfSignedFileViewpdf', title: '文件链接', link: true},
   {key: 'fileState', title: '状态', type: 'select'},
+  {key: 'rejectReason', title: '拒签原因'},
   {key: 'note', title: '备注'},
   {key: 'signFileSubject', title: '文件主题'},
   {key: 'signStartTime', title: '发起时间'},
@@ -99,7 +100,10 @@ class Person extends React.Component {
       show = '草稿'
     }else if(state === 'wait'){
       show = '待签署'
-    }else{
+    }else if(state === 'reject'){
+      show = '已拒签'
+    }
+    else{
       show = '已签署'
     }
     if(item.link){
@@ -116,15 +120,17 @@ class Person extends React.Component {
     let show1, show2, show3, show4;
     if(value.signWay === '1'){
       show1 = '签署文件（每人都需签署）'
-    }else{
+    }else if(value.signWay === '0'){
       show1 = '发送文件（仅需对方签署）'
+    }else{
+      show1 = '无'
     }
     if(value.signOrderStrategy === 0){
       show2 = '无序签署'
     }else if(value.signOrderStrategy === 1){
       show2 = '顺序签署'
     }else{
-      show2 = '每个单独签'
+      show2 = '无'
     }
     if(value.isAddCcSide === '0'){
       show3 = '否'

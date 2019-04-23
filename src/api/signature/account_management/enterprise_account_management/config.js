@@ -104,15 +104,15 @@ const four_controls = [
 
 const four_buttons = [
   {key:'order',title:'订购',bsStyle:'primary'},
-  {key:'pay',title:'支付订单'},
+  // {key:'pay',title:'支付订单'},
   {key:'look',title:'查看消费记录'},
 ];
 
 const four_filters = [
   {key:'nativeOrderNo',title:'订单编号',type:'text'},
   {key:'orderStatus',title:'订单状态',type:'select',options:statusOptions},
-  {key:'orderTimeFrom',title:'订购时间',type:'date'},
-  {key:'orderTimeTo',title:'至',type:'date'},
+  {key:'orderTimeFrom',title:'订购时间',type:'date',props:{showTime:true}},
+  {key:'orderTimeTo',title:'至',type:'date',props:{showTime:true}},
 ];
 
 const unitOptions = [

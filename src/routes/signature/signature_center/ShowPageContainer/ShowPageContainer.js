@@ -11,13 +11,14 @@ const getSelfState = (rootState) => {
   return getPathValue(rootState, STATE_PATH);
 };
 
-const buildShowState = (config, items=[], dispatch, title, user) => {
+const buildShowState = (config, items=[], dispatch, title, user, closeFunc) => {
   dispatch(action.create({
     ...config,
     value: items,
     visible: true,
     title,
-    user
+    user,
+    closeFunc
   }))
 };
 
@@ -27,13 +28,14 @@ const cancelActionCreator = ({onClose}) => () => {
 };
 
 const rejectActionCreator = ({onClose}) => async(dispatch, getState) => {
-  const {value} = getSelfState(getState());
+  const {value, closeFunc} = getSelfState(getState());
   const URL_REJECT = `/api/signature/signature_center/repeal`;
   const {returnCode, returnMsg, result} = await fetchJson(`${URL_REJECT}/${value.id}`, 'get');
   if (returnCode !== 0) {
     return showError(returnMsg)
   }
   showSuccessMsg(returnMsg);
+  closeFunc()
 };
 
 const onLinkActionCreator = (tabKey, key, rowIndex, item) => (dispatch, getState) => {

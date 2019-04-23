@@ -167,7 +167,7 @@ const server = app.listen(port, () => {
   console.log(`The server is running at http://localhost:${port}/`);
 });
 
-// 建立WS服务器
-const wsProxy = new WebSocketProxy();
-const wsServer = WsServer.createServer(server);
-wsServer.onConnect(ws => wsProxy.addWebSocket(ws));
+// // 建立WS服务器
+// const wsProxy = new WebSocketProxy();
+// const wsServer = WsServer.createServer(server);
+// wsServer.onConnect(ws => wsProxy.addWebSocket(ws));

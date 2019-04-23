@@ -9,8 +9,9 @@ import AddDialogContainer, {buildAddState} from './AddDialog/AddDialogContainer'
 import upload from './upload';
 import moment from 'moment';
 import execWithLoading from "../../../../standard-business/execWithLoading";
-import {updateTable} from '../../../../standard-business/OrderTabPage/createOrderTabPageContainer'
 import {host, privilege,fadadaServiceName} from '../../../../api/gloablConfig';
+import ShowSignContainer, {buildSignState} from '../signDialog/ShowSignContainer'
+import {toFormValue} from "../../../../common/check";
 
 /**
  * 功能：生成一个签署中心新增页面容器组件
@@ -40,12 +41,18 @@ const createEditPageContainer = (action, getSelfState, getParentState) => {
     try{
       let url = '/api/signature/signature_center/editConfig';
       const editConfig = getJsonResult(await fetchJson(url));
+      const controls1 = helper.deepCopy(editConfig.controls1);
       let data = {};
       if(id){
         const URL_LIST_ONE = '/api/signature/signature_center/getOne';
         const list = getJsonResult(await fetchJson(`${URL_LIST_ONE}/${id}`,'get'));
         if(list.signWay === '1' || list.signWay === 1){
           list.signPartyList[0].readonly = true         //签署文件时，发起人信息设为只读
+        }
+        if(!list.signContractId){
+          controls1[0].type = 'readonly'
+        }else{
+          controls1[0].type = 'text'
         }
           data = list;
       }
@@ -55,6 +62,7 @@ const createEditPageContainer = (action, getSelfState, getParentState) => {
         status: 'page',
         closeFunc,
         value: data,
+        controls1
       }
     }catch (e){
       helper.showError(e.message);
@@ -86,11 +94,11 @@ const createEditPageContainer = (action, getSelfState, getParentState) => {
         const {status, name ,response = {}} = sss;
         const fileBody = response.result;
         if(status && response.returnCode === 0){
+          dispatch(action.assign({...fileBody, signFileSubject: name}, 'value'));
           showSuccessMsg(`[${name}]上传成功`);
         }else{
           return showError(`[${name}]上传失败`)
         }
-        dispatch(action.assign({...fileBody, signFileSubject: name}, 'value'))
       })
     }
   };
@@ -166,7 +174,7 @@ const createEditPageContainer = (action, getSelfState, getParentState) => {
     if(json.returnCode !== 0) return showError(json.returnMsg);
     const selectItems = json.result;
     const filterItems = json.result;
-    const newItems = getMoreData({key: 'account', arr:value.signPartyList}, {key: 'companyContactAccount', arr:filterItems});
+    const newItems = getMoreData({key: 'account', arr:value.signPartyList || []}, {key: 'companyContactAccount', arr:filterItems});
     const okFunc = (addItems = []) => {
       dispatch(action.assign({signPartyList: addItems}, 'value'))
     };
@@ -190,34 +198,20 @@ const createEditPageContainer = (action, getSelfState, getParentState) => {
     showPopup(AddDialogContainer)
   };
 
-  //刷新页面
-  const upDatePage = (guid) => async (dispatch, getState) => {
-    showSuccessMsg('保存成功');
-    const selfState = getSelfState(getState());
-    const URL_LIST_ONE = '/api/signature/signature_center/getOne';
-    const list = getJsonResult(await fetchJson(`${URL_LIST_ONE}/${guid}`,'get'));
-    if(!list){
-      return showError(`刷新页面数据失败`)
-    }
-    dispatch(action.assign({value: list}))
-  };
-
-const arrOnly = (arr, key) => {
-  let first;
-  if(arr.length>0){   //获取第一个元素的对应的属性
-    first = arr[0][key];
-    return arr.every((item) =>{    //都跟第一个元素做比对，只要有一个不对应，那说明不是唯一属性值了
-      return item[key] === first;
-    });
-  }
-  return true;
-};
-
 //验证邮箱
   const checkMail= (mail) => {
     if(!(/^[a-zA-Z0-9_.-]+@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*\.[a-zA-Z0-9]{2,6}$/.test(mail))){
       return false;
     }else {
+      return true
+    }
+  };
+
+  //验证手机号码
+  const checkPhone = (number) => {
+    if(!(/^[1][3,4,5,7,8][0-9]{9}$/.test(number))){
+      return false;
+    }else{
       return true
     }
   };
@@ -240,66 +234,36 @@ const arrOnly = (arr, key) => {
   const saveAction = async (dispatch, getState) => {
     const {value, closeFunc} = getSelfState(getState());
     const URL_SAVE = `/api/signature/signature_center/save`;
-/*      for(let i = 0; i<value.signPartyList.length; i++){  //对表格数据进行排序
+    if(JSON.stringify(value) === "{}"){    //新增页为空，直接关闭页面
+      closeFunc && closeFunc();
+      return
+    }
+    if(value.signPartyList){
+      for(let i = 0; i<value.signPartyList.length; i++){  //对表格数据进行排序
         value.signPartyList[i].sequence = i+1
       }
 
       for(let i = 0; i<value.signPartyList.length; i++){   //验证表格邮箱格式
-        if(value.signPartyList[i].account && !checkMail(value.signPartyList[i].account)){
-          return showError('表格中有账号（邮箱）格式不正确！')
+        if(value.signPartyList[i].account && !checkMail(value.signPartyList[i].account) && !checkPhone(value.signPartyList[i].account)){
+          return showError('请输入正确的账号(手机号或邮箱)！')
         }
       }
       if(only(value.signPartyList, 'account') === false){
         return showError('表格账号（邮箱）保持唯一')
-      }*/
-
-    if(JSON.stringify(value) === "{}"){
-      return showError('空白页面')
-    }else{
-      if(value.signPartyList){
-        for(let i = 0; i<value.signPartyList.length; i++){  //对表格数据进行排序
-          value.signPartyList[i].sequence = i+1
-        }
-
-        for(let i = 0; i<value.signPartyList.length; i++){   //验证表格邮箱格式
-          if(value.signPartyList[i].account && !checkMail(value.signPartyList[i].account)){
-            return showError('表格中有账号（邮箱）格式不正确！')
-          }
-        }
-        if(only(value.signPartyList, 'account') === false){
-          return showError('表格账号（邮箱）保持唯一')
-        }
       }
-      const postData = {
-        signContractId: value.signContractId,
-        id: value.id,
-        isAddCcSide: value.isAddCcSide,
-        note: value.note,
-        isSignInSpecifiedLocation:value.isSignInSpecifiedLocation,
-        signExpirationTime: value.signExpirationTime,
-        signFinishTime: value.signFinishTime,
-        signOrderStrategy: value.signOrderStrategy,
-        signPartyList: value.signPartyList,
-        signWay: value.signWay,
-        signFileSubject: value.signFileSubject
-      };
-      const {result, returnCode, returnMsg} = await fetchJson(URL_SAVE,postOption(postData, 'post'));
-      if(returnCode !== 0 ){return showError(returnMsg);}
-      closeFunc && closeFunc();
     }
+    const {result, returnCode, returnMsg} = await fetchJson(URL_SAVE,postOption(value, 'post'));
+    if(returnCode !== 0 ){return showError(returnMsg)}
+    closeFunc && closeFunc();
   };
 
   //下一步
  const nextAction = async(dispatch, getState) => {
    try {
      const {value, controls1, controls2, tableCols, closeFunc} = getSelfState(getState());
-     let date = moment().format('YYYY-MM-DD HH:mm:ss'); //获取当前时间
-     for(let i = 0; i<value.signPartyList.length; i++){
-       value.signPartyList[i].sequence = i+1
+     if(JSON.stringify(value) === "{}"){         //没有填写任何内容是，直接关闭
+       return showError('请上传签署文件！')
      }
-/*     if(value.signExpirationTime < date){
-       return showError(('签署截至时间已过期，请重新确认！'))
-     }*/
      if(!validValue(controls1, value)){   //判断from1必填
        dispatch(action.assign({valid: true}));
        return
@@ -308,21 +272,30 @@ const arrOnly = (arr, key) => {
        dispatch(action.assign({valid: true}));
        return
      }
-     if(!validArray(tableCols, value.signPartyList.filter(item => !item.hide))){   //判断表格必填
-       dispatch(action.assign({valid: true, from: false}));
-       return
+     let isRepeat = false;
+     let msg = '';
+     if(value.signPartyList){
+       value.signPartyList.forEach(item => {
+         item = toFormValue(item);
+         if(!item.signPartyName){
+           isRepeat = true;
+           msg = '姓名/机构不能为空！'
+         }else if(!item.account){
+           isRepeat = true;
+           msg = '账号（邮箱）不能为空！'
+         }
+       });
+       if(isRepeat){
+         return showError(msg)
+       }
      }
-     if(value.signPartyList.length === 0){
-       return showError('至少添加一个签署方');
-     }
-
      for(let i = 0; i<value.signPartyList.length; i++){  //对表格数据进行排序
        value.signPartyList[i].sequence = i+1
      }
 
      for(let i = 0; i<value.signPartyList.length; i++){   //验证表格邮箱格式
-       if(value.signPartyList[i].account && !checkMail(value.signPartyList[i].account)){
-         return showError('表格中有账号（邮箱）格式不正确！')
+       if(value.signPartyList[i].account && !checkMail(value.signPartyList[i].account) && !checkPhone(value.signPartyList[i].account)){
+         return showError('请输入正确的账号(手机号或邮箱)！')
        }
      }
 
@@ -341,7 +314,8 @@ const arrOnly = (arr, key) => {
      }
      const {returnCode, returnMsg, result } = await helper.fetchJson(URL_SIGN, helper.postOption(save.id)); //签署
      if (returnCode !== 0) return helper.showError(returnMsg);
-     window.open(result);
+     buildSignState(dispatch, value.signFileSubject, closeFunc, result);
+     showPopup(ShowSignContainer);
      closeFunc && closeFunc();
    }catch (e){
      helper.showError(e.message)
@@ -352,51 +326,49 @@ const arrOnly = (arr, key) => {
   const sendAction = async (dispatch, getState) => {
     try {
       const {value, controls1, controls2, tableCols, closeFunc} = getSelfState(getState());
-      let date = moment().format('YYYY-MM-DD HH:mm:ss'); //获取当前时间
-      for(let i = 0; i<value.signPartyList.length; i++){
-        value.signPartyList[i].sequence = i+1
-      }
-      if(value.signExpirationTime < date){
-        return showError(('签署截至时间已过期，请重新确认！'))
-      }
-      if(!validValue(controls1, value)){   //判断from1必填
-        dispatch(action.assign({valid: true}));
-        return
-      }
-      if(!validValue(controls2, value)){   //判断from2必填
-        dispatch(action.assign({valid: true}));
-        return
-      }
-      if(!validArray(tableCols, value.signPartyList.filter(item => !item.hide))){   //判断表格必填
-        dispatch(action.assign({valid: true, from: false}));
-        return
-      }
-      if(value.signPartyList.length === 0){
-        return showError('至少添加一个签署方');
-      }
-
-      for(let i = 0; i<value.signPartyList.length; i++){  //对表格数据进行排序
-        value.signPartyList[i].sequence = i+1
-      }
-
-      for(let i = 0; i<value.signPartyList.length; i++){   //验证表格邮箱格式
-        if(value.signPartyList[i].account && !checkMail(value.signPartyList[i].account)){
-          return showError('表格中有账号（邮箱）格式不正确！')
-        }
-      }
-
-      let id = value.id;
       const URL_SAVE = `/api/signature/signature_center/save`;      //保存
       const URL_SUBMIT = '/api/signature/signature_center/sub';  //提交
-
-      const save = helper.getJsonResult(await fetchJson(URL_SAVE,postOption(value, 'post')));  //先保存
-      const submit = await fetchJson(`${URL_SUBMIT}/${save.id}`, 'get');   //再提交
-      if(submit.returnCode !== 0){
-        showError(submit.returnMsg);
-        return
-      }
-      showSuccessMsg(submit.returnMsg);
-      closeFunc && closeFunc();                   //发送成功后关闭当前页
+        if(!validValue(controls1, value)){   //判断from1必填
+          dispatch(action.assign({valid: true}));
+          return
+        }
+        if(!validValue(controls2, value)){   //判断from2必填
+          dispatch(action.assign({valid: true}));
+          return
+        }
+        if(value.signPartyList.length === 0){
+          return showError('签署人不能为空！')
+        }
+        let isRepeat = false;
+        let msg = '';
+        if(value.signPartyList){
+          value.signPartyList.forEach(item => {
+            item = toFormValue(item);
+            if(!item.signPartyName){
+              isRepeat = true;
+              msg = '姓名/机构不能为空！'
+            }else if(!item.account){
+              isRepeat = true;
+              msg = '账号（邮箱）不能为空！'
+            }
+          });
+          if(isRepeat){
+            return showError(msg)
+          }
+        }
+        for(let i = 0; i<value.signPartyList.length; i++){  //对表格数据进行排序
+            value.signPartyList[i].sequence = i+1;
+          }
+        for(let i = 0; i<value.signPartyList.length; i++){   //验证表格邮箱格式
+          if(value.signPartyList[i].account && !checkMail(value.signPartyList[i].account) && !checkPhone(value.signPartyList[i].account)){
+            return showError('请确认表格中邮箱或手机格式正确！')
+          }
+        }
+        const save = helper.getJsonResult(await fetchJson(URL_SAVE,postOption(value, 'post')));  //先保存
+        const submit = await fetchJson(`${URL_SUBMIT}/${save.id}`, 'get');   //再提交
+        if(submit.returnCode !== 0){return showError(submit.returnMsg);}
+        showSuccessMsg(submit.returnMsg);
+        closeFunc && closeFunc();                   //发送成功后关闭当前页
     }catch (e){
       helper.showError(e.message)
     }

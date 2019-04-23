@@ -35,7 +35,7 @@ const mySearch = async (dispatch, action, selfState, currentPage, pageSize, filt
     default:
       return
   }
-  const {returnCode, returnMsg, result} = await search(urlList, from, to, {...filter,signUser,fileState,isAll}, false);
+  const {returnCode, returnMsg, result} = await search(urlList, from, to, {signUser,fileState,isAll,...filter}, false);
   const json = await helper.fetchJson(URL_TABSLIST, 'post');
   if (returnCode === 0) {
     if (!result.tags && result.tabTotal) { //转成统一结构

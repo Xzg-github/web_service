@@ -6,8 +6,10 @@ import helper, {fetchJson, showError} from '../../../common/common';
 import { getObject } from '../../../common/common';
 import createOrderTabPageContainer, {buildOrderTabPageCommonState, updateTable} from "../../../standard-business/OrderTabPage/createOrderTabPageContainer";
 import ShowPageContainer,{buildShowState} from "./ShowPageContainer/ShowPageContainer";
+import ShowSignContainer, {buildSignState} from './signDialog/ShowSignContainer'
 import showPopup from '../../../standard-business/showPopup';
 import showDiaLog from './showDiaLog/AddDialogContainer';
+import rejectDialog from './rejectDialog/RejectDialogContainer';
 import {jump} from '../../../components/Link';
 
 const URL_CONFIG = '/api/signature/signature_center/config';
@@ -84,11 +86,31 @@ const signatureAction = (tabKey) => async (dispatch, getState) =>{
   const checkedItems = tableItems[tabKey].filter(item => item.checked === true);
   if(checkedItems.length !== 1)return helper.showError('请勾选一条记录');
   const id = checkedItems[0].id;
+  const title = checkedItems[0].signFileSubject;
   const URL_SIGN =  '/api/signature/signature_center/sign';
   const {returnCode, returnMsg, result } = await helper.fetchJson(URL_SIGN, helper.postOption(id));
   if (returnCode !== 0) return helper.showError(returnMsg);
-  window.open(result);
-  return updateTable(dispatch, action, getSelfState(getState()));
+  const closeFunc = () => {
+    return updateTable(dispatch, action, getSelfState(getState()), ['mySign', 'hisSign', 'draft', 'other']);
+  };
+  buildSignState(dispatch, title, closeFunc, result);
+  showPopup(ShowSignContainer)
+};
+
+//拒签
+const rejectActionCreation = (tabKey) => async (dispatch, getState) => {
+  const {tableItems} = getSelfState(getState());
+  const controls = [{ key: 'rejectReason', title: '拒签原因', required: true, type: 'text'}];
+  const URL_REJECT = '/api/signature/signature_center/reject';
+  const checkItems = tableItems[tabKey].filter(item => item.checked === true);
+  const id = checkItems[0].id;
+  const closeFunc = () => {
+    return updateTable(dispatch, action, getSelfState(getState()), ['mySign', 'hisSign', 'draft', 'other']);
+  };
+  if(checkItems.length !==1){return helper.showError('请勾选一条记录！')}
+  if(checkItems.length === 1){
+    await rejectDialog(controls, id, closeFunc, {}, false)
+  }
 };
 
 export const getCookie = (cookieName) =>{
@@ -116,7 +138,10 @@ const onLinkActionCreator = (tabKey, key, rowIndex, item) => async (dispatch, ge
   const user = await fetchJson(`${URL_ACCOUNT}/${token}`,'get');
   if(user.returnCode !== 0) {return showError(user.returnMsg)}
   const title = items.signFileSubject || '签署详情';
-  buildShowState(showConfig, result, dispatch, title, user);
+  const closeFunc = () => {
+    return updateTable(dispatch, action, getSelfState(getState()), ['mySign', 'hisSign', 'draft', 'other']);
+  };
+  buildShowState(showConfig, result, dispatch, title, user, closeFunc);
   showPopup(ShowPageContainer);
 };
 
@@ -139,11 +164,16 @@ const linePreviewAction = (tabKey) => async (dispatch, getState) => {
   const checkedItems = tableItems[tabKey].filter(item => item.checked === true);
   if(checkedItems.length !== 1){return helper.showError('请勾选一条记录')}
   const URL_VIEW = checkedItems[0].urlOfSignedFileViewpdf;
+  const title = checkedItems[0].signFileSubject;
   if(!URL_VIEW){
     helper.showError('请先完成签署操作！');
     return
   }
-  window.open(URL_VIEW)
+  const closeFunc = () => {
+    return updateTable(dispatch, action, getSelfState(getState()), ['mySign', 'hisSign', 'draft', 'other']);
+  };
+  buildSignState(dispatch, title, closeFunc, URL_VIEW);
+  showPopup(ShowSignContainer)
 };
 
 
@@ -153,7 +183,8 @@ const toolbarActions = {
   signature:signatureAction,
   del: delAction,
   upload: uploadActionCreator,
-  view: linePreviewAction
+  view: linePreviewAction,
+  reject: rejectActionCreation
 };
 
 const clickActionCreator = (tabKey, key) => {
@@ -192,14 +223,8 @@ const onAuthenticationActionCreator = () => async(dispatch, getState) => {
     return
   }
 
-  const options = [
-    {value:1,title:'法人'},
-    {value:2,title:'代理人'},
-  ];
-
   const controls = [
-    {key:'companyPrincipalType',title:'企业负责人信息 ',type:'select',options,required:true},
-    {key:'name',title:'法人信息',type:'text',required:true},
+    {key:'name',title:'法人姓名',type:'text',required:true},
   ];
   if (await showDiaLog(controls, {} ,false)) {
   }

@@ -32,6 +32,7 @@ const okActionCreator = () => async (dispatch, getState) => {
     dispatch(action.assign({valid: true}));
     return;
   }
+  value.companyPrincipalType = 1;
   const body = helper.postOption(value);
   const {result,returnCode,returnMsg} =await helper.fetchJson(url,body);
   if(returnCode !== 0) {

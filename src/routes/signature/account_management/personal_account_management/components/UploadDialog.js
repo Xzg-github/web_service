@@ -55,7 +55,7 @@ class UploadDialog extends React.Component {
             <RadioGroup value={radioValue[index]} onChange={(e)=>onRadio(e.target.checked,index)}>
               <Radio value={true}>默认签章</Radio>
             </RadioGroup>
-            {isAuthSeal && <span>企业授权</span>}
+            {isAuthSeal && <img src={require('../../../../../../public/authorization.svg')} alt=""/>}
           </div>
         </div>
       </div>

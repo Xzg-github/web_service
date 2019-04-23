@@ -17,9 +17,6 @@ const getSelfState = (state) => {
 
 const buildState = (config, items,edit) => {
   const controls = helper.deepCopy(config.controls);
-  if(!items.companyContactGroupId){
-    controls[3].type ='search'
-  }
   return {
     ...config,
     controls,
