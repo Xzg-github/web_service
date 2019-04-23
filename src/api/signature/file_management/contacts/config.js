@@ -48,7 +48,7 @@ const controls = [
   {key:'companyContactAccount',title:'账号(电子邮件)',type:'text',required:true},
   //{key:'companyContactEmail',title:'电子邮件',type:'text',required:true},
   {key:'companyContactPhoneNumber',title:'手机号码',type:'number'},
-  {key:'companyContactGroupId',title:'所属分组',type:'readonly',required:true},
+  {key:'companyContactGroupId',title:'所属分组',type:'search',required:true},
   {key:'companyContactNote',title:'备注',type:'textArea',span:2},
 ];
 
