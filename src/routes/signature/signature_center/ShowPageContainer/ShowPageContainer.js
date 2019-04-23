@@ -1,8 +1,8 @@
 import {Action} from '../../../../action-reducer/action';
 import { connect } from 'react-redux';
 import {getPathValue} from '../../../../action-reducer/helper';
-import {postOption, fetchJson, showSuccessMsg, showError} from '../../../../common/common';
 import Person from './Person';
+import reasonDiaLog from './reasonDialog/ReasonContainer'
 
 const STATE_PATH = ['temp'];
 const action = new Action(STATE_PATH);
@@ -29,17 +29,10 @@ const cancelActionCreator = ({onClose}) => () => {
 
 const rejectActionCreator = ({onClose}) => async(dispatch, getState) => {
   const {value, closeFunc} = getSelfState(getState());
-  const URL_REJECT = `/api/signature/signature_center/repeal`;
-  const {returnCode, returnMsg, result} = await fetchJson(`${URL_REJECT}/${value.id}`, 'get');
-  if (returnCode !== 0) {
-    return showError(returnMsg)
+  const id = value.id;
+  const controls = [{key: 'revokeReason', title: '撤销原因', type: 'text', required: true}];
+  if (await reasonDiaLog(controls, closeFunc, id, {} )) {
   }
-  showSuccessMsg(returnMsg);
-  closeFunc()
-};
-
-const onLinkActionCreator = (tabKey, key, rowIndex, item) => (dispatch, getState) => {
-
 };
 
 const clickActionCreators = {
@@ -62,7 +55,6 @@ const actionCreators = {
   onClick: clickActionCreator,
   reject: rejectActionCreator,
   onCancel:cancelActionCreator,
-  onLink:onLinkActionCreator
 };
 
 const container = connect(mapStateToProps, actionCreators)(Person);
