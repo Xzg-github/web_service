@@ -32,6 +32,7 @@ const okActionCreator = () => async (dispatch, getState) => {
     dispatch(action.assign({valid: true}));
     return;
   }
+  console.log(value);
   if(!value.companyAccountId){
     helper.showError('请先获取企业信息');
     return
