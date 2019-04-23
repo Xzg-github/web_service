@@ -100,7 +100,8 @@ const companyNameAction = () => async (dispatch, getState) => {
       break
     }
   }
-  if (await showDiaLogFour(diaLogFour,{id:value.id,companyOrder,companyName},isLook)) {
+  let companyAccountId = value.companyAccountId ? value.companyAccountId : '';
+  if (await showDiaLogFour(diaLogFour,{id:value.id,companyOrder,companyName,companyAccountId},isLook)) {
     return updateTable(dispatch, getState)
   }
 };
