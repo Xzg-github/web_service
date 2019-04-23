@@ -30,4 +30,10 @@ api.post('/audit', async (req, res) => {
   res.send(await fetchJsonByNode(req, url, postOption(req.body, 'post')))
 });
 
+//解绑
+api.post('/untied', async(req, res) => {
+  const url = `${service}/user_account/relieve_bind_company_belong`;
+  res.send(await fetchJsonByNode(req, url, postOption(req.body, 'post')))
+});
+
 export default api;

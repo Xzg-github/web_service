@@ -1,7 +1,6 @@
 import { connect } from 'react-redux';
 import { Action } from '../../../action-reducer/action';
 import {getPathValue} from '../../../action-reducer/helper';
-import {search2} from '../../../common/search';
 import helper, {fetchJson, showError} from '../../../common/common';
 import { getObject } from '../../../common/common';
 import createOrderTabPageContainer, {buildOrderTabPageCommonState, updateTable} from "../../../standard-business/OrderTabPage/createOrderTabPageContainer";
@@ -9,7 +8,7 @@ import ShowPageContainer,{buildShowState} from "./ShowPageContainer/ShowPageCont
 import ShowSignContainer, {buildSignState} from './signDialog/ShowSignContainer'
 import showPopup from '../../../standard-business/showPopup';
 import showDiaLog from './showDiaLog/AddDialogContainer';
-import {jump} from '../../../components/Link';
+import rejectDialog from './rejectDialog/RejectDialogContainer';
 
 const URL_CONFIG = '/api/signature/signature_center/config';
 const urlList = '/api/signature/signature_center/list';
@@ -79,6 +78,7 @@ const delAction = (tabKey) => async (dispatch, getState) => {
   return updateTable(dispatch, action, getSelfState(getState()));
 };
 
+//签署
 const signatureAction = (tabKey) => async (dispatch, getState) =>{
   const {tableItems} = getSelfState(getState());
   const checkedItems = tableItems[tabKey].filter(item => item.checked === true);
@@ -93,6 +93,22 @@ const signatureAction = (tabKey) => async (dispatch, getState) =>{
   };
   buildSignState(dispatch, title, closeFunc, result);
   showPopup(ShowSignContainer)
+};
+
+//拒签
+const rejectActionCreation = (tabKey) => async (dispatch, getState) => {
+  const {tableItems} = getSelfState(getState());
+  const controls = [{ key: 'rejectReason', title: '拒签原因', required: true, type: 'text'}];
+  const URL_REJECT = '/api/signature/signature_center/reject';
+  const checkItems = tableItems[tabKey].filter(item => item.checked === true);
+  const id = checkItems[0].id;
+  const closeFunc = () => {
+    return updateTable(dispatch, action, getSelfState(getState()), ['mySign', 'hisSign', 'draft', 'other']);
+  };
+  if(checkItems.length !==1){return helper.showError('请勾选一条记录！')}
+  if(checkItems.length === 1){
+    await rejectDialog(controls, id, closeFunc, {}, false)
+  }
 };
 
 export const getCookie = (cookieName) =>{
@@ -156,7 +172,6 @@ const linePreviewAction = (tabKey) => async (dispatch, getState) => {
   };
   buildSignState(dispatch, title, closeFunc, URL_VIEW);
   showPopup(ShowSignContainer)
-  //window.open(URL_VIEW)
 };
 
 
@@ -166,7 +181,8 @@ const toolbarActions = {
   signature:signatureAction,
   del: delAction,
   upload: uploadActionCreator,
-  view: linePreviewAction
+  view: linePreviewAction,
+  reject: rejectActionCreation
 };
 
 const clickActionCreator = (tabKey, key) => {

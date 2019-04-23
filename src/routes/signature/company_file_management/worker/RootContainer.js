@@ -7,6 +7,7 @@ import {buildOrderPageState} from '../../../../common/state';
 import {search, search2} from '../../../../common/search';
 import showDialog from './EdiltDialogContainer';
 import {toFormValue} from "../../../../common/check";
+import showUnited from './UntiedDialogContainer'
 
 
 const action = new Action(['worker'], false);
@@ -90,8 +91,27 @@ const examineActionCreator = ()=> async(dispatch, getState) => {
     helper.showError('请勾选一条记录');
     return
   }
+  if(items[0].companyAuditState === '1'){
+    return helper.showError('此企业员工已审核通过！')
+  }
   if (await showDialog( items[0] ,config)) {
     refresh(dispatch, state);
+  }
+};
+
+//解绑
+const untiedActionCreator = () => async(dispatch, getState) => {
+  const {tableItems, config} = getSelfState(getState());
+  const items = tableItems.filter(item => item.checked);
+  const controls = [{key: 'refuseNote', type: 'text', title: '解绑原因', required: true}];
+  if(items.length !==1){
+    helper.showError('请勾选一条记录');
+    return
+  }
+  if(items[0].companyAuditState === '1'){
+    await showUnited(controls, items)
+  }else{
+    return helper.showError('仅解绑已审核的员工！')
   }
 };
 
@@ -143,7 +163,8 @@ const clickActionCreators = {
   search: searchActionCreator,
   examine: examineActionCreator,
   disable: disableActionCreator,
-  enable: enableActionCreator
+  enable: enableActionCreator,
+  untied: untiedActionCreator
 };
 
 const clickActionCreator = (key) => {

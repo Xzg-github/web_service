@@ -38,6 +38,7 @@ const buttons = [
   // {key:'add',title:'新增',bsStyle:'primary'},
   // {key:'invitation',title:'发起邀请'},
   {key:'examine',title:'审核', bsStyle: 'primary'},
+  {key: 'untied', title: '解绑'}
   //{key:'edit',title:'编辑'},
   //{key:'del',title:'删除'},
   //{key:'enable',title:'启用'},
