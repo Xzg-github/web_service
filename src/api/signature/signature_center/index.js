@@ -107,6 +107,12 @@ api.post('/del', async(req, res) => {
   res.send(await fetchJsonByNode(req, url, postOption(req.body)))
 });
 
+//拒签
+api.post('/reject', async(req, res) => {
+  const url = `${service}/sign_center/reject`;
+  res.send(await fetchJsonByNode(req, url, postOption(req.body)))
+});
+
 //从群组中添加
 api.post('/groups', async(req, res) => {
   const url = `${service}/sign_group/select_by_param`;
