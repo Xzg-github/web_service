@@ -13,7 +13,7 @@ const filters = [
   {key: 'phoneNumber', title: '手机号码', type: 'text'},
   {key: 'userAccountState', title: '状态', type: 'select', options: isOptions1},
   {key: 'email', title: '电子邮件', type: 'text'},
-  {key: 'companyName', title: '归属企业', type: 'text'},
+  {key: 'companyId', title: '归属企业', type: 'search'},
 ];
 
 const tableCols = [
