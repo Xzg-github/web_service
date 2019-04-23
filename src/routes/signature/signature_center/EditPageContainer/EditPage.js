@@ -13,7 +13,7 @@ class EditPage extends React.Component {
   toAlert = () => {
     return (
       <div style ={{overflow: 'hidden'}}>
-        <div style={{float: 'left', width: '600px', marginRight: '10px'}}>
+        <div style={{float: 'left', width: '597px', marginRight: '10px'}}>
           <Alert
             message="电子签名不适用以下文书："
             type="warning"
@@ -23,7 +23,7 @@ class EditPage extends React.Component {
                         3、涉及停止供水、供热、供气、供电等公共事业服务的;
                         4、法律、行政法规规定的不适用电子文书的其他形式。"/>
         </div>
-        <div style={{float: 'left', width: '600px'}}>
+        <div style={{float: 'left', width: '497px'}}>
           <Alert
             message="上传文件须知："
             type="warning"

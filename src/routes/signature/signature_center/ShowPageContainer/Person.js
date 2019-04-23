@@ -16,6 +16,7 @@ const LABELS = [
   {key: 'urlOfSignedFileViewpdf', title: '文件链接', link: true},
   {key: 'fileState', title: '状态', type: 'select'},
   {key: 'rejectReason', title: '拒签原因'},
+  {key: 'revokeReason', title: '撤销原因'},
   {key: 'note', title: '备注'},
   {key: 'signFileSubject', title: '文件主题'},
   {key: 'signStartTime', title: '发起时间'},

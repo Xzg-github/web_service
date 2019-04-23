@@ -151,9 +151,9 @@ api.get('/record/:guid', async(req, res) => {
 });
 
 //撤销签署
-api.get('/repeal/:guid', async(req, res) => {
-  const url = `${service}/sign_center/revoke/${req.params.guid}`;
-  res.send(await fetchJsonByNode(req, url))
+api.post('/repeal', async(req, res) => {
+  const url = `${service}/sign_center/revoke`;
+  res.send(await fetchJsonByNode(req, url, postOption(req.body)))
 });
 
 //判断新增操作
