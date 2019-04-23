@@ -15,6 +15,7 @@ const Panel = Collapse.Panel;
 const LABELS = [
   {key: 'urlOfSignedFileViewpdf', title: '文件链接', link: true},
   {key: 'fileState', title: '状态', type: 'select'},
+  {key: 'rejectReason', title: '拒签原因'},
   {key: 'note', title: '备注'},
   {key: 'signFileSubject', title: '文件主题'},
   {key: 'signStartTime', title: '发起时间'},
@@ -99,7 +100,10 @@ class Person extends React.Component {
       show = '草稿'
     }else if(state === 'wait'){
       show = '待签署'
-    }else{
+    }else if(state === 'reject'){
+      show = '已拒签'
+    }
+    else{
       show = '已签署'
     }
     if(item.link){
