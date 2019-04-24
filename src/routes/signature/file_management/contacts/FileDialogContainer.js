@@ -142,6 +142,9 @@ const selectActionCreator = (key) => async (dispatch, getState) => {
 
 
 const onChangeActionCreator = (keyValue,keyName) => async (dispatch, getState) => {
+  if(typeof keyValue !== 'object'){
+    keyValue = keyValue.replace(/^\s+|\s+$/g,"")
+  }
   dispatch(action.assign({[keyName]: keyValue}, 'value'));
 };
 
