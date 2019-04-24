@@ -124,6 +124,9 @@ const createEditPageContainer = (action, getSelfState, getParentState) => {
     }else if(key === 'signWay' && values === '0'){
       dispatch(action.assign({signPartyList: newList }, 'value'))
     }
+    if(typeof values !== 'object'){        //消除输入空格
+      values = values.replace(/^\s|\s+$/g, "")
+    }
     dispatch (action.assign({[key]: values}, 'value'));
   };
 

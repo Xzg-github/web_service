@@ -101,11 +101,14 @@ const rejectActionCreation = (tabKey) => async (dispatch, getState) => {
   const controls = [{ key: 'rejectReason', title: '拒签原因', required: true, type: 'text'}];
   const URL_REJECT = '/api/signature/signature_center/reject';
   const checkItems = tableItems[tabKey].filter(item => item.checked === true);
-  const id = checkItems[0].id;
   const closeFunc = () => {
     return updateTable(dispatch, action, getSelfState(getState()), ['mySign', 'hisSign', 'draft', 'other']);
   };
   if(checkItems.length !==1){return helper.showError('请勾选一条记录！')}
+  const id = checkItems[0].id;
+  if(checkItems[0].fileState !== 'wait'){
+    return helper.showError('仅待签署状态可以拒签！')
+  }
   if(checkItems.length === 1){
     await rejectDialog(controls, id, closeFunc, {}, false)
   }
