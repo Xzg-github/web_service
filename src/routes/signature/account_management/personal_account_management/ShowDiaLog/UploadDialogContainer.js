@@ -174,6 +174,9 @@ const mapStateToProps = (state) => {
 };
 
 const formChangeActionCreator = (key, value) => {
+  if(typeof value !== 'object'){
+    value = value.replace(/^\s+|\s+$/g,"")
+  }
   return action.assign({[key]: value}, 'value');
 };
 

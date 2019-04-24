@@ -27,6 +27,9 @@ const buildState = (config, items=[],pay) => {
 
 const changeActionCreator = (key, value) =>  (dispatch, getState) => {
   const {items} = getSelfState(getState());
+  if(typeof value !== 'object'){
+    value = value.replace(/^\s+|\s+$/g,"")
+  }
   let isMoney = false;
   for(let item of items){
     let money = Number(value);
