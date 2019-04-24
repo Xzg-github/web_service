@@ -16,7 +16,6 @@ const isOptions2 = [
   {value:'wait', title: '待签署'},
   {value: 'sign', title: '已签署'},
   {value: 'completed', title: '已完成'},
-  {value: 'cancel', title: '已拒签'},
   {value: 'overdue', title: '已过期'},
   {value: 'revoke', title: '已撤销'},
   {value: 'reject', title: '已拒签'}

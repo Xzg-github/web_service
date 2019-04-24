@@ -18,12 +18,17 @@ const buildState = (controls, items,) => {
     title: '是否确定解绑',
     visible: true,
     items,
+    value: {}
   }
 };
 
 const okActionCreator = () => async(dispatch, getState) => {
-  const {value, items} = getSelfState(getState());
+  const {value, items, controls} = getSelfState(getState());
   const id = items[0].id;
+  if (!helper.validValue(controls, value)) {
+    dispatch(action.assign({valid: true}));
+    return;
+  }
   const {returnMsg, returnCode, result} = await helper.fetchJson(URL_UNTIED, postOption({...value,companyAuditState:1, id}));
   if(returnCode !==0){return helper.showError(returnMsg)}
   helper.showSuccessMsg(returnMsg);
@@ -36,6 +41,9 @@ const closeActionCreator = () => (dispatch) => {
 };
 
 const changeActionCreator = (key, value) => {
+  if(typeof value !== 'object'){        //消除输入空格
+    value = value.replace(/^\s|\s+$/g, "")
+  }
   return action.assign({[key]: value}, 'value')
 };
 

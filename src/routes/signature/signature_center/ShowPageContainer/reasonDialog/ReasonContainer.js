@@ -24,6 +24,9 @@ const buildState = (controls, close, id, item ={}) => {
 
 //输入值
 const changeActionCreator = (key, value) => {
+  if(typeof value !== 'object'){        //消除输入空格
+    value = value.replace(/^\s|\s+$/g, "")
+  }
   return action.assign({[key]: value}, 'value')
 };
 
