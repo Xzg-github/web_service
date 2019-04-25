@@ -29,7 +29,7 @@ const okActionCreator = () => async(dispatch, getState) => {
     dispatch(action.assign({valid: true}));
     return;
   }
-  const {returnMsg, returnCode, result} = await helper.fetchJson(URL_UNTIED, postOption({...value,companyAuditState:1, id}));
+  const {returnMsg, returnCode, result} = await helper.fetchJson(URL_UNTIED, postOption({...value,companyAuditState:4, id}));
   if(returnCode !==0){return helper.showError(returnMsg)}
   helper.showSuccessMsg(returnMsg);
   dispatch(action.assign({visible: false, ok: false}));

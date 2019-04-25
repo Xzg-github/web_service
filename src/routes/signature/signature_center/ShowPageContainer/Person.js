@@ -18,7 +18,7 @@ const LABELS = [
   {key: 'rejectReason', title: '拒签原因'},
   {key: 'revokeReason', title: '撤销原因'},
   {key: 'note', title: '备注'},
-  {key: 'signFileSubject', title: '文件主题'},
+  //{key: 'signFileSubject', title: '文件主题'},
   {key: 'signStartTime', title: '发起时间'},
   {key: 'signExpirationTime', title: '截至签署日期'},
   //{key: 'annex', title: '附件'},
@@ -103,16 +103,19 @@ class Person extends React.Component {
       show = '待签署'
     }else if(state === 'reject'){
       show = '已拒签'
-    }
-    else{
+    }else if(state === 'revoke'){
+      show = '已撤销'
+    }else if(state === 'overdue'){
+      show = '已过期'
+    } else{
       show = '已签署'
     }
     if(item.link){
-      return <div key = {index}><a href={value.urlOfSignedFileViewpdf} target="_blank">在线预览</a></div>
+      return value.urlOfSignedFileViewpdf ? <div key = {index}><a href={value.urlOfSignedFileViewpdf} target="_blank">在线预览</a></div>: <div key = {index}>无</div>
     }else if(item.type){
       return <div key = {index}>{show}</div>
     }else{
-      return <div key={index}>{value[item.key] || '无'}</div>
+      return <div key={index} style = {{width:'800px',textOverflow: 'ellipsis', overflow: 'hidden', whiteSpace: 'nowrap'}}>{value[item.key] || '无'}</div>
     }
   };
 
@@ -165,13 +168,21 @@ class Person extends React.Component {
       <ModalWithDrag {...this.getProps()}>
         <Title title = "文件信息" />
         <div style={{overflow: 'hidden'}}>
-          <div style={{float: 'left', marginRight: '6px', textAlign: 'right'}}>{LABELS.map((item, index) => <div key={index}>{`${item.title}:`}</div>)}</div>
-          <div style={{float: 'left'}}>{LABELS.map((item, index)=> this.rendValue(item, index))}</div>
+          <div style={{float: 'left', marginRight: '6px', textAlign: 'right'}}>
+            {LABELS.map((item, index) => <div key={index}>{`${item.title}:`}</div>)}
+          </div>
+          <div style={{float: 'left'}}>
+            {LABELS.map((item, index)=> this.rendValue(item, index))}
+          </div>
         </div>
         <Title title = "签署信息"/>
         <div style={{overflow: 'hidden'}}>
-          <div style={{float: 'left', marginRight: '6px', textAlign: 'right'}}>{MESSAGE.map((item, index) => <div key={index}>{`${item.title}:`}</div>)}</div>
-          <div style={{float: 'left'}}>{MESSAGE.map((item, index)=> this.rendValue1(item, index))}</div>
+          <div style={{float: 'left', marginRight: '6px', textAlign: 'right'}}>
+            {MESSAGE.map((item, index) => <div key={index}>{`${item.title}:`}</div>)}
+          </div>
+          <div style={{float: 'left'}}>
+            {MESSAGE.map((item, index)=> this.rendValue1(item, index))}
+          </div>
         </div>
         <Title title = "签署记录" />
         {this.toTable()}
