@@ -3,23 +3,29 @@
 .root {
   position: relative;
 
+  > div:nth-child(3) {
+    margin-left: 8px
+  }
+
+  > div:nth-child(5) {
+    margin-left: 8px
+  }
+
+  > div:nth-child(7) {
+    margin-left: 8px
+  }
+
+  > div:nth-child(9) {
+    margin-left: 8px;
+  }
+
+  > div:nth-child(10) {
+    padding-left: 8px;
+    padding-right: 8px;
+  }
+
   > *:not(:last-child) {
     margin-bottom: @padding-vertical;
   }
 
-  [role='title'] > * {
-    margin-right: 5px;
-  }
-
-  [role='toolbar'] {
-    margin-bottom: @padding-vertical;
-  }
-
-  [role='operation'] {
-    text-align: center;
-
-    > *:not(:last-child) {
-      margin-right: 20px;
-    }
-  }
 }
