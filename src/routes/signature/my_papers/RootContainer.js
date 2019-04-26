@@ -6,9 +6,11 @@ import Tree from '../../../common/tree';
 import {Action} from '../../../action-reducer/action';
 import {getPathValue} from '../../../action-reducer/helper';
 import showTreeDialog from './FileDialogContainer'
-import showStaffDialog from '../enterprise_documents/StaffDialogContainer';
 import {toFormValue} from '../../../common/check';
 import {search2} from '../../../common/search';
+import {getCookie}from '../signature_center/OrderTabPageContainer'
+import  ShowPageContainer,{buildShowState}from '../signature_center/ShowPageContainer/ShowPageContainer'
+import showPopup from '../../../standard-business/showPopup';
 
 
 const STATE_PATH = ['my_papers'];
@@ -294,8 +296,31 @@ const formSearchActionCreator = (key, title,keyControl) => async (dispatch, getS
   }else {
     helper.showError(json.returnMsg)
   }
-
 };
+
+// link详情查看
+const linkActionCreator = (key, rowIndex, item) => async (dispatch, getState) => {
+  try {
+    const URL_CONFIG = '/api/signature/signature_center/config';
+    const {showConfig} = helper.getJsonResult(await helper.fetchJson(URL_CONFIG));
+    let token = getCookie('token');
+    const URL_RECORD = `/api/signature/signature_center/record`;
+    const URL_ACCOUNT = '/api/signature/signature_center/getName'; //当前登陆人信息
+    const {returnCode, returnMsg, result} = await helper.fetchJson(`${URL_RECORD}/${item.id}`);
+    if(returnCode !==0){return helper.showError(returnMsg)}
+    const user = await helper.fetchJson(`${URL_ACCOUNT}/${token}`,'get');
+    if(user.returnCode !== 0) {return helper.showError(user.returnMsg)}
+    const title = item.signFileOrder;
+    const closeFunc = () => {
+      return
+    };
+    buildShowState(showConfig, result, dispatch, title, user, closeFunc);
+    showPopup(ShowPageContainer);
+  }catch (e){
+    helper.showError(e.message)
+  }
+};
+
 
 const actionCreators = {
   onInit: initActionCreator,
@@ -308,6 +333,7 @@ const actionCreators = {
   onPageNumberChange: pageNumberActionCreator,
   onChange: changeActionCreator,
   onPageSizeChange: pageSizeActionCreator,
+  onLink: linkActionCreator,
 };
 
 
