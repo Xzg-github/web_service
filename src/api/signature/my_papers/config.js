@@ -17,7 +17,7 @@ const filters = [
 ];
 
 const tableCols = [
-  {key:'signFileOrder',title:'系统编号'},
+  {key:'signFileOrder',title:'系统编号',link:true},
   {key:'signFileSubject',title:'文件主题'},
   {key:'insertUser',title:'发起人'},
   {key:'signStartTime',title:'发起时间'},

@@ -7,7 +7,7 @@ import {Input} from 'antd';
 const InputSearch = Input.Search;
 
 const TREE_PROPS = ['tree', 'expand', 'select', 'searchValue', 'onExpand', 'onSelect'];
-const TABLE_EVENTS = ['onCheck', 'onDoubleClick'];
+const TABLE_EVENTS = ['onCheck', 'onDoubleClick','onLink'];
 const SEARCH_EVENTS = ['onChange', 'onSearch', 'onClick'];
 const PAGINATION = ['maxRecords', 'pageSize', 'currentPage', 'pageSizeType', 'description',
   'onPageNumberChange', 'onPageSizeChange'];
