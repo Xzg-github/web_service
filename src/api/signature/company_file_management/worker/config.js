@@ -12,6 +12,8 @@ const isOptions1 = [
   {value: '0', title: '待审核'},
   {value: '1', title: '已通过'},
   {value: '2', title: '未通过'},
+  {value: '3', title: '待绑定'},
+  {value: '4', title: '已解绑'}
 ];
 
 const filters = [
@@ -38,7 +40,7 @@ const buttons = [
   // {key:'add',title:'新增',bsStyle:'primary'},
   // {key:'invitation',title:'发起邀请'},
   {key:'examine',title:'审核', bsStyle: 'primary'},
-  {key: 'untied', title: '解绑'}
+  //{key: 'untied', title: '解绑'}
   //{key:'edit',title:'编辑'},
   //{key:'del',title:'删除'},
   //{key:'enable',title:'启用'},
