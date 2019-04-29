@@ -11,7 +11,7 @@ const unitOptions = [
 ];
 
 const filters = [
-  {key:'companyId',title:'客户名称',type:'search',searchUrl:'/api/signature/monthly_bill/customer'},
+  {key:'companyId',title:'客户名称',type:'search',searchUrl:'/api/signature/monthly_bill/customerAccoundId'},
   {key:'monthBillCode',title:'账单编号',type:'text'},
   {key:'startTime',title:'账期开始日期',type:'date'},
   {key:'endTime',title:'账期结束日期',type:'date'},
