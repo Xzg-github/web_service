@@ -33,7 +33,7 @@ class LookDialog extends React.Component {
       title: this.props.title,
       visible: this.props.visible,
       maskClosable: false,
-      width: 800,
+      width: 1100,
       onCancel,
       afterClose: this.props.afterClose,
       className: s.root ,
