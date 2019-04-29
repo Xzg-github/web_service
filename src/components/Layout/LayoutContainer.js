@@ -77,8 +77,9 @@ const initActionCreator = () => async (dispatch) => {
     return
   }
   const {returnCode, returnMsg, result} = await helper.fetchJson(`${PRIVILEGE_URL}/${role.result}`);
-  //设置用户名
+  //设置用户名和userId
   document.cookie = 'username'+ '=' + escape(role.username);
+  document.cookie = 'userId'+ '=' + escape(role.userId);
   if (returnCode === 0) {
     const tableColsSetting = await getTableColsConfig();
     const payload = Object.assign(result, splitNavigation(result.navigation), {tableColsSetting, status: 'page'});

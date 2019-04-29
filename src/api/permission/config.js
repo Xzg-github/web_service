@@ -33,13 +33,19 @@ const account = [
     {key: 'personal_account_management'}, //个人账号管理
 ];
 
+//数据统计子菜单
+const  dataStatistics = [
+  {key: 'enterpriseBusinessFlow'}, //企业业务流水
+  {key: 'platformBusinessFlow'}, //平台业务流水
+];
+
 const signature = [
     {key:'signature_center', icon: 'pld-picture'},     //签署中心
     {key: 'business_account', icon: 'pld-picture'},       //企业账户金额
     {key: 'businessOrder', icon: 'pld-picture'}    ,       //企业订单
     {key:'my_papers', icon: 'pld-picture'},            //我的文件
     {key:'monthly_bill', icon: 'pld-picture'},        //月账单
-    {key:'data_statistics', icon: 'pld-picture'},             //数据统计
+    {key:'dataStatistics', icon: 'pld-picture', children: dataStatistics},             //数据统计
     {key:'enterprise_documents', icon: 'pld-picture'},             //企业文件
     {key:'file_management', icon: 'pld-picture',children:file},             //档案管理
     {key:'account_management', icon: 'pld-picture',children:account},           //账号管理

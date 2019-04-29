@@ -30,7 +30,6 @@ const rootReducer = combineReducers({
     password,
     signature_center: create('signature_center'),
     my_papers: create('my_papers',false),
-    data_statistics: create('data_statistics'),
     monthly_bill: create('monthly_bill',false),
     business_account: create('business_account'),
     registered: create('registered', false),
@@ -58,6 +57,10 @@ const rootReducer = combineReducers({
     personal_certification: create('personal_certification'),
     personal_account_management: create('personal_account_management'),
     fadada: create('fadada'),
+
+    //数据统计
+    enterpriseBusinessFlow: create('enterpriseBusinessFlow', false),
+    platformBusinessFlow: create('platformBusinessFlow', false),
 });
 
 export default rootReducer;
