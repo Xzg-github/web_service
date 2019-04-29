@@ -41,6 +41,41 @@ class EditPage extends React.Component {
     return <SuperToolbar {...props}/>
   };
 
+/*  toShowFile = () => {
+    const {value} = this.props;
+    return (
+      <div>
+        <a href={value.urlOfSignedFileViewpdf} style={{fontSize: '14px'}}>{value.signFileSubject}</a>
+      </div>
+    )
+  };*/
+
+  toUpload = () => {
+    const {value, buttons1} = this.props;
+    const delbuttons = [{key: 'delFile', title: '删除'}];
+    const props = { buttons: buttons1,size: 'default', callback: getObject(this.props, TOOLBAR_EVENTS )};
+    const props1 = { buttons: delbuttons,size: 'small', callback: getObject(this.props, TOOLBAR_EVENTS )};
+    if(value.signContractId){
+      return(
+        <div style={{overflow: 'hidden'}}>
+          <div style={{float: 'left'}}>
+            <SuperToolbar {...props}/>
+          </div>
+          <div style={{float: 'left', marginLeft: '30px'}}>
+            <a href={value.urlOfSignedFileViewpdf} target="_blank">{value.signFileSubject}</a>
+            <SuperToolbar {...props1}/>
+          </div>
+        </div>
+      )
+    }else{
+      return (
+        <SuperToolbar {...props}/>
+      )
+    }
+  };
+
+
+
   toButtons2 = (buttons) => {
     const {buttons2} = this.props;
     const props = {buttons: buttons2,size: 'small', callback: getObject(this.props, TOOLBAR_EVENTS )};
@@ -118,7 +153,7 @@ class EditPage extends React.Component {
       <Card className = {s.root}>
         {this.toAlert()}
         <Title title = "上传文件" />
-        {this.toButtons1()}
+        {this.toUpload()}
         <Title title = "文件信息" />
         {this.toForm1()}
         <Title title = "签署方信息" />
