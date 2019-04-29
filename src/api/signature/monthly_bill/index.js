@@ -39,5 +39,10 @@ api.get('/customer',async(req,res) => {
   res.send(await fetchJsonByNode(req,url,postOption(body)))
 });
 
+//根据id获取详情
+api.get('/getId',async(req,res) => {
+  const url = `${service}/month_bill/${req.params.id}`;
+  res.send(await fetchJsonByNode(req,url))
+});
 
 export default api;

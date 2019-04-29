@@ -49,11 +49,11 @@ const controls = [
 ];
 
 const cols = [
-  {key:'businessItemId',title:'费用项目'},
-  {key:'price',title:'价格'},
-  {key:'unitType',title:'计量单位',options:unitOptions},
-  {key:'totalNumber',title:'本期总数量'},
-  {key:'totalAmount',title:'总金额'},
+  {key:'businessName',title:'费用项目'},
+  {key:'unitPrice',title:'价格'},
+  {key:'unit',title:'计量单位'},
+  {key:'monthTotal',title:'本期总数量'},
+  {key:'totalMoney',title:'总金额'},
 ];
 
 
