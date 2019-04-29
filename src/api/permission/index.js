@@ -180,7 +180,13 @@ api.get('/role', async (req, res) => {
   const {token} = req.cookies;
   const url = `${service}/authc/${token}/account`;
   const {returnCode, result} = await fetchJsonByNode(req, url);
-  returnCode === 0 ? res.send({returnCode, result: result['contractRoles'], username: result['username']}) : res.send({returnCode: -1});
-})
+  returnCode === 0 ? res.send({returnCode, result: result['contractRoles'], username: result['username'], userId: result['userId']}) : res.send({returnCode: -1});
+});
+
+// 导出数据到excel (查询数据源)
+api.post('/common_export', async (req, res) => {
+  const url = `${host}/integration_service/load/excel`;
+  res.send(await fetchJsonByNode(req, url, postOption(req.body)));
+});
 
 export default api;

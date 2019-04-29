@@ -7,7 +7,8 @@ const prefix = '/signature';
 const children = [
     require('./signature_center').default,
     require('./my_papers').default,
-    require('./data_statistics').default,
+    require('./dataStatistics/enterpriseBusinessFlow').default,
+    require('./dataStatistics/platformBusinessFlow').default,
     require('./monthly_bill').default,
     require('./enterprise_documents').default,
     require('./file_management/contacts').default,

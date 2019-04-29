@@ -22,7 +22,8 @@ const data = {
     econtract_company_role: {
       signature_center: '签署中心',
       my_papers: '我的文件',
-      // data_statistics: '数据统计',
+      dataStatistics: '数据统计',
+      enterpriseBusinessFlow: '业务明细流水',
       //monthly_bill: '月账单',
       file_management: '档案管理',
       account_management: '账号管理',
@@ -39,7 +40,8 @@ const data = {
     econtract_admin_role: {
       business_account: '企业账户金额',
       businessOrder: '企业订单',
-      // data_statistics: '数据统计',
+      dataStatistics: '数据统计',
+      platformBusinessFlow: '业务明细流水',
       //monthly_bill: '月账单',
       businessArchives: '企业档案',
       monthly_bill: '月账单',

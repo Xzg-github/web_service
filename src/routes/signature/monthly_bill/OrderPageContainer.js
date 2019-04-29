@@ -11,6 +11,7 @@ const TAB_KEY = 'index';
 const STATE_PATH =  ['monthly_bill'];
 
 const URL_LIST = '/api/signature/monthly_bill/list';
+const URL_ID = '/api/signature/monthly_bill/getId'
 
 const action = new Action(STATE_PATH);
 
@@ -65,7 +66,11 @@ const onLinkActionCreator = (key, rowIndex, item)  => async (dispatch,getState) 
   const {tabs} = getPathValue(getState(), STATE_PATH);
   const tabKey = helper.genTabKey('look', tabs);
   const title =  item.monthBillCode + '-查看月账单';
-  dispatch(action.assign(buildPageState (tabs, tabKey,title,item)));
+  const {result,returnCode,returnMsg} = await helper.fetchJson(`${URL_ID}/${item.id}`);
+  if(returnCode !=0) {
+    return helper.showError('returnMsg')
+  }
+  dispatch(action.assign(buildPageState (tabs, tabKey,title,result)));
 };
 
 const changeActionCreator = (key, value) => (dispatch,getState) =>{
