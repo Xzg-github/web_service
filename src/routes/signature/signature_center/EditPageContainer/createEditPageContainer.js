@@ -383,6 +383,11 @@ const createEditPageContainer = (action, getSelfState, getParentState) => {
     closeFunc && closeFunc();
   };
 
+  //删除文件
+  const delFileAction = async(dispatch, getState) => {
+    dispatch(action.assign({urlOfSignedFileViewpdf: '', fileName: '', signContractId: '', signFileSubject: ''}, 'value'))
+  };
+
 
 
   const toolbarAction = {
@@ -394,7 +399,8 @@ const createEditPageContainer = (action, getSelfState, getParentState) => {
     next: nextAction,
     upload: uploadAction,
     send: sendAction,
-    close: closeAction
+    close: closeAction,
+    delFile: delFileAction
   };
 
   const clickActionCreator = (key) => {
