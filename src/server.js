@@ -68,7 +68,7 @@ app.get('*', async (req, res, next) => {
       res.send(`<!doctype html>${page}`);
       return;
     }
-res.cookie('token', 'ba590683-346c-4d64-937b-c906d477089f%3Acae37af8-8c3e-4bd7-8a0c-6de6607e8906')
+
     //跳转去epld
     if (req.path === '/epldLogin'){
       res.redirect(302, epld);
