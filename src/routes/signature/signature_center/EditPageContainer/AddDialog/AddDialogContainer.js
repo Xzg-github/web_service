@@ -32,13 +32,16 @@ export const buildAddState = (config, filterItems, items=[], add, dispatch, okFu
 
 //Input搜索框change监听
 const changeActionCreator = (event) => (dispatch, getState) =>{
-  const {value, groupConfig} = getParentState(getState());
-  if(groupConfig.title === '从签署群组添加'){
+  const {title} = getSelfState(getState());
+  if(title === '从联系人中添加'){
     dispatch(action.assign({formValue: event.target.value}));
     const { filterItems, formValue} = getSelfState(getState());
     let newTableItems = [];
     filterItems.forEach((item) => {
       if(item.companyContactName.toLowerCase().indexOf(formValue.toLowerCase()) > -1) {
+        newTableItems.push(item);
+      }
+      if(item.companyContactAccount.toLowerCase().indexOf(formValue.toLowerCase()) > -1) {
         newTableItems.push(item);
       }
     });
@@ -50,6 +53,9 @@ const changeActionCreator = (event) => (dispatch, getState) =>{
     filterItems.forEach((item) => {
       if(item.signGroupName.toLowerCase().indexOf(formValue.toLowerCase()) > -1) {
         newTableItems.push(item);
+      }
+      if(item.companyContactName.toLowerCase().indexOf(formValue.toLowerCase()) > -1){
+        newTableItems.push(item)
       }
     });
     dispatch(action.assign({tableItems: newTableItems}));
@@ -72,18 +78,31 @@ const changeKey = (arr, key) => {
 
 const okActionCreator = ({okFunc, onClose}) => async(dispatch, getState) => {
   const {value, groupConfig, contactConfig} = getParentState(getState());
-  const {filterItems} = getSelfState(getState());
-    const checkId = [];
-    filterItems.forEach(item => {
-      item.checked && (checkId.push(item))
-    });
-    const changeItems = changeKey(checkId, ['id', 'signPartyName', 'account']);
-    for(let i=0; i< changeItems.length; i++){
-      delete changeItems[i].id
+  const {filterItems, title} = getSelfState(getState());
+  const checkId = [];
+    if(title === '从联系人中添加'){
+      filterItems.forEach(item => {
+        item.checked && (checkId.push(item))
+      });
+      const changeItems = changeKey(checkId, ['id', 'signPartyName', 'account']);
+      for(let i=0; i< changeItems.length; i++){
+        delete changeItems[i].id
+      }
+      const newItems = value.signPartyList.concat(changeItems);
+      okFunc(newItems);
+      onClose();
+    }else{
+      filterItems.forEach(item => {item.checked && (checkId.push(item))}); //勾选记录
+      if(checkId.length !==1){return showError('签署群组只能勾选一条！')} //判断勾选一条
+      const onlyFilter = checkId[0].concatMemberVos;
+      for(let i = 0; i < onlyFilter.length; i++){
+        delete onlyFilter[i].id
+      }
+      const changeItems = changeKey(onlyFilter, ['signPartyName', 'account']);
+      const newItems = value.signPartyList.concat(changeItems);
+      okFunc(newItems);
+      onClose()
     }
-    const newItems = value.signPartyList.concat(changeItems);
-    okFunc(newItems);
-    onClose();
 };
 
 const checkActionCreator = (isAll, checked, rowIndex) => (dispatch,getState) => {

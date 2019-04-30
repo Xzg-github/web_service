@@ -194,6 +194,14 @@ const createEditPageContainer = (action, getSelfState, getParentState) => {
     if(json.returnCode !== 0) return showError(json.returnMsg);
     const selectItems = json.result;
     const filterItems = json.result;
+      for(let i = 0; i < selectItems.length; i++){  //取出群组数组里各个成员名，集中以字符串形式展现
+        let member = selectItems[i].concatMemberVos;
+        let init = [];
+        for( let z = 0; z < member.length; z++){
+          init.push(member[z].companyContactName)
+        }
+        selectItems[i].companyContactName = init.join(',')
+      }
     const okFunc = (addItems = []) => {
       dispatch(action.assign({signPartyList: addItems}, 'value'))
     };
