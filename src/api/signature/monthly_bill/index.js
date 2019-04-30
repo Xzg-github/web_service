@@ -29,7 +29,7 @@ api.get('/getId/:id',async(req,res) => {
   res.send(await fetchJsonByNode(req,url))
 });
 
-//获取已启用的客户
+//获取已启用的客户id
 api.get('/customer',async(req,res) => {
   const body = {
     companyName:req.query.filter,
@@ -38,6 +38,17 @@ api.get('/customer',async(req,res) => {
   const url = `${service}/company_account/select_enabled_drop_list`;
   res.send(await fetchJsonByNode(req,url,postOption(body)))
 });
+
+//获取已启用的客户accoundId
+api.get('/customerAccoundId',async(req,res) => {
+  const body = {
+    companyName:req.query.filter,
+    maxNumber:20
+  };
+  const url = `${service}/company_account/drop_list_valuetitle_accountId_companyName`;
+  res.send(await fetchJsonByNode(req,url,postOption(body)))
+});
+
 
 //根据id获取详情
 api.get('/getId',async(req,res) => {
