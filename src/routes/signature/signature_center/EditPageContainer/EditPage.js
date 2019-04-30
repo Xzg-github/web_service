@@ -4,6 +4,7 @@ import s from './EditPage.less';
 import {SuperTable2, SuperForm, Card, Title, SuperToolbar} from '../../../../components/index';
 import {getObject} from "../../../../common/common";
 import { Alert } from 'antd';
+import { Icon } from 'antd'
 
 
 const TOOLBAR_EVENTS = ['onClick']; // 工具栏点击事件
@@ -35,26 +36,13 @@ class EditPage extends React.Component {
     )
   };
 
-  toButtons1 = (buttons) => {
-    const {buttons1} = this.props;
-    const props = { buttons: buttons1,size: 'default', callback: getObject(this.props, TOOLBAR_EVENTS )};
-    return <SuperToolbar {...props}/>
-  };
-
-/*  toShowFile = () => {
-    const {value} = this.props;
-    return (
-      <div>
-        <a href={value.urlOfSignedFileViewpdf} style={{fontSize: '14px'}}>{value.signFileSubject}</a>
-      </div>
-    )
-  };*/
+onClick = (key) => {
+  this.props.onClick(key)
+};
 
   toUpload = () => {
     const {value, buttons1} = this.props;
-    const delbuttons = [{key: 'delFile', title: '删除'}];
     const props = { buttons: buttons1,size: 'default', callback: getObject(this.props, TOOLBAR_EVENTS )};
-    const props1 = { buttons: delbuttons,size: 'small', callback: getObject(this.props, TOOLBAR_EVENTS )};
     if(value.signContractId){
       return(
         <div style={{overflow: 'hidden'}}>
@@ -62,8 +50,8 @@ class EditPage extends React.Component {
             <SuperToolbar {...props}/>
           </div>
           <div style={{float: 'left', marginLeft: '30px'}}>
-            <a href={value.urlOfSignedFileViewpdf} target="_blank">{value.signFileSubject}</a>
-            <SuperToolbar {...props1}/>
+            <a href={value.urlOfSignedFileViewpdf} target="_blank" style={{marginRight: '10px', textDecoration: 'underline'}}>{value.signFileSubject}</a>
+            <span className = "icon" style={{cursor: 'pointer'}} onClick = {this.onClick.bind(null, 'delFile')}><Icon type ='close' /></span>
           </div>
         </div>
       )
