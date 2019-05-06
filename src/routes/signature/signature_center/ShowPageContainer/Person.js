@@ -66,7 +66,7 @@ class Person extends React.Component {
       reject: reject.bind(null, this.props),
       onCancel: onCancel.bind(null, this.props),
       width: 1000,
-      visible: true,
+      visible: this.props.visible,
       maskClosable: false,
       ...extra
     };
