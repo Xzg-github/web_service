@@ -21,10 +21,10 @@ export const buildAddState = (config, items=[], dispatch) => {
 
 
 const okActionCreator = ({onClose}) => async(dispatch, getState) => {
-  const {tableItems} = getSelfState(getState());
-  const order = tableItems[0].nativeOrderNo;
+  const {tableItems, value} = getSelfState(getState());
+  value.nativeOrderNo = tableItems[0].nativeOrderNo;
   const URL_PAY = '/api/signature/business_account/payOrder';
-  const {returnCode, returnMsg, result} = await fetchJson(`${URL_PAY}/${order}`,'post');
+  const {returnCode, returnMsg, result} = await fetchJson(URL_PAY,postOption(value,'post'));
   if(returnCode !== 0){return showError(returnMsg)}
   showSuccessMsg(returnMsg);
   onClose()

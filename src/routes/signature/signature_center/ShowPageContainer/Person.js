@@ -15,8 +15,8 @@ const Panel = Collapse.Panel;
 const LABELS = [
   {key: 'urlOfSignedFileViewpdf', title: '文件链接', link: true},
   {key: 'fileState', title: '状态', type: 'select'},
-  {key: 'rejectReason', title: '拒签原因'},
-  {key: 'revokeReason', title: '撤销原因'},
+  //{key: 'rejectReason', title: '拒签原因'},
+  //{key: 'revokeReason', title: '撤销原因'},
   {key: 'note', title: '备注'},
   //{key: 'signFileSubject', title: '文件主题'},
   {key: 'signStartTime', title: '发起时间'},
@@ -24,10 +24,23 @@ const LABELS = [
   //{key: 'annex', title: '附件'},
 ];
 
+const REASON1 = [
+  {key: 'rejectReason', title: '拒签原因'}
+];
+
+const REASON2 = [
+  {key: 'revokeReason', title: '撤销原因'}
+];
+
+const REASON3 = [
+  {key: 'rejectReason', title: '拒签原因'},
+  {key: 'revokeReason', title: '撤销原因'}
+];
+
 const MESSAGE = [
   {key: 'signWay', title: '签署方式', link: true},
   {key: 'signOrderStrategy', title: '签署顺序', type: 'select'},
-  {key: 'isAddCcSide', title: '添加抄送方', value: '1'},
+  {key: 'isAddCcSide', title: '抄送方', value: '1'},
   {key: 'isSignInSpecifiedLocation', title: '指定签署位置'},
  // {key: 'copyMessage', title: '抄送放信息'}
 ];
@@ -66,6 +79,48 @@ class Person extends React.Component {
                callback: { onLink: onLink ? onLink.bind(null) : undefined}
     };
     return <SuperTable {...props} />
+  };
+
+  toReason = () => {
+    const {value} = this.props;
+    if(value.rejectReason){
+      return(
+        <div style={{overflow: 'hidden', color: 'red', marginTop: '10px'}}>
+          <div style={{float: 'left', marginRight: '6px', textAlign: 'right'}}>
+            {REASON1.map((item, index) => <div key={index}>{`${item.title}:`}</div>)}
+          </div>
+          <div style={{float: 'left'}}>
+            {REASON1.map((item, index) => <div key ={index}>{value.rejectReason}</div>)}
+          </div>
+        </div>
+      )
+    }else if(value.revokeReason){
+      return (
+        <div style={{overflow: 'hidden', color: 'red', marginTop: '10px'}}>
+          <div style={{float: 'left', marginRight: '6px', textAlign: 'right'}}>
+            {REASON2.map((item, index) => <div key ={index}>{`${item.title}:`}</div>)}
+          </div>
+          <div style={{float: 'left'}}>
+            {REASON2.map((item, index) => <div key= {index}>{value.revokeReason}</div>)}
+          </div>
+        </div>
+      )
+    }else if(value.revokeReason && value.rejectReason){
+      return (
+        <div>
+          <div style ={{overflow: 'hidden', color: 'red', marginTop: '10px'}}>
+            <div style={{float: 'left', margitnRight: '6px', textAlign: 'right'}}>
+              {REASON3.map((item, index) => <div key = {index}>{`${item.title}:`}</div>)}
+            </div>
+            <div style = {{float: left}}>
+              {REASON3.map((item, index) => <div key ={index}>{value[item.key] || '无'}</div>)}
+            </div>
+          </div>
+        </div>
+      )
+    } else{
+      return ''
+    }
   };
 
   toPanel = ({key, title}) => {
@@ -137,7 +192,7 @@ class Person extends React.Component {
       show2 = '无'
     }
     if(value.isAddCcSide === '0'){
-      show3 = '否'
+      show3 = '无'
     }else{
       show3 = '是'
     }
@@ -186,6 +241,7 @@ class Person extends React.Component {
         </div>
         <Title title = "签署记录" />
         {this.toTable()}
+        {this.toReason()}
 {/*        <Title title = "操作记录" />
         {panels.length > 0 ? this.toShow() : this.toEmpty()}*/}
       </ModalWithDrag>

@@ -34,13 +34,13 @@ class AddDialog extends React.Component {
     } else if (size === 'large') {
       return 910;
     } else {
-      return 520;
+      return 700;
     }
   };
 
   formProps = () => {
     return {
-      colNum: 1,
+      colNum: 2,
       controls: this.props.controls,
       value: this.props.value,
       valid: this.props.valid,

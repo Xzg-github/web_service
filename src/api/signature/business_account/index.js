@@ -51,8 +51,8 @@ api.post('/order', async (req, res) => {
 });
 
 //支付订单接口
-api.post('/payOrder/:id', async (req, res) => {
-  const url = `${service}/company_order/complete/${req.params.id}`;
+api.post('/payOrder', async (req, res) => {
+  const url = `${service}/company_order/complete`;
   res.send(await fetchJsonByNode(req,url,postOption(req.body)));
 });
 
