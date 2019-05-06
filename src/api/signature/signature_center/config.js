@@ -51,6 +51,12 @@ const buttons2 = [
   {key: 'reject', title:'拒签'}
 ];
 
+const buttons3 = [
+  {key: 'add', title: '新增', bsStyle: 'primary'},
+  {key: 'upload', title: '下载文件'},
+  {key: 'view', title: '在线预览'},
+];
+
 const tableCols = [
   {key: 'signFileOrder', title: '系统编号',link: true},
   {key: 'signFileSubject', title: '文件主题'},
@@ -79,6 +85,7 @@ const config = {
   filters,
   buttons,
   buttons2,
+  buttons3,
   tableCols,
   initPageSize: pageSize,
   pageSizeType,

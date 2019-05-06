@@ -71,11 +71,14 @@ class OrderTabPage extends React.Component {
   };
 
   toToolbar = () => {
-    const {subActiveKey, buttons, buttons2} = this.props;
+    const {subActiveKey, buttons, buttons2, buttons3} = this.props;
     const props = {buttons, onClick: this.onHandleClick};
     const props2 = {buttons: buttons2, onClick: this.onHandleClick};
+    const props3 = {buttons: buttons3, onClick: this.onHandleClick};
     if(subActiveKey === 'draft'){
       return <SuperToolbar {...props} />;
+    }else if(subActiveKey === 'hisSign'){
+      return <SuperToolbar {...props3}/>
     }
     return <SuperToolbar {...props2} />;
   };
