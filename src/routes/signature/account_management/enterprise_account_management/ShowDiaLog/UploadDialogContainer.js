@@ -30,13 +30,13 @@ const msg = [
 
 
 
-const buildState = async(config, items,edit) => {
+const buildState = async(config, items,edit,fileList=[]) => {
   return {
     title: !edit ? '新增' : '编辑',
     controls:config.controls,
     value: items,
     valid: false,
-    fileList: [],
+    fileList,
     delFileList: [],
     editFileList:[],
     visible: true,
@@ -188,9 +188,9 @@ const actionCreators = {
   onClosePreview: closePreviewActionCreator,
 };
 
-export default async (config, items={},edit=false) => {
+export default async (config, items={},edit=false,fileList) => {
   const Container = connect(mapStateToProps, actionCreators)(UploadDialog);
-  global.store.dispatch(action.create(await buildState(config, items,edit)));
+  global.store.dispatch(action.create(await buildState(config, items,edit,fileList)));
   await showPopup(Container, {}, true);
 
   const state = getSelfState(global.store.getState());

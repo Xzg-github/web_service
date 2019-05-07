@@ -109,10 +109,38 @@ const delAction = () => async (dispatch, getState) => {
   return updateTable(dispatch,getState)
 };
 
+const editAction = () => async (dispatch, getState) => {
+  const {edit,checkValue,radioValue} = getSelfState(getState());
+  console.log(checkValue);
+  let ids = [];
+  let radios = [];
+
+  for(let v in checkValue){
+    checkValue[v]&&(ids.push(v))
+  }
+  for(let v in radioValue){
+    radioValue[v] && (radios.push(v))
+  }
+
+  if(ids.length !== 1){
+    helper.showError('请勾选一个');
+    return
+  }
+
+  if(ids[0] === radios[0]){
+    helper.showError('默认签章不能删除');
+    return
+  }
+
+  if (await showDiaLog(edit,{},false)) {
+    return updateTable(dispatch,getState)
+  }
+};
 
 
 const toolbarActions = {
   add:addAction,
+  edit:editAction,
   del:delAction
 };
 

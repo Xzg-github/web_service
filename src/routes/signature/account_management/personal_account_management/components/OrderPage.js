@@ -124,7 +124,7 @@ class OrderPage extends React.Component {
               {this.toForm(props)}
             </div>
           </div>
-          {/*<div className={s.box}>
+          <div className={s.box}>
             <Title title="提醒设置"/>
             <div className={s.topBox}>
               {this.remind(props)}
@@ -133,7 +133,7 @@ class OrderPage extends React.Component {
             <div className={s.bottomBox}>
               {this.check(props)}
             </div>
-          </div>*/}
+          </div>
         </Card>
       </div>
     );
