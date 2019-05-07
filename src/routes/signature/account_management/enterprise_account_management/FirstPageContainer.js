@@ -102,6 +102,9 @@ const changeActionCreator = (key, value) => async(dispatch,getState) =>{
       return
     }
   }else  if(key === 'isNotifiedByEmail'){
+    if(!state.value.email){
+      return helper.showError('没有邮箱账号,不能修改邮箱通知')
+    }
     body = {
       accountSecureId : state.value.accountSecureId,
       isNotified:value+''
@@ -112,6 +115,9 @@ const changeActionCreator = (key, value) => async(dispatch,getState) =>{
       return
     }
   }else  if(key === 'isNotifiedByPhone'){
+    if(!state.value.notifyPhone){
+      return helper.showError('没有手机号,不能修改手机通知')
+    }
     body = {
       accountSecureId : state.value.accountSecureId,
       isNotified:value+''

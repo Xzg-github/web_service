@@ -10,7 +10,7 @@ api.post('/', async (req, res) => {
     const url = `${host}/${fadadaServiceName}/login/login`;
     const json = await fetchJsonByNode(req,url, postOption(req.body));
     if (json.returnCode === 0) {
-      res.cookie('username', req.body.account, {maxAge: WEEK});
+      // res.cookie('username', req.body.account, {maxAge: WEEK});
       res.cookie('accountId',json.result.accountId, {maxAge: WEEK});
       res.send({returnCode: 0});
     } else {
@@ -18,7 +18,7 @@ api.post('/', async (req, res) => {
     }
   } else {
     res.cookie('token', '20170803040015', {httpOnly: true});
-    res.cookie('username', req.body.account, {maxAge: WEEK});
+    // res.cookie('username', req.body.account, {maxAge: WEEK});
     res.send({returnCode: 0});
   }
 });
