@@ -14,7 +14,7 @@ api.get('/config', async (req, res) => {
 // OrderPage Table数据
 api.post('/list', async (req, res) => {
   const url = `${service}/company_order/company_order_admin/list`;
-  res.send(await fetchJsonByNode(req, url, postOption(req.body)))
+  res.send(await fetchJsonByNode(req, url, postOption(req.body)));
 });
 
 //录入收款
@@ -23,9 +23,9 @@ api.post('/receipt', async (req, res) => {
 });
 
 //审核
-api.get('/audit/:id', async (req, res) => {
-  const url = `${service}/company_order/complete/${req.params.id}`;
-  res.send(await fetchJsonByNode(req, url, 'post'))
+api.post('/audit', async (req, res) => {
+  const url = `${service}/company_order/audit`;
+  res.send(await fetchJsonByNode(req, url, postOption(req.body)));
 });
 
 //获取消费记录

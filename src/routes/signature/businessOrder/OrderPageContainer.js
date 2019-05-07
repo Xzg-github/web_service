@@ -46,14 +46,15 @@ const receiptActionCreator = async (dispatch, getState) => {
 
 //单项操作 针对待审核状态
 const auditActionCreator = async (dispatch, getState) => {
-  const {tableItems} = getSelfState(getState());
+  const {tableItems, auditDialogConfig} = getSelfState(getState());
   const validItem = tableItems.reduce((result, item) => {
     item.checked && item['orderStatus'] === 0 && result.push(item);
     return result;
     }, []);
   if (validItem.length !== 1) return showError('请选择一条未支付的记录');
-  const {returnCode, returnMsg} = await fetchJson(`${URL_AUDIT}/${validItem[0]['nativeOrderNo']}`);
-  return returnCode === 0 ? updateTable(dispatch, getState) : showError(returnMsg);
+  if (true === await showEditDialog(auditDialogConfig, {id: validItem[0].id, orderStatus: validItem[0].orderStatus}, 'audit')) {
+    return updateTable(dispatch, getState);
+  }
 };
 
 const recordActionCreator = async (dispatch, getState) => {

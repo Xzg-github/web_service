@@ -22,11 +22,11 @@ const initActionCreator = () => async (dispatch, getState) => {
   try {
     dispatch(action.assign({status: 'loading'}));
     //初始化数据
-    const { index, editDialogConfig} = helper.getJsonResult(await helper.fetchJson(URL_CONFIG));
+    const { index, editDialogConfig, auditDialogConfig} = helper.getJsonResult(await helper.fetchJson(URL_CONFIG));
     //页面数据
     const list = helper.getJsonResult(await search(URL_LIST, 0, index.pageSize, {}));
 
-    const newState = {editDialogConfig, status: 'page'};
+    const newState = {editDialogConfig, auditDialogConfig, status: 'page'};
     const payload = buildOrderPageState(list, index, newState);
 
     dispatch(action.create(payload));
