@@ -3,6 +3,7 @@ import AddDialog from './AddDialog';
 import {Action} from '../../../../../action-reducer/action';
 import {getPathValue} from '../../../../../action-reducer/helper';
 import {postOption, fetchJson, showSuccessMsg, showError} from '../../../../../common/common';
+import {getCookie} from '../createEditPageContainer'
 
 const STATE_PATH = ['temp'];
 const action = new Action(STATE_PATH);
@@ -92,16 +93,50 @@ const okActionCreator = ({okFunc, onClose}) => async(dispatch, getState) => {
       okFunc(newItems);
       onClose();
     }else{
-      filterItems.forEach(item => {item.checked && (checkId.push(item))}); //勾选记录
-      if(checkId.length !==1){return showError('签署群组只能勾选一条！')} //判断勾选一条
-      const onlyFilter = checkId[0].concatMemberVos;
-      for(let i = 0; i < onlyFilter.length; i++){
-        delete onlyFilter[i].id
+      if(value.signWay === '1' || value.signWay === 1){
+        const URL_ACCOUNT = '/api/signature/signature_center/getName';
+        let token = getCookie('token');
+        const {returnCode, returnMsg, result} = await fetchJson(`${URL_ACCOUNT}/${token}`,'get');
+        if(returnCode !== 0) return showError('当前发起人获取失败');
+        const email = result.userEmail;
+        const signPartyName = result.username;
+        const list = [{account:email, signPartyName, readonly: true}];
+        filterItems.forEach(item => {item.checked && (checkId.push(item))}); //勾选记录
+        if(checkId.length !==1){return showError('签署群组只能勾选一条！')} //判断勾选一条
+        const onlyFilter = checkId[0].concatMemberVos;
+        for(let i = 0; i < onlyFilter.length; i++){
+          delete onlyFilter[i].id
+        }
+        let newMap = [];
+        for( let [index, elem] of new Map(onlyFilter.map((item, i) => [i, item]))){  //通过Map数组解构去重，并修改数组对象中的Key值
+          let i = {
+            signPartyName: elem.companyContactName,  //转换数组对象中的key
+            account: elem.companyContactAccount
+          };
+          newMap.push(i)
+        }
+        const newItems = list.concat(newMap);
+        okFunc(newItems);
+        onClose()
+      }else if(value.signWay === '0' || value.signWay === 0){
+        filterItems.forEach(item => {item.checked && (checkId.push(item))}); //勾选记录
+        if(checkId.length !==1){return showError('签署群组只能勾选一条！')} //判断勾选一条
+        const onlyFilter = checkId[0].concatMemberVos;
+        for(let i = 0; i < onlyFilter.length; i++){
+          delete onlyFilter[i].id
+        }
+        let newMap = [];
+        for( let [index, elem] of new Map(onlyFilter.map((item, i) => [i, item]))){  //通过Map数组解构去重，并修改数组对象中的Key值
+          let i = {
+            signPartyName: elem.companyContactName,  //转换数组对象中的key
+            account: elem.companyContactAccount
+          };
+          newMap.push(i)
+        }
+        okFunc(newMap);
+        onClose()
       }
-      const changeItems = changeKey(onlyFilter, ['signPartyName', 'account']);
-      const newItems = value.signPartyList.concat(changeItems);
-      okFunc(newItems);
-      onClose()
+
     }
 };
 
