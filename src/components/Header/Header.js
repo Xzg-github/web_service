@@ -8,8 +8,9 @@ const MenuItem = Menu.Item;
 const MenuDivider = Menu.Divider;
 
 const getUsername = () => {
-  const username = 'username=';
+  const username = 'usernameFdd=';
   const cookie = document.cookie;
+  console.log(cookie);
   const begin = cookie.indexOf(username) + username.length;
   const end = cookie.indexOf(';', begin);
   return unescape(cookie.substring(begin, end < 0 ? cookie.length : end));
@@ -118,18 +119,8 @@ class Header extends React.Component {
   };
 
   toAvatar = () => {
-    const props = {
-      placement: 'bottomRight',
-      overlay: this.toMenu(),
-      trigger: ['click'],
-      onVisibleChange: this.onVisibleChange
-    };
     return (
-      <Dropdown {...props}>
-        <span role='avatar' data-role='block' data-active={this.state.visible ? true : null}>
-          <Avatar icon="user" />
-        </span>
-      </Dropdown>
+      <div style={{fontSize:14}}>您好,{this.state.username}</div>
     );
   };
 

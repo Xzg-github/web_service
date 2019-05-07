@@ -111,11 +111,51 @@ const delAction = () => async (dispatch, getState) => {
 };
 
 
+const editAction = () => async (dispatch, getState) => {
+  const {edit,checkValue,radioValue,uploadList} = getSelfState(getState());
+  console.log(getSelfState(getState()));
+  let ids = [];
+  let radios = [];
+
+  for(let v in checkValue){
+    checkValue[v]&&(ids.push(v))
+  }
+  for(let v in radioValue){
+    radioValue[v] && (radios.push(v))
+  }
+
+  if(ids.length !== 1){
+    helper.showError('请勾选一个');
+    return
+  }
+
+  if(ids[0] === radios[0]){
+    helper.showError('默认签章不能删除');
+    return
+  }
+  const fileList = [];
+  let fileItem = uploadList.filter(list => {
+    return list.id === ids[0]
+  });
+  console.log(fileItem);
+  fileList.push({
+    thumbUrl:fileItem[0].signSealImgBase64,
+    status:'done',
+    id:fileItem[0].id,
+    uid:0,
+  });
+  if (await showDiaLog(edit,{},false,fileList)) {
+    return updateTable(dispatch,getState)
+  }
+};
+
 
 const toolbarActions = {
   add:addAction,
+  edit:editAction,
   del:delAction
 };
+
 
 const clickActionCreator = (key) => {
   if (toolbarActions.hasOwnProperty(key)) {
