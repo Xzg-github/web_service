@@ -24,13 +24,15 @@ const unitOptions = [
 
 //支付方式
 const payOptions = [
-  {value:'1',title:'支付宝'},
-  {value:'2',title:'微信'},
+  {value:'1',title:'微信'},
+  {value:'2',title:'支付宝'},
   {value:'3',title:'对公转账'},
 ];
 
 const fourControls = [
-  {key:'b',title:'请选择支付方式',type:'radioGroup',options:payOptions,required:true},
+  {key:'payWay',title:'请选择支付方式',type:'radioGroup',options:payOptions,required:true},
+  {key: 'outerOrderNo', title: '订单外部流水号', type: 'text',span: 2},
+  {key: 'payDescription', title: '订单备注', type: 'textArea', span: 2}
 ];
 
 const filters = [

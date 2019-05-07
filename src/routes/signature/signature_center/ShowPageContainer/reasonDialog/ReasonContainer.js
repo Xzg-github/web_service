@@ -5,6 +5,7 @@ import showPopup from '../../../../../standard-business/showPopup';
 import helper, {showError, showSuccessMsg} from '../../../../../common/common';
 
 const action = new Action( ['fadada'], false);
+const action1 = new Action( ['temp'], false);
 const URL_REJECT = `/api/signature/signature_center/repeal`;
 
 const getSelfState = (state) => {
@@ -42,6 +43,7 @@ const okActionCreator = () => async (dispatch, getState) => {
   if(returnCode !== 0){return showError(returnMsg)}
   showSuccessMsg(returnMsg);
   dispatch(action.assign({visible: false, ok: true}));
+  dispatch(action1.assign({visible: false}))
   close();
 };
 

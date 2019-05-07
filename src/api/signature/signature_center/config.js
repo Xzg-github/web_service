@@ -51,6 +51,12 @@ const buttons2 = [
   {key: 'reject', title:'拒签'}
 ];
 
+const buttons3 = [
+  {key: 'add', title: '新增', bsStyle: 'primary'},
+  {key: 'upload', title: '下载文件'},
+  {key: 'view', title: '在线预览'},
+];
+
 const tableCols = [
   {key: 'signFileOrder', title: '系统编号',link: true},
   {key: 'signFileSubject', title: '文件主题'},
@@ -79,6 +85,7 @@ const config = {
   filters,
   buttons,
   buttons2,
+  buttons3,
   tableCols,
   initPageSize: pageSize,
   pageSizeType,
@@ -92,7 +99,7 @@ const config = {
       { key: 'account', title: '账号', type: 'text'},
      // { key: 'signIdentity', title: '签署身份', type: 'select', options: isOptions1},
       //{ key: 'isAllowAddSignatories', title: '允许增加签署方', type: 'select', options: isOptions},
-      { key: 'signFinishTime', title: '签署时间'},
+      { key: 'signFinishTime', title: '操作时间'},
       { key: 'signState', title: '签署状态', options: isOptions2},
       //{ key: 'signingOpinions', title: '签署意见', type: 'text'},
      // { key: 'sendLink', title: '链接', link: '发送链接'},

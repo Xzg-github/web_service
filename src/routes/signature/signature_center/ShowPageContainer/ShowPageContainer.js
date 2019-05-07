@@ -23,8 +23,8 @@ const buildShowState = (config, items=[], dispatch, title, user, closeFunc) => {
 };
 
 //关闭
-const cancelActionCreator = ({onClose}) => () => {
-  onClose();
+const cancelActionCreator = () => (dispatch) => {
+  dispatch(action.assign({visible: false, ok: false}))
 };
 
 const rejectActionCreator = ({onClose}) => async(dispatch, getState) => {
