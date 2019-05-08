@@ -46,6 +46,7 @@ class SetDialog extends React.Component {
   };
 
   render() {
+    console.log(this.props);
     return (
       <ModalWithDrag {...this.modalProps()}>
         <SuperForm {...this.formProps()} />

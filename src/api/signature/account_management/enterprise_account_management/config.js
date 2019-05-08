@@ -18,7 +18,7 @@ const LABELS = [
   {key: 'grzh', title: '企业账号'},
   {key: 'companyOrder', title: '企业编号'},
   {key: 'companyName', title: '企业名称'},
-  {key: 'companyContact', title: '管理人姓名'},
+  {key: 'managerPersonName', title: '管理人姓名'},
   {key: 'notifyPhone', title: '手机号码',type:'edit'},
 ];
 

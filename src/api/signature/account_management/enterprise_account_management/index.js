@@ -118,4 +118,12 @@ api.get('/edit/:id', async (req, res) => {
   res.send(await fetchJsonByNode(req,url));
 });
 
+//修改手机号
+api.post('/updatePhone', async (req, res) => {
+  const url = `${service}/account_secure/update`;
+  res.send(await fetchJsonByNode(req,url,postOption(req.body)));
+});
+
+
+
 export default api;

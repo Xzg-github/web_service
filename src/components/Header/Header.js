@@ -10,7 +10,6 @@ const MenuDivider = Menu.Divider;
 const getUsername = () => {
   const username = 'usernameFdd=';
   const cookie = document.cookie;
-  console.log(cookie);
   const begin = cookie.indexOf(username) + username.length;
   const end = cookie.indexOf(';', begin);
   return unescape(cookie.substring(begin, end < 0 ? cookie.length : end));
