@@ -119,7 +119,7 @@ class Header extends React.Component {
 
   toAvatar = () => {
     return (
-      <div style={{fontSize:14}}>您好,{this.state.username}</div>
+      <div style={{fontSize:14}}>您好,  {this.state.username}</div>
     );
   };
 

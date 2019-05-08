@@ -34,6 +34,13 @@ const checkPhone= (phone) => {
   }
 };
 
+const checkMail= (mail) => {
+  if(!(/^[a-zA-Z0-9_.-]+@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*\.[a-zA-Z0-9]{2,6}$/.test(mail))){
+    return false;
+  }else {
+    return true
+  }
+};
 
 const okActionCreator = () => async (dispatch, getState) => {
   const {value,controls,edit} = getSelfState(getState());
@@ -41,11 +48,18 @@ const okActionCreator = () => async (dispatch, getState) => {
     dispatch(action.assign({valid: true}));
     return;
   }
-
-  if(!checkPhone(value.notifyPhone)){
-    helper.showError('手机号码格式不正确')
-    return
+  if(value.notifyPhone){
+    if(!checkPhone(value.notifyPhone)){
+      helper.showError('手机号码格式不正确')
+      return
+    }
+  }else if(value.notifyEmail){
+    if(!checkMail(value.notifyEmail)){
+      helper.showError('邮箱格式不正确')
+      return
+    }
   }
+
 
   const body = helper.postOption(helper.convert(value));
   const {result,returnCode,returnMsg} = await helper.fetchJson(URL_PHONE,body);

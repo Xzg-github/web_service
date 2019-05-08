@@ -6,6 +6,7 @@ import {Action} from '../../../../action-reducer/action';
 import {getPathValue} from '../../../../action-reducer/helper';
 import showDiaLogOne from './ShowDiaLog/DialogContainer';
 import showDiaLogFour from './ShowDiaLog/FourDialogContainer';
+import showPhoneDiaLog from '../enterprise_account_management/ShowDiaLog/NotifyPhoneDiaLogContainer';
 
 
 const TAB_KEY = 'one';
@@ -16,22 +17,8 @@ const URL_DAYS = '/api/signature/account_management/personal_account_management/
 const URL_EMAIL = '/api/signature/account_management/personal_account_management/email';
 const URL_PHONE = '/api/signature/account_management/personal_account_management/phone';
 
-
-function getCookie(cookieName) {
-  let strCookie = document.cookie;
-  let arrCookie = strCookie.split("; ");
-  for(let i = 0; i < arrCookie.length; i++){
-    let arr = arrCookie[i].split("=");
-    if(cookieName == arr[0]){
-      return arr[1];
-    }
-  }
-  return "";
-}
-
 const updateTable = async(dispatch,getState)  =>{
   const result =  helper.getJsonResult(await helper.fetchJson(`${URL_LIST}`));
-  result.grzh = result.registerType === 'phone_number' ? result.notifyPhone : result.notifyEmail;
   result.isNotifiedByEmail = result.isNotifiedByEmail === 'true' ? true : false;
   result.isNotifiedByPhone = result.isNotifiedByPhone === 'true' ? true : false;
   dispatch(action.assign({value: {...result}},TAB_KEY))
@@ -49,9 +36,7 @@ const initActionCreator = () => async (dispatch, getState) => {
 
   dispatch(action.assign({status: 'loading'}, TAB_KEY));
   try {
-    let accountId =  getCookie('accountId');
     const result =  helper.getJsonResult(await helper.fetchJson(`${URL_LIST}`));
-    result.grzh = result.registerType === 'phone_number' ? result.notifyPhone : result.notifyEmail;
     result.isNotifiedByEmail = result.isNotifiedByEmail === 'true' ? true : false;
     result.isNotifiedByPhone = result.isNotifiedByPhone === 'true' ? true : false;
     dispatch(action.assign({
@@ -106,10 +91,32 @@ const companyNameAction = () => async (dispatch, getState) => {
   }
 };
 
+const notifyPhoneAction = () => async (dispatch, getState) => {
+  const {value} = getSelfState(getState());
+  const controls = [
+    {key:'notifyPhone',title:'电话 ',type:'number',required:true},
+  ];
+  if (await showPhoneDiaLog(controls, {} ,false)) {
+    return updateTable(dispatch,getState)
+  }
+};
+
+const notifyEmailAction = () => async (dispatch, getState) => {
+  const {value} = getSelfState(getState());
+  const controls = [
+    {key:'notifyEmail',title:'邮箱 ',type:'text',required:true},
+  ];
+  if (await showPhoneDiaLog(controls, {} ,false)) {
+    return updateTable(dispatch,getState)
+  }
+};
+
 
 const toolbarActions = {
   accountPassword:passwordAction,
-  companyName:companyNameAction
+  companyName:companyNameAction,
+  notifyPhone:notifyPhoneAction,
+  notifyEmail:notifyEmailAction
 };
 
 const clickActionCreator = (key) => {

@@ -113,7 +113,6 @@ const delAction = () => async (dispatch, getState) => {
 
 const editAction = () => async (dispatch, getState) => {
   const {edit,checkValue,radioValue,uploadList} = getSelfState(getState());
-  console.log(getSelfState(getState()));
   let ids = [];
   let radios = [];
 
@@ -133,18 +132,19 @@ const editAction = () => async (dispatch, getState) => {
     helper.showError('默认签章不能删除');
     return
   }
+  let signSealName;
   const fileList = [];
   let fileItem = uploadList.filter(list => {
     return list.id === ids[0]
   });
-  console.log(fileItem);
+  signSealName = fileItem[0].signSealName;
   fileList.push({
     thumbUrl:fileItem[0].signSealImgBase64,
     status:'done',
     id:fileItem[0].id,
     uid:0,
   });
-  if (await showDiaLog(edit,{},false,fileList)) {
+  if (await showDiaLog(edit,{signSealName,delId:fileItem[0].id},true,fileList)) {
     return updateTable(dispatch,getState)
   }
 };

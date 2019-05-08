@@ -8,6 +8,7 @@ import execWithLoading from '../../../../../standard-business/execWithLoading';
 const action = new Action(['temp'], false);
 
 const URL_ADD = '/api/signature/account_management/personal_account_management/addSign';//新增
+const URL_DEL = '/api/signature/account_management/personal_account_management/delSign';//删除
 
 const getSelfState = (state) => {
   return state.temp || {};
@@ -49,14 +50,38 @@ const buildState = async(config, items,edit,fileList=[]) => {
     confirmLoading:false
   };
 };
-
+/*
+* 编辑如果改变图片，需要删除旧图片
+* 如果没有改变图片，直接掉用修改接口
+* */
 const okActionCreator = () => async (dispatch, getState) => {
-  const {fileList=[],value,controls} = getSelfState(getState());
+  const {fileList=[],value,controls,edit} = getSelfState(getState());
   //企业的：生成一个圆形的企业章，尺寸要求：200*166
+  if (!helper.validValue(controls, value)) {
+    dispatch(action.assign({valid: true}));
+    return;
+  }
+
   if(fileList.length === 0){
     helper.showError('请上传文件');
     return
   }
+  //如果是编辑操作没有改变图片;
+  if(fileList[0].id && edit){
+    dispatch(action.assign({confirmLoading:true}));
+    const body = {
+      id:fileList[0].id,
+      signSealName:value.signSealName
+    };
+    const {result,returnCode,returnMsg} = await helper.fetchJson(URL_ADD,helper.postOption(body));
+    if(returnCode !== 0){
+      return helper.showError(returnMsg);
+    }
+    dispatch(action.assign({confirmLoading:false}));
+    dispatch(action.assign({visible: false, ok: true}));
+    return helper.showSuccessMsg('操作成功');
+  }
+  //新增操作或者编辑操作改变了原始图片
   let img_url = window.URL.createObjectURL(fileList[0]);
   let img = new Image();
   img.src = img_url;
@@ -67,13 +92,6 @@ const okActionCreator = () => async (dispatch, getState) => {
     if(imgWidth > 200 || imgHeight > 166){
       helper.showError('企业章尺寸不符合要求,建议166*166像素');
       return
-    }
-
-
-
-    if (!helper.validValue(controls, value)) {
-      dispatch(action.assign({valid: true}));
-      return;
     }
 
     dispatch(action.assign({confirmLoading:true}));
@@ -93,16 +111,21 @@ const okActionCreator = () => async (dispatch, getState) => {
           helper.showError(json.returnMsg);
           return
         }
-
+        //如果为编辑删除旧签章
+        if(edit && value.delId){
+          const url = `${URL_DEL}/${value.delId}`;
+          const {result,returnCode,returnMsg} = await helper.fetchJson(url,'delete');
+          if(returnCode!=0){
+            helper.showError('旧签章删除失败');
+          }
+        }
         dispatch(action.assign({confirmLoading:false}));
-        helper.showSuccessMsg('新增成功');
+        helper.showSuccessMsg('操作成功');
         dispatch(action.assign({visible: false, ok: true}));
       })
     });
 
   }
-
-
 };
 
 const closeActionCreator = () => (dispatch) => {

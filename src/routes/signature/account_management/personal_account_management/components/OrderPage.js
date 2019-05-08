@@ -63,10 +63,16 @@ class OrderPage extends React.Component {
       return (
         <span>
           <Icon type="edit" onClick={() => this.onClick(key)} style={{fontSize:18,color:'#2196F3'}}/>
+        </span>
+      )
+    }    if(item.type === 'editButton'){
+      return (
+        <span>
+          <Icon type="edit" onClick={() => this.onClick(key)} style={{fontSize:18,color:'#2196F3'}}/>
           { isTool ?   <span className={s.boxEdit}>{msg}</span> :
             <Tooltip placement="topLeft" title={value.refuseNote ? value.refuseNote : '无'}>
-            <span className={s.boxEdit}>{msg}</span>
-          </Tooltip>}
+              <span className={s.boxEdit}>{msg}</span>
+            </Tooltip>}
         </span>
       )
     }else if(item.type === 'button'){
