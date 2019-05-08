@@ -65,8 +65,25 @@ const editDialogConfig = {
   title: '录入收款', controls, config: {ok: '确定', cancel: '取消'}
 };
 
+/** AuditDialog Config Information **/
+const payOption = [
+  {value: 1,title: '微信'},
+  {value: 2,title: '支付宝'},
+  {value: 3,title: '对公转账号'},
+];
+
+const auditControls = [
+  {key: 'payWay', title: '支付方式', type: 'radioGroup', options: payOption, required: true},
+  {key: 'outerOrderNo', title: '订单外部流水号', type: 'text', span: 2},
+  {key: 'payDescription', title: '订单备注', type: 'textArea', span: 2}
+];
+
+const auditDialogConfig = {
+  title: '审核', controls: auditControls, config: {ok: '确定', cancel: '取消'}
+}
+
 const config = {
-  index, editDialogConfig
+  index, editDialogConfig, auditDialogConfig
 };
 
 export default config;
