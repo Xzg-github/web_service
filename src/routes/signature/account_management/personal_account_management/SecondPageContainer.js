@@ -127,7 +127,7 @@ const editAction = () => async (dispatch, getState) => {
   }
 
   if(ids[0] === radios[0]){
-    helper.showError('默认签章不能删除');
+    helper.showError('默认签章不能编辑');
     return
   }
   let signSealName;
