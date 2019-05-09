@@ -119,7 +119,7 @@ const createEditPageContainer = (action, getSelfState, getParentState) => {
       if(returnCode !== 0) return showError('当前发起人获取失败');
       const email = result.userEmail;
       const signPartyName = result.username;
-      newList.unshift({account:email, signPartyName, readonly: true});
+      newList.unshift({account:email, signPartyName, readonly: true, status: 1});
       dispatch(action.assign({signPartyList: newList}, 'value'))
     }else if(key === 'signWay' && values === '0'){
       dispatch(action.assign({signPartyList: newList }, 'value'))
@@ -424,13 +424,27 @@ const createEditPageContainer = (action, getSelfState, getParentState) => {
     return getSelfState(state);
   };
 
+  const blurAction = (rowIndex, keyName, values) => async(dispatch,getState) => {
+    const {value} = getSelfState(getState());
+    const URL_ACCOUNT_STATUS = '/api/signature/signature_center/account';  // 判断账号是否注册
+    if(keyName === 'account'){
+      const {result, returnMsg, returnCode} = await fetchJson(URL_ACCOUNT_STATUS, postOption(value.signPartyList), 'post');
+      if(returnCode !==0){return showError(returnMsg)}
+      if(value.signWay === '1' || value.signWay === 1){
+        result[0].readonly = true
+      }
+      dispatch(action.assign({signPartyList: result}, 'value'))
+    }
+  };
+
   const actionCreators = {
     onInit: initActionCreators,
     onClick: clickActionCreator,
     onCheck: checkActionCreator,
     onChange: changeActionCreator,
     onContentChange:contentChangeAction,
-    onExitValid: exitValidAction
+    onExitValid: exitValidAction,
+    onBlur: blurAction,
   };
 
   return connect(mapStateToProps, actionCreators)(EnhanceLoading(EditPage))

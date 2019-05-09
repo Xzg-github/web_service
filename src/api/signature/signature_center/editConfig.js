@@ -1,6 +1,6 @@
 const isOptions = [
-  {value: 1, title: '是'},
-  {value: 0, title: '否'}
+  {value: 1, title: '已注册'},
+  {value: 0, title: '未注册'}
 ];
 
 const isOptions1 = [
@@ -49,6 +49,7 @@ const tableCols = [
   { key: 'sequence', title: '签署顺序',type: 'number', required: true, hide: true},
   { key: 'signPartyName', title: '姓名/机构',type: 'text', required: true},
   { key: 'account', title: '账号（邮箱）', type: 'text', required: true},
+  { key: 'status', title: '是否注册', options: isOptions, cellClick: true, }
 /*  { key: 'isAllowAddSignatories', title: '允许增加签署方', type: 'select', options: isOptions},
   { key: 'signIdentity', title: '签署身份', type: 'select', options: isOptions1}*/
 ];

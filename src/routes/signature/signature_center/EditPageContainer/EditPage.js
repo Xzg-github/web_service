@@ -1,10 +1,11 @@
 import React, { PropTypes } from 'react';
 import withStyles from 'isomorphic-style-loader/lib/withStyles';
 import s from './EditPage.less';
-import {SuperTable2, SuperForm, Card, Title, SuperToolbar} from '../../../../components/index';
+import {SuperForm, Card, Title, SuperToolbar} from '../../../../components/index';
 import {getObject} from "../../../../common/common";
 import { Alert } from 'antd';
 import { Icon } from 'antd'
+import SuperTable2 from './Component/SuperTable2'
 
 
 const TOOLBAR_EVENTS = ['onClick']; // 工具栏点击事件
@@ -114,8 +115,8 @@ onClick = (key) => {
 
   toTable = () => {
     const {tableCols, value, onExitValid, valid} = this.props;
-    const {onContentChange, onCheck} = getObject(this.props, ['onContentChange', 'onCheck']);
-    const events1 = { onContentChange, onCheck, onExitValid };
+    const {onContentChange, onCheck, onBlur} = getObject(this.props, ['onContentChange', 'onCheck', 'onBlur']);
+    const events1 = { onContentChange, onCheck, onExitValid, onBlur };
     const props = {cols: tableCols, items: value.signPartyList || [], callback: events1, valid};
     return <SuperTable2 {...props}/>
   };

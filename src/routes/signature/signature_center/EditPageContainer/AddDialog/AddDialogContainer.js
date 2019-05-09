@@ -80,8 +80,9 @@ const changeKey = (arr, key) => {
 const okActionCreator = ({okFunc, onClose}) => async(dispatch, getState) => {
   const {value, groupConfig, contactConfig} = getParentState(getState());
   const {filterItems, title} = getSelfState(getState());
+  const URL_ACCOUNT_STATUS = '/api/signature/signature_center/account';
   const checkId = [];
-    if(title === '从联系人中添加'){
+    if(title === '从联系人中添加'){             //从联系人中添加
       filterItems.forEach(item => {
         item.checked && (checkId.push(item))
       });
@@ -90,10 +91,15 @@ const okActionCreator = ({okFunc, onClose}) => async(dispatch, getState) => {
         delete changeItems[i].id
       }
       const newItems = value.signPartyList.concat(changeItems);
-      okFunc(newItems);
+      const {result, returnCode, returnMsg} = await fetchJson(URL_ACCOUNT_STATUS, postOption(newItems, 'post'));
+      if(returnCode !== 0){return showError(returnMsg)}
+      if(value.signWay === '1' || value.signWay === 1){    //如果是签署文件，发起人为不可编辑
+        result[0].readonly= true;
+      }
+      okFunc(result);
       onClose();
-    }else{
-      if(value.signWay === '1' || value.signWay === 1){
+    }else{                                          //从群组中添加
+      if(value.signWay === '1' || value.signWay === 1){                 //签署方式为签署文件， 发起人为不可编辑
         const URL_ACCOUNT = '/api/signature/signature_center/getName';
         let token = getCookie('token');
         const {returnCode, returnMsg, result} = await fetchJson(`${URL_ACCOUNT}/${token}`,'get');
@@ -116,7 +122,10 @@ const okActionCreator = ({okFunc, onClose}) => async(dispatch, getState) => {
           newMap.push(i)
         }
         const newItems = list.concat(newMap);
-        okFunc(newItems);
+        const arrayStatus = await fetchJson(URL_ACCOUNT_STATUS, postOption(newItems, 'post'));
+        if(arrayStatus.returnCode !== 0){return showError(arrayStatus.returnMsg)}
+          arrayStatus.result[0].readonly= true;
+        okFunc(arrayStatus.result);
         onClose()
       }else if(value.signWay === '0' || value.signWay === 0){
         filterItems.forEach(item => {item.checked && (checkId.push(item))}); //勾选记录
@@ -133,7 +142,9 @@ const okActionCreator = ({okFunc, onClose}) => async(dispatch, getState) => {
           };
           newMap.push(i)
         }
-        okFunc(newMap);
+        const arrayStatus = await fetchJson(URL_ACCOUNT_STATUS, postOption(newMap, 'post'));
+        if(arrayStatus.returnCode !== 0){return showError(arrayStatus.returnMsg)}
+        okFunc(arrayStatus.result);
         onClose()
       }
 

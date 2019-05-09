@@ -162,4 +162,10 @@ api.get('/create', async(req, res) => {
   res.send(await fetchJsonByNode(req, url))
 });
 
+//获取用户账号是否注册
+api.post('/account', async(req, res) => {
+  const url = `${service}/user/accountStatus`;
+  res.send(await fetchJsonByNode(req, url, postOption(req.body)))
+});
+
 export default api;
