@@ -10,7 +10,6 @@ const MenuDivider = Menu.Divider;
 const getUsername = () => {
   const username = 'usernameFdd=';
   const cookie = document.cookie;
-  console.log(cookie);
   const begin = cookie.indexOf(username) + username.length;
   const end = cookie.indexOf(';', begin);
   return unescape(cookie.substring(begin, end < 0 ? cookie.length : end));
@@ -120,7 +119,7 @@ class Header extends React.Component {
 
   toAvatar = () => {
     return (
-      <div style={{fontSize:14}}>您好,{this.state.username}</div>
+      <div style={{fontSize:14}}>您好,&nbsp;&nbsp;{this.state.username}</div>
     );
   };
 

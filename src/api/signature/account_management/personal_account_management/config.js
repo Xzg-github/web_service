@@ -15,17 +15,18 @@ const oneControls = [
 
 const LABELS = [
   //{key: 'qymc', title: '账号头像',type:'avatar'},
-  {key: 'grzh', title: '个人账号'},
+  {key: 'account', title: '个人账号'},
   //{key: 'accountPassword', title: '登录密码',type:'edit'},
   {key: 'realName', title: '真实姓名'},
   {key: 'idCard', title: '身份号'},
-  {key: 'notifyPhone', title: '手机号码'},
-  {key: 'notifyEmail', title: '电子邮件'},
-  {key: 'companyName', title: '归属企业',type:'edit'},
+  {key: 'notifyPhone', title: '手机号码',type:'edit'},
+  {key: 'notifyEmail', title: '电子邮件',type:'edit'},
+  {key: 'companyName', title: '归属企业',type:'editButton'},
 ];
 
 const two_buttons = [
   {key:'add',title:'新增',bsStyle:'primary'},
+  {key:'edit',title:'编辑'},
   {key:'del',title:'删除'},
 ];
 

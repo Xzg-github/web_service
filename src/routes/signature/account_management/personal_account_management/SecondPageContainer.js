@@ -110,8 +110,7 @@ const delAction = () => async (dispatch, getState) => {
 };
 
 const editAction = () => async (dispatch, getState) => {
-  const {edit,checkValue,radioValue} = getSelfState(getState());
-  console.log(checkValue);
+  const {edit,checkValue,radioValue,uploadList} = getSelfState(getState());
   let ids = [];
   let radios = [];
 
@@ -128,14 +127,26 @@ const editAction = () => async (dispatch, getState) => {
   }
 
   if(ids[0] === radios[0]){
-    helper.showError('默认签章不能删除');
+    helper.showError('默认签章不能编辑');
     return
   }
-
-  if (await showDiaLog(edit,{},false)) {
+  let signSealName;
+  const fileList = [];
+  let fileItem = uploadList.filter(list => {
+    return list.id === ids[0]
+  });
+  signSealName = fileItem[0].signSealName;
+  fileList.push({
+    thumbUrl:fileItem[0].signSealImgBase64,
+    status:'done',
+    id:fileItem[0].id,
+    uid:0,
+  });
+  if (await showDiaLog(edit,{signSealName,delId:fileItem[0].id},true,fileList)) {
     return updateTable(dispatch,getState)
   }
 };
+
 
 
 const toolbarActions = {
