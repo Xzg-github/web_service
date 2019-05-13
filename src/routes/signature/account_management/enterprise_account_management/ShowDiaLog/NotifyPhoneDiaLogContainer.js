@@ -12,10 +12,10 @@ const getSelfState = (state) => {
   return state.temp || {};
 };
 
-const buildState = (controls, result) => {
+const buildState = (controls, result,title) => {
   return {
     controls,
-    title:'修改手机号',
+    title:title,
     visible: true,
     value: result,
     width:300
@@ -101,9 +101,9 @@ const actionCreators = {
   onExitValid: exitValidActionCreator
 };
 
-export default async (controls, items) => {
+export default async (controls, items,title) => {
   const Container = connect(mapStateToProps, actionCreators)(Dialog);
-  global.store.dispatch(action.create(buildState(controls, items)));
+  global.store.dispatch(action.create(buildState(controls, items,title)));
   await showPopup(Container, {}, true);
 
   const state = getSelfState(global.store.getState());
