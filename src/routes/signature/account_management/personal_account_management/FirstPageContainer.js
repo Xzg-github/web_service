@@ -96,7 +96,7 @@ const notifyPhoneAction = () => async (dispatch, getState) => {
   const controls = [
     {key:'notifyPhone',title:'电话 ',type:'number',required:true},
   ];
-  if (await showPhoneDiaLog(controls, {} ,false)) {
+  if (await showPhoneDiaLog(controls, {} ,'修改手机号')) {
     return updateTable(dispatch,getState)
   }
 };
@@ -106,7 +106,7 @@ const notifyEmailAction = () => async (dispatch, getState) => {
   const controls = [
     {key:'notifyEmail',title:'邮箱 ',type:'text',required:true},
   ];
-  if (await showPhoneDiaLog(controls, {} ,false)) {
+  if (await showPhoneDiaLog(controls, {} ,'修改邮箱')) {
     return updateTable(dispatch,getState)
   }
 };
