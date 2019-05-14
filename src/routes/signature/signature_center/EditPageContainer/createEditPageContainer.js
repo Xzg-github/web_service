@@ -242,6 +242,7 @@ const createEditPageContainer = (action, getSelfState, getParentState) => {
     }
   };
 
+
   //保存
   const saveAction = async (dispatch, getState) => {
     const {value, closeFunc} = getSelfState(getState());
@@ -260,9 +261,13 @@ const createEditPageContainer = (action, getSelfState, getParentState) => {
           return showError('请输入正确的账号(手机号或邮箱)！')
         }
       }
-      if(only(value.signPartyList, 'account') === false){
-        return showError('表格账号（邮箱）保持唯一')
-      }
+        let isRepeat = false;
+        for( let i = 0; i < value.signPartyList.length; i++){         //账号重复时，不允许保存
+          for(let j = i+1; j < value.signPartyList.length; j++){
+            if(value.signPartyList[i].account === value.signPartyList[j].account){isRepeat = true}
+          }
+        }
+        if(isRepeat){return showError('请保持表格签署人唯一！')}
     }
     const {result, returnCode, returnMsg} = await fetchJson(URL_SAVE,postOption(value, 'post'));
     if(returnCode !== 0 ){return showError(returnMsg)}
@@ -273,46 +278,42 @@ const createEditPageContainer = (action, getSelfState, getParentState) => {
  const nextAction = async(dispatch, getState) => {
    try {
      const {value, controls1, controls2, tableCols, closeFunc} = getSelfState(getState());
-     if(JSON.stringify(value) === "{}"){         //没有填写任何内容是，直接关闭
-       return showError('请上传签署文件！')
-     }
-     if(!validValue(controls1, value)){   //判断from1必填
+     if(JSON.stringify(value) === "{}"){return showError('请上传签署文件！')}         //没有填写任何内容是，直接关闭
+     if(!validValue(controls1, value)){                                                //判断from1必填
        dispatch(action.assign({valid: true}));
        return
      }
-     if(!validValue(controls2, value)){   //判断from2必填
+     if(!validValue(controls2, value)){                                               //判断from2必填
        dispatch(action.assign({valid: true}));
        return
      }
-     let isRepeat = false;
+     let isBlank = false;
      let msg = '';
      if(value.signPartyList){
-       value.signPartyList.forEach(item => {
+       value.signPartyList.forEach(item => {    //判断表格必填
          item = toFormValue(item);
          if(!item.signPartyName){
-           isRepeat = true;
+           isBlank = true;
            msg = '姓名/机构不能为空！'
          }else if(!item.account){
-           isRepeat = true;
+           isBlank = true;
            msg = '账号（邮箱）不能为空！'
          }
        });
-       if(isRepeat){
-         return showError(msg)
+       if(isBlank){return showError(msg)}
+     }
+     let isRepeat = false;
+     for( let i = 0; i < value.signPartyList.length; i++){         //账号重复时，不允许保存
+       for(let j = i+1; j < value.signPartyList.length; j++){
+         if(value.signPartyList[i].account === value.signPartyList[j].account){isRepeat = true}
        }
      }
-     for(let i = 0; i<value.signPartyList.length; i++){  //对表格数据进行排序
-       value.signPartyList[i].sequence = i+1
-     }
-
-     for(let i = 0; i<value.signPartyList.length; i++){   //验证表格邮箱格式
+     if(isRepeat){return showError('请保持表格签署人唯一！')}
+     for(let i = 0; i<value.signPartyList.length; i++){value.signPartyList[i].sequence = i+1}  //对表格数据进行排序
+     for(let i = 0; i<value.signPartyList.length; i++){                                        //验证表格邮箱格式
        if(value.signPartyList[i].account && !checkMail(value.signPartyList[i].account) && !checkPhone(value.signPartyList[i].account)){
          return showError('请输入正确的账号(手机号或邮箱)！')
        }
-     }
-
-     if(only(value.signPartyList, 'account') === false){       //验证发起人唯一
-       return showError('表格账号（邮箱）保持唯一')
      }
      const URL_SAVE = `/api/signature/signature_center/save`;      //保存
      const URL_SUBMIT = '/api/signature/signature_center/sub';  //提交
@@ -348,33 +349,33 @@ const createEditPageContainer = (action, getSelfState, getParentState) => {
           dispatch(action.assign({valid: true}));
           return
         }
-        if(value.signPartyList.length === 0){
-          return showError('签署人不能为空！')
-        }
-        let isRepeat = false;
+        if(value.signPartyList.length === 0){return showError('签署人不能为空！')}
+        let isBlank = false;
         let msg = '';
         if(value.signPartyList){
           value.signPartyList.forEach(item => {
             item = toFormValue(item);
             if(!item.signPartyName){
-              isRepeat = true;
+              isBlank = true;
               msg = '姓名/机构不能为空！'
             }else if(!item.account){
-              isRepeat = true;
+              isBlank = true;
               msg = '账号（邮箱）不能为空！'
             }
           });
-          if(isRepeat){
-            return showError(msg)
+          if(isBlank){return showError(msg)}
+          let isRepeat = false;
+          for( let i = 0; i < value.signPartyList.length; i++){         //账号重复时，不允许保存
+            for(let j = i+1; j < value.signPartyList.length; j++){
+              if(value.signPartyList[i].account === value.signPartyList[j].account){isRepeat = true}
+            }
           }
+          if(isRepeat){return showError('请保持表格签署人唯一！')}
         }
-        for(let i = 0; i<value.signPartyList.length; i++){  //对表格数据进行排序
-            value.signPartyList[i].sequence = i+1;
-          }
+        for(let i = 0; i<value.signPartyList.length; i++){value.signPartyList[i].sequence = i+1}//对表格数据进行排序
         for(let i = 0; i<value.signPartyList.length; i++){   //验证表格邮箱格式
           if(value.signPartyList[i].account && !checkMail(value.signPartyList[i].account) && !checkPhone(value.signPartyList[i].account)){
-            return showError('请确认表格中邮箱或手机格式正确！')
-          }
+            return showError('请确认表格中邮箱或手机格式正确！')}
         }
         const save = helper.getJsonResult(await fetchJson(URL_SAVE,postOption(value, 'post')));  //先保存
         const submit = await fetchJson(`${URL_SUBMIT}/${save.id}`, 'get');   //再提交

@@ -84,10 +84,16 @@ const okActionCreator = ({okFunc, onClose}) => async(dispatch, getState) => {
   const checkId = [];
     if(title === '从联系人中添加'){             //从联系人中添加
       filterItems.forEach(item => {item.checked && (checkId.push(item))});
-      const changeItems = changeKey(checkId, ['id', 'signPartyName', 'account']);
-      for(let i=0; i< changeItems.length; i++){delete changeItems[i].id}
-      const newItems = value.signPartyList.concat(changeItems);
-      const {result, returnCode, returnMsg} = await fetchJson(URL_ACCOUNT_STATUS, postOption(newItems, 'post'));
+      const totalItems = value.signPartyList.concat(checkId);
+      const data = [];
+      for(let [index, elem] of new Map( totalItems.map( ( item, i ) => [ i, item ] ) )){
+        let i = {
+          signPartyName:elem.companyContactName || elem.signPartyName,
+          account: elem.companyContactAccount || elem.account
+        };
+        data.push(i)
+      }
+      const {result, returnCode, returnMsg} = await fetchJson(URL_ACCOUNT_STATUS, postOption(data, 'post'));
       if(returnCode !== 0){return showError(returnMsg)}
       if(value.signWay === '1'){result[0].readonly= true}     //如果是签署文件，发起人为不可编辑
       okFunc(result);
@@ -96,12 +102,21 @@ const okActionCreator = ({okFunc, onClose}) => async(dispatch, getState) => {
       filterItems.forEach(item => {item.checked && (checkId.push(item))}); //勾选记录
       if(checkId.length !==1){return showError('签署群组只能勾选一条！')} //判断勾选一条
       const onlyFilter = checkId[0].concatMemberVos;
-      for(let i = 0; i < onlyFilter.length; i++){delete onlyFilter[i].id}
-      for(let i = 0; i < value.signPartyList.length; i++){delete value.signPartyList[i].status}
-      const newItems = value.signPartyList.concat(onlyFilter);
-      const changeItems = changeKey(newItems, ['signPartyName', 'account']);           //转换Key值
-      let newMap = [];
-      const {result, returnMsg, returnCode} = await fetchJson(URL_ACCOUNT_STATUS, postOption(changeItems, 'post'));
+      const totalItems = value.signPartyList.concat(onlyFilter);
+      const newItems = [];
+      for(let [index, elem] of new Map( totalItems.map( ( item, i ) => [ i, item ] ) )){
+        let i = {
+          signPartyName:elem.companyContactName || elem.signPartyName,
+          account: elem.companyContactAccount || elem.account
+        };
+        newItems.push(i)
+      }
+      let hash = {};
+      const data = newItems.reduce((preVal, curVal) => {
+        hash[curVal.account] ? '' : hash[curVal.account] = true && preVal.push(curVal);
+        return preVal
+      }, []);
+      const {result, returnMsg, returnCode} = await fetchJson(URL_ACCOUNT_STATUS, postOption(data, 'post'));
       if(returnCode !== 0){return showError(returnMsg)}
       if(value.signWay === '1'){result[0].readonly= true }//如果是签署文件，发起人为不可编辑
       okFunc(result);
