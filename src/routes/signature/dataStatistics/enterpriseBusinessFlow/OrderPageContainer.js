@@ -43,7 +43,7 @@ const exportPageActionCreator = async (dispatch, getState) => {
 };
 
 const toolbarActions = {
-  reset: resetActionCreator,
+  reset: resetActionCreator(),
   search: searchActionCreator,
   exportSearch: exportSearchActionCreator,
   exportPage: exportPageActionCreator,
@@ -81,7 +81,7 @@ const pageSizeActionCreator = (pageSize, currentPage) => async (dispatch, getSta
 
 const filterSearchActionCreator = (key, value) => async (dispatch)=> {
   if(key === 'businessCode'){
-    const option = helper.postOption({itemName: value, "maxNumber": 10})
+    const option = helper.postOption({itemName: value, "maxNumber": 10});
     const {result, returnCode, returnMsg} = await fetchJson(urlItemName, option);
     returnCode === 0
       ? dispatch(action.update({options: result},'filters',{key: 'key', value: key}))
