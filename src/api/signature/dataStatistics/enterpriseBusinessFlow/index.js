@@ -19,7 +19,7 @@ api.post('/list', async (req, res) => {
 
 //业务项目
 api.post('/itemName', async (req, res) => {
-  const url = `${service}/business_items/drop_list`;
+  const url = `${service}/business_items/list`;
   res.send(await fetchJsonByNode(req, url, postOption(req.body)));
 });
 

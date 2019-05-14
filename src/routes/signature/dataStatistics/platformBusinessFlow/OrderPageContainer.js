@@ -77,13 +77,19 @@ const pageSizeActionCreator = (pageSize, currentPage) => async (dispatch, getSta
 const filterSearchActionCreator = (key, value) => async (dispatch)=> {
   let option;
   if(key === 'businessCode'){
-    option = helper.postOption({itemName: value, "maxNumber": 65536})
+    option = helper.postOption({itemName: value, itemFrom: 0, itemTo: 65536});
     const {result, returnCode, returnMsg} = await fetchJson(urlItemName, option);
+    const options = result.data.map(currentItem => {
+      return {
+        value: currentItem.code,
+        title: currentItem.itemName
+      }
+    });
     returnCode === 0
-      ? dispatch(action.update({options: result},'filters',{key: 'key', value: key}))
+      ? dispatch(action.update({options},'filters',{key: 'key', value: key}))
       : showError(returnMsg);
   } else if (key === 'companyId') {
-    option = helper.postOption({companyName: value, "maxNumber": 65536})
+    option = helper.postOption({companyName: value, "maxNumber": 65536});
     const {result, returnCode, returnMsg} = await fetchJson(urlBusiness, option);
     returnCode === 0
       ? dispatch(action.update({options: result},'filters',{key: 'key', value: key}))
