@@ -1,10 +1,11 @@
 import React, { PropTypes } from 'react';
 import withStyles from 'isomorphic-style-loader/lib/withStyles';
 import s from './EditPage.less';
-import {SuperTable2, SuperForm, Card, Title, SuperToolbar} from '../../../../components/index';
+import {SuperForm, Card, Title, SuperToolbar} from '../../../../components/index';
 import {getObject} from "../../../../common/common";
 import { Alert } from 'antd';
 import { Icon } from 'antd'
+import SuperTable2 from './Component/SuperTable2'
 
 
 const TOOLBAR_EVENTS = ['onClick']; // 工具栏点击事件
@@ -46,13 +47,12 @@ onClick = (key) => {
     if(value.signContractId){
       return(
         <div style={{overflow: 'hidden'}}>
-          <div style={{float: 'left'}}>
-            <SuperToolbar {...props}/>
-          </div>
-          <div style={{float: 'left', marginLeft: '30px'}}>
+          <div style={{float: 'left'}}><SuperToolbar {...props}/></div>
+          {value.signFileSubject ? <div style={{float: 'left', marginLeft: '30px'}}>
             <a href={value.urlOfSignedFileViewpdf} target="_blank" style={{marginRight: '10px', textDecoration: 'underline'}}>{value.signFileSubject}</a>
             <span className = "icon" style={{cursor: 'pointer'}} onClick = {this.onClick.bind(null, 'delFile')}><Icon type ='close' /></span>
-          </div>
+          </div> : ''
+          }
         </div>
       )
     }else{
@@ -114,8 +114,8 @@ onClick = (key) => {
 
   toTable = () => {
     const {tableCols, value, onExitValid, valid} = this.props;
-    const {onContentChange, onCheck} = getObject(this.props, ['onContentChange', 'onCheck']);
-    const events1 = { onContentChange, onCheck, onExitValid };
+    const {onContentChange, onCheck, onBlur} = getObject(this.props, ['onContentChange', 'onCheck', 'onBlur']);
+    const events1 = { onContentChange, onCheck, onExitValid, onBlur };
     const props = {cols: tableCols, items: value.signPartyList || [], callback: events1, valid};
     return <SuperTable2 {...props}/>
   };

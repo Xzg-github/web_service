@@ -3,6 +3,7 @@ import AddDialog from './AddDialog';
 import {Action} from '../../../../../action-reducer/action';
 import {getPathValue} from '../../../../../action-reducer/helper';
 import {postOption, fetchJson, showSuccessMsg, showError} from '../../../../../common/common';
+import {getCookie} from '../createEditPageContainer'
 
 const STATE_PATH = ['temp'];
 const action = new Action(STATE_PATH);
@@ -79,28 +80,31 @@ const changeKey = (arr, key) => {
 const okActionCreator = ({okFunc, onClose}) => async(dispatch, getState) => {
   const {value, groupConfig, contactConfig} = getParentState(getState());
   const {filterItems, title} = getSelfState(getState());
+  const URL_ACCOUNT_STATUS = '/api/signature/signature_center/account';
   const checkId = [];
-    if(title === '从联系人中添加'){
-      filterItems.forEach(item => {
-        item.checked && (checkId.push(item))
-      });
+    if(title === '从联系人中添加'){             //从联系人中添加
+      filterItems.forEach(item => {item.checked && (checkId.push(item))});
       const changeItems = changeKey(checkId, ['id', 'signPartyName', 'account']);
-      for(let i=0; i< changeItems.length; i++){
-        delete changeItems[i].id
-      }
+      for(let i=0; i< changeItems.length; i++){delete changeItems[i].id}
       const newItems = value.signPartyList.concat(changeItems);
-      okFunc(newItems);
+      const {result, returnCode, returnMsg} = await fetchJson(URL_ACCOUNT_STATUS, postOption(newItems, 'post'));
+      if(returnCode !== 0){return showError(returnMsg)}
+      if(value.signWay === '1'){result[0].readonly= true}     //如果是签署文件，发起人为不可编辑
+      okFunc(result);
       onClose();
     }else{
       filterItems.forEach(item => {item.checked && (checkId.push(item))}); //勾选记录
       if(checkId.length !==1){return showError('签署群组只能勾选一条！')} //判断勾选一条
       const onlyFilter = checkId[0].concatMemberVos;
-      for(let i = 0; i < onlyFilter.length; i++){
-        delete onlyFilter[i].id
-      }
-      const changeItems = changeKey(onlyFilter, ['signPartyName', 'account']);
-      const newItems = value.signPartyList.concat(changeItems);
-      okFunc(newItems);
+      for(let i = 0; i < onlyFilter.length; i++){delete onlyFilter[i].id}
+      for(let i = 0; i < value.signPartyList.length; i++){delete value.signPartyList[i].status}
+      const newItems = value.signPartyList.concat(onlyFilter);
+      const changeItems = changeKey(newItems, ['signPartyName', 'account']);           //转换Key值
+      let newMap = [];
+      const {result, returnMsg, returnCode} = await fetchJson(URL_ACCOUNT_STATUS, postOption(changeItems, 'post'));
+      if(returnCode !== 0){return showError(returnMsg)}
+      if(value.signWay === '1'){result[0].readonly= true }//如果是签署文件，发起人为不可编辑
+      okFunc(result);
       onClose()
     }
 };

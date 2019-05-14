@@ -15,10 +15,11 @@ const oneControls = [
 
 
 const LABELS = [
-  {key: 'grzh', title: '企业账号'},
+  {key: 'account', title: '企业账号'},
   {key: 'companyOrder', title: '企业编号'},
   {key: 'companyName', title: '企业名称'},
-  {key: 'companyContact', title: '管理人姓名'},
+  {key: 'notifyEmail', title: '电子邮件',type:'edit'},
+  {key: 'managerPersonName', title: '管理人姓名'},
   {key: 'notifyPhone', title: '手机号码',type:'edit'},
 ];
 

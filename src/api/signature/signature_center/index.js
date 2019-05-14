@@ -29,6 +29,12 @@ api.get('/getName/:token', async (req, res) => {
   res.send(await fetchJsonByNode(req, url))
 });
 
+//获取用户名与邮箱账号
+api.get('/authc/:token', async (req, res) => {
+  const url = `${service}/authc/${req.params.token}/account`;
+  res.send(await fetchJsonByNode(req, url))
+});
+
 //提交
 api.get('/sub/:guid', async (req, res) => {
   const url = `${service}/sign_center/submit/${req.params.guid}`;
@@ -160,6 +166,12 @@ api.post('/repeal', async(req, res) => {
 api.get('/create', async(req, res) => {
   const url = `${service}/sign_center/check_can_create_sign_file`;
   res.send(await fetchJsonByNode(req, url))
+});
+
+//获取用户账号是否注册
+api.post('/account', async(req, res) => {
+  const url = `${service}/user/accountStatus`;
+  res.send(await fetchJsonByNode(req, url, postOption(req.body)))
 });
 
 export default api;
