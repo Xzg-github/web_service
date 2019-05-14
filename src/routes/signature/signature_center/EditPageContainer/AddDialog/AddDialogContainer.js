@@ -83,71 +83,29 @@ const okActionCreator = ({okFunc, onClose}) => async(dispatch, getState) => {
   const URL_ACCOUNT_STATUS = '/api/signature/signature_center/account';
   const checkId = [];
     if(title === '从联系人中添加'){             //从联系人中添加
-      filterItems.forEach(item => {
-        item.checked && (checkId.push(item))
-      });
+      filterItems.forEach(item => {item.checked && (checkId.push(item))});
       const changeItems = changeKey(checkId, ['id', 'signPartyName', 'account']);
-      for(let i=0; i< changeItems.length; i++){
-        delete changeItems[i].id
-      }
+      for(let i=0; i< changeItems.length; i++){delete changeItems[i].id}
       const newItems = value.signPartyList.concat(changeItems);
       const {result, returnCode, returnMsg} = await fetchJson(URL_ACCOUNT_STATUS, postOption(newItems, 'post'));
       if(returnCode !== 0){return showError(returnMsg)}
-      if(value.signWay === '1' || value.signWay === 1){    //如果是签署文件，发起人为不可编辑
-        result[0].readonly= true;
-      }
+      if(value.signWay === '1'){result[0].readonly= true}     //如果是签署文件，发起人为不可编辑
       okFunc(result);
       onClose();
-    }else{                                          //从群组中添加
-      if(value.signWay === '1' || value.signWay === 1){                 //签署方式为签署文件， 发起人为不可编辑
-        const URL_ACCOUNT = '/api/signature/signature_center/getName';
-        let token = getCookie('token');
-        const {returnCode, returnMsg, result} = await fetchJson(`${URL_ACCOUNT}/${token}`,'get');
-        if(returnCode !== 0) return showError('当前发起人获取失败');
-        const email = result.userEmail;
-        const signPartyName = result.username;
-        const list = [{account:email, signPartyName, readonly: true}];
-        filterItems.forEach(item => {item.checked && (checkId.push(item))}); //勾选记录
-        if(checkId.length !==1){return showError('签署群组只能勾选一条！')} //判断勾选一条
-        const onlyFilter = checkId[0].concatMemberVos;
-        for(let i = 0; i < onlyFilter.length; i++){
-          delete onlyFilter[i].id
-        }
-        let newMap = [];
-        for( let [index, elem] of new Map(onlyFilter.map((item, i) => [i, item]))){  //通过Map数组解构去重，并修改数组对象中的Key值
-          let i = {
-            signPartyName: elem.companyContactName,  //转换数组对象中的key
-            account: elem.companyContactAccount
-          };
-          newMap.push(i)
-        }
-        const newItems = list.concat(newMap);
-        const arrayStatus = await fetchJson(URL_ACCOUNT_STATUS, postOption(newItems, 'post'));
-        if(arrayStatus.returnCode !== 0){return showError(arrayStatus.returnMsg)}
-          arrayStatus.result[0].readonly= true;
-        okFunc(arrayStatus.result);
-        onClose()
-      }else if(value.signWay === '0' || value.signWay === 0){
-        filterItems.forEach(item => {item.checked && (checkId.push(item))}); //勾选记录
-        if(checkId.length !==1){return showError('签署群组只能勾选一条！')} //判断勾选一条
-        const onlyFilter = checkId[0].concatMemberVos;
-        for(let i = 0; i < onlyFilter.length; i++){
-          delete onlyFilter[i].id
-        }
-        let newMap = [];
-        for( let [index, elem] of new Map(onlyFilter.map((item, i) => [i, item]))){  //通过Map数组解构去重，并修改数组对象中的Key值
-          let i = {
-            signPartyName: elem.companyContactName,  //转换数组对象中的key
-            account: elem.companyContactAccount
-          };
-          newMap.push(i)
-        }
-        const arrayStatus = await fetchJson(URL_ACCOUNT_STATUS, postOption(newMap, 'post'));
-        if(arrayStatus.returnCode !== 0){return showError(arrayStatus.returnMsg)}
-        okFunc(arrayStatus.result);
-        onClose()
-      }
-
+    }else{
+      filterItems.forEach(item => {item.checked && (checkId.push(item))}); //勾选记录
+      if(checkId.length !==1){return showError('签署群组只能勾选一条！')} //判断勾选一条
+      const onlyFilter = checkId[0].concatMemberVos;
+      for(let i = 0; i < onlyFilter.length; i++){delete onlyFilter[i].id}
+      for(let i = 0; i < value.signPartyList.length; i++){delete value.signPartyList[i].status}
+      const newItems = value.signPartyList.concat(onlyFilter);
+      const changeItems = changeKey(newItems, ['signPartyName', 'account']);           //转换Key值
+      let newMap = [];
+      const {result, returnMsg, returnCode} = await fetchJson(URL_ACCOUNT_STATUS, postOption(changeItems, 'post'));
+      if(returnCode !== 0){return showError(returnMsg)}
+      if(value.signWay === '1'){result[0].readonly= true }//如果是签署文件，发起人为不可编辑
+      okFunc(result);
+      onClose()
     }
 };
 

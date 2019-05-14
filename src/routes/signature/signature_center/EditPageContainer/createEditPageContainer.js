@@ -112,10 +112,11 @@ const createEditPageContainer = (action, getSelfState, getParentState) => {
   const changeActionCreator = (key, values) => async(dispatch, getState) => {
     const {value} = getSelfState(getState());
     let token = getCookie('token');
-    const URL_ACCOUNT = '/api/signature/signature_center/getName';
+    //const URL_ACCOUNT = '/api/signature/signature_center/getName';
+    const URL_AUTHC = '/api/signature/signature_center/authc';
     let newList = [];
     if(key === 'signWay' && values === '1'){
-      const {returnCode, returnMsg, result} = await fetchJson(`${URL_ACCOUNT}/${token}`,'get');
+      const {returnCode, returnMsg, result} = await fetchJson(`${URL_AUTHC}/${token}`,'get');
       if(returnCode !== 0) return showError('当前发起人获取失败');
       const email = result.userEmail;
       const signPartyName = result.username;

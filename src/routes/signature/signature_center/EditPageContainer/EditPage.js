@@ -47,13 +47,12 @@ onClick = (key) => {
     if(value.signContractId){
       return(
         <div style={{overflow: 'hidden'}}>
-          <div style={{float: 'left'}}>
-            <SuperToolbar {...props}/>
-          </div>
-          <div style={{float: 'left', marginLeft: '30px'}}>
+          <div style={{float: 'left'}}><SuperToolbar {...props}/></div>
+          {value.signFileSubject ? <div style={{float: 'left', marginLeft: '30px'}}>
             <a href={value.urlOfSignedFileViewpdf} target="_blank" style={{marginRight: '10px', textDecoration: 'underline'}}>{value.signFileSubject}</a>
             <span className = "icon" style={{cursor: 'pointer'}} onClick = {this.onClick.bind(null, 'delFile')}><Icon type ='close' /></span>
-          </div>
+          </div> : ''
+          }
         </div>
       )
     }else{
