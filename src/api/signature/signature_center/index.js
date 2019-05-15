@@ -29,6 +29,12 @@ api.get('/getName/:token', async (req, res) => {
   res.send(await fetchJsonByNode(req, url))
 });
 
+//获取用户名与邮箱账号
+api.get('/authc/:token', async (req, res) => {
+  const url = `${service}/authc/${req.params.token}/account`;
+  res.send(await fetchJsonByNode(req, url))
+});
+
 //提交
 api.get('/sub/:guid', async (req, res) => {
   const url = `${service}/sign_center/submit/${req.params.guid}`;
