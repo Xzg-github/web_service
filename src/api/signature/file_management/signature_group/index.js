@@ -19,7 +19,7 @@ api.post('/list', async (req, res) => {
     ...filter,
     other
   };
-  res.send(await fetchJsonByNode(req, url,postOption(body)));
+  res.send(await fetchJsonByNode(req, url,postOption(req.body)));
 });
 
 //新增
