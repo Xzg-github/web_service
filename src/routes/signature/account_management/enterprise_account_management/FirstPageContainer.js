@@ -107,7 +107,7 @@ const clickActionCreator = (key) => {
 const changeActionCreator = (key, value) => async(dispatch,getState) =>{
   const state = getSelfState(getState());
   let body;
-  if(key === 'daysOfAdvanceNotice'){
+  if(key === 'daysOfAdvanceNotice' && value){
     body = {
       id : state.value.id,
       daysOfAdvanceNotice:value

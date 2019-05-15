@@ -4,7 +4,7 @@ import {pageSize, pageSizeType, description, searchConfig} from '../../../gloabl
 const buttons = [
   {key:'add',title:'新增',bsStyle:'primary'},
   {key:'edit',title:'编辑'},
-  {key:'del',title:'删除'},
+  {key:'del',title:'删除',confirm:'是否确认删除？'},
 ];
 
 const tableCols = [

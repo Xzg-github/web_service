@@ -42,6 +42,8 @@ class OrderPage extends React.Component {
   remind = (props) => {
     const propsInput = {
       style: { width: '100px' },
+      precision:0,
+      min:1,
       value: props.value['daysOfAdvanceNotice'],
       onChange:(value) => props.onChange('daysOfAdvanceNotice',value)
     };

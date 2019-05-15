@@ -96,6 +96,8 @@ class OrderPage extends React.Component {
     const propsInput = {
       style: { width: '100px' },
       value: props.value['daysOfAdvanceNotice'],
+      precision:0,
+      min:1,
       onChange:(value) => props.onChange('daysOfAdvanceNotice',value)
     };
     return (
