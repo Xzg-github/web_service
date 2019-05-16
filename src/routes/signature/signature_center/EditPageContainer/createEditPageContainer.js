@@ -182,7 +182,7 @@ const createEditPageContainer = (action, getSelfState, getParentState) => {
     const okFunc = (addItems = []) => {
       dispatch(action.assign({signPartyList: addItems}, 'value'))
     };
-    buildAddState(contactConfig, filterItems, newItems, true, dispatch, okFunc);
+    buildAddState(contactConfig, filterItems, newItems, true, dispatch, okFunc, value);
     showPopup(AddDialogContainer)
   };
 
@@ -206,7 +206,7 @@ const createEditPageContainer = (action, getSelfState, getParentState) => {
     const okFunc = (addItems = []) => {
       dispatch(action.assign({signPartyList: addItems}, 'value'))
     };
-    buildAddState(groupConfig, filterItems, selectItems, true, dispatch, okFunc);
+    buildAddState(groupConfig, filterItems, selectItems, true, dispatch, okFunc, value);
     showPopup(AddDialogContainer)
   };
 
