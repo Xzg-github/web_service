@@ -59,11 +59,24 @@ class AddDialog extends React.Component {
     };
   };
 
+  getShow = () => {
+    const {value} = this.props;
+    let member = [];
+    for(let i = 0; i<value.signPartyList.length; i++){
+      member.push(value.signPartyList[i].signPartyName)
+    }
+    let members = member.join(' , ');
+    return(
+      <div style={{marginBottom: '10px'}}>已添加的签署人：<span style={{color: '#2196f3'}}>{members}</span></div>
+    )
+  };
+
   render() {
     return (
       <div className={s.root}>
         <ModalWithDrag {...this.getProps()}>
           {this.toSearchInput()}
+          {this.getShow()}
           {this.toTable()}
         </ModalWithDrag>
       </div>

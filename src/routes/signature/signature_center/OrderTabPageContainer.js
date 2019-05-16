@@ -99,7 +99,6 @@ const signatureAction = (tabKey) => async (dispatch, getState) =>{
 const rejectActionCreation = (tabKey) => async (dispatch, getState) => {
   const {tableItems} = getSelfState(getState());
   const controls = [{ key: 'rejectReason', title: '拒签原因', required: true, type: 'text'}];
-  const URL_REJECT = '/api/signature/signature_center/reject';
   const checkItems = tableItems[tabKey].filter(item => item.checked === true);
   const closeFunc = () => {
     return updateTable(dispatch, action, getSelfState(getState()), ['mySign', 'hisSign', 'draft', 'other']);
@@ -132,11 +131,12 @@ const onLinkActionCreator = (tabKey, key, rowIndex, item) => async (dispatch, ge
   const {showConfig, tableItems} = getSelfState(getState());
   let token = getCookie('token');
   const URL_RECORD = `/api/signature/signature_center/record`;
-  const URL_ACCOUNT = '/api/signature/signature_center/getName'; //当前登陆人信息
+  //const URL_ACCOUNT = '/api/signature/signature_center/getName'; //当前登陆人信息
+  const URL_AUTHC = '/api/signature/signature_center/authc';  //当前登录人信息
   const items = tableItems[tabKey][rowIndex];
   const {returnCode, returnMsg, result} = await helper.fetchJson(`${URL_RECORD}/${items.id}`);
   if(returnCode !==0){return showError(returnMsg)}
-  const user = await fetchJson(`${URL_ACCOUNT}/${token}`,'get');
+  const user = await fetchJson(`${URL_AUTHC}/${token}`,'get');
   if(user.returnCode !== 0) {return showError(user.returnMsg)}
   const title = items.signFileSubject || '签署详情';
   const closeFunc = () => {

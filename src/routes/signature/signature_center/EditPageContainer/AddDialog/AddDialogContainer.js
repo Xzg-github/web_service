@@ -20,14 +20,15 @@ const getParentState =(rootState) => {
   return state[state.activeKey];
 };
 
-export const buildAddState = (config, filterItems, items=[], add, dispatch, okFunc) => {
+export const buildAddState = (config, filterItems, items=[], add, dispatch, okFunc, value) => {
   dispatch(action.create({
     ...config,
     okFunc,
     visible: true,
     add,
     filterItems,
-    tableItems: items
+    tableItems: items,
+    value
   }));
 };
 
@@ -39,10 +40,7 @@ const changeActionCreator = (event) => (dispatch, getState) =>{
     const { filterItems, formValue} = getSelfState(getState());
     let newTableItems = [];
     filterItems.forEach((item) => {
-      if(item.companyContactName.toLowerCase().indexOf(formValue.toLowerCase()) > -1) {
-        newTableItems.push(item);
-      }
-      if(item.companyContactAccount.toLowerCase().indexOf(formValue.toLowerCase()) > -1) {
+      if(item.companyContactName.toLowerCase().indexOf(formValue.toLowerCase()) > -1 || item.companyContactAccount.toLowerCase().indexOf(formValue.toLowerCase()) > -1) {
         newTableItems.push(item);
       }
     });
@@ -52,11 +50,8 @@ const changeActionCreator = (event) => (dispatch, getState) =>{
     const { filterItems, formValue} = getSelfState(getState());
     let newTableItems = [];
     filterItems.forEach((item) => {
-      if(item.signGroupName.toLowerCase().indexOf(formValue.toLowerCase()) > -1) {
+      if(item.signGroupName.toLowerCase().indexOf(formValue.toLowerCase()) > -1 || item.companyContactName.toLowerCase().indexOf(formValue.toLowerCase()) > -1) {
         newTableItems.push(item);
-      }
-      if(item.companyContactName.toLowerCase().indexOf(formValue.toLowerCase()) > -1){
-        newTableItems.push(item)
       }
     });
     dispatch(action.assign({tableItems: newTableItems}));

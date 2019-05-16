@@ -42,10 +42,13 @@ const createEditPageContainer = (action, getSelfState, getParentState) => {
       let url = '/api/signature/signature_center/editConfig';
       const editConfig = getJsonResult(await fetchJson(url));
       const controls1 = helper.deepCopy(editConfig.controls1);
+      let token = getCookie('token');
       let data = {};
       if(id){
         const URL_LIST_ONE = '/api/signature/signature_center/getOne';
+        const URL_ACCOUNT_STATUS = '/api/signature/signature_center/account';  // 判断账号是否注册
         const list = getJsonResult(await fetchJson(`${URL_LIST_ONE}/${id}`,'get'));
+        const listStatus = getJsonResult(await fetchJson(URL_ACCOUNT_STATUS, postOption(list.signPartyList), 'post'));
         if(list.signWay === '1' || list.signWay === 1){
           list.signPartyList[0].readonly = true         //签署文件时，发起人信息设为只读
         }
@@ -55,6 +58,7 @@ const createEditPageContainer = (action, getSelfState, getParentState) => {
           controls1[0].type = 'text'
         }
           data = list;
+          data.signPartyList = listStatus
       }
       return {
         ...editConfig,
@@ -176,13 +180,12 @@ const createEditPageContainer = (action, getSelfState, getParentState) => {
     const url = '/api/signature/signature_center/name';
     const json = await fetchJson(url, 'post');
     if(json.returnCode !== 0) return showError(json.returnMsg);
-    const selectItems = json.result;
     const filterItems = json.result;
     const newItems = getMoreData({key: 'account', arr:value.signPartyList || []}, {key: 'companyContactAccount', arr:filterItems});
     const okFunc = (addItems = []) => {
       dispatch(action.assign({signPartyList: addItems}, 'value'))
     };
-    buildAddState(contactConfig, filterItems, newItems, true, dispatch, okFunc);
+    buildAddState(contactConfig, filterItems, newItems, true, dispatch, okFunc, value);
     showPopup(AddDialogContainer)
   };
 
@@ -206,7 +209,7 @@ const createEditPageContainer = (action, getSelfState, getParentState) => {
     const okFunc = (addItems = []) => {
       dispatch(action.assign({signPartyList: addItems}, 'value'))
     };
-    buildAddState(groupConfig, filterItems, selectItems, true, dispatch, okFunc);
+    buildAddState(groupConfig, filterItems, selectItems, true, dispatch, okFunc, value);
     showPopup(AddDialogContainer)
   };
 
