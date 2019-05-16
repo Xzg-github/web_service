@@ -24,7 +24,7 @@ const data = {
       my_papers: '我的文件',
       dataStatistics: '数据统计',
       enterpriseBusinessFlow: '业务明细流水',
-      //monthly_bill: '月账单',
+      monthly_bill: '月账单',
       file_management: '档案管理',
       account_management: '账号管理',
      //enterprise_documents: '企业文件',
