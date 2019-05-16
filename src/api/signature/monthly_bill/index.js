@@ -56,4 +56,11 @@ api.get('/getId',async(req,res) => {
   res.send(await fetchJsonByNode(req,url))
 });
 
+//依据username获取该用户的角色
+api.get('/role', async (req, res) => {
+  const {token} = req.cookies;
+  const url = `${service}/authc/${token}/account`;
+  res.send(await fetchJsonByNode(req,url))
+});
+
 export default api;

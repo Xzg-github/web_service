@@ -16,6 +16,7 @@ const STATE_PATH = ['monthly_bill'];
 const action = new Action(STATE_PATH);
 
 const URL_LIST = '/api/signature/monthly_bill/list';
+const URL_ROLE = '/api/signature/monthly_bill/role';
 const URL_CONFIG = '/api/signature/monthly_bill/config';
 
 
@@ -28,15 +29,23 @@ const initActionCreator = () => async (dispatch, getState) => {
     const defaultTabs = [{key: 'index', title: '月账单', close: false}];
     const {activeKey='index', tabs=defaultTabs} = getSelfState(getState());
     dispatch(action.assign({status: 'loading'}));
+    const json = helper.getJsonResult(await helper.fetchJson(URL_ROLE));
+    console.log(json);
     //初始化数据
     const { index , edit } = helper.getJsonResult(await helper.fetchJson(URL_CONFIG));
     //页面数据
-    const list = helper.getJsonResult(await search(URL_LIST, 0, index.pageSize, {}));
-
-
+    const obj = {};
+    if(json.contractRoles === "econtract_company_role"){
+      obj.companyId = json.userId
+    }
+    const list = helper.getJsonResult(await search(URL_LIST, 0, index.pageSize, obj));
+    const body = buildOrderPageState(list, index, {tabKey: 'index'});
+    if(json.contractRoles === "econtract_company_role"){
+     body.filters.splice(0,1)
+    }
     dispatch(action.assign({
       status: 'page',
-      index: buildOrderPageState(list, index, {tabKey: 'index'}),
+      index: body,
       activeKey,
       tabs,
       editConfig:edit
