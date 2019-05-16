@@ -94,7 +94,7 @@ const createEditPageContainer = (action, getSelfState, getParentState) => {
         const {status, name ,response = {}} = sss;
         const fileBody = response.result;
         if(status && response.returnCode === 0){
-          dispatch(action.assign({...fileBody, signFileSubject: name}, 'value'));
+          dispatch(action.assign({...fileBody, signFileSubject: name, name}, 'value'));
           showSuccessMsg(`[${name}]上传成功`);
         }else{
           return showError(`[${name}]上传失败`)
@@ -279,6 +279,7 @@ const createEditPageContainer = (action, getSelfState, getParentState) => {
    try {
      const {value, controls1, controls2, tableCols, closeFunc} = getSelfState(getState());
      if(JSON.stringify(value) === "{}"){return showError('请上传签署文件！')}         //没有填写任何内容是，直接关闭
+     if(!value.signContractId){return showError('请上传要签署的文件！')}
      if(!validValue(controls1, value)){                                                //判断from1必填
        dispatch(action.assign({valid: true}));
        return
