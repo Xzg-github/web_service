@@ -98,7 +98,7 @@ const createEditPageContainer = (action, getSelfState, getParentState) => {
         const {status, name ,response = {}} = sss;
         const fileBody = response.result;
         if(status && response.returnCode === 0){
-          dispatch(action.assign({...fileBody, signFileSubject: name, name}, 'value'));
+          dispatch(action.assign({...fileBody, signFileSubject: name, signFileName:name}, 'value'));
           showSuccessMsg(`[${name}]上传成功`);
         }else{
           return showError(`[${name}]上传失败`)
