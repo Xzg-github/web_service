@@ -79,6 +79,7 @@ const okActionCreator = () => async (dispatch, getState) => {
     };
     const {result,returnCode,returnMsg} = await helper.fetchJson(URL_ADD,helper.postOption(body));
     if(returnCode !== 0){
+      dispatch(action.assign({confirmLoading:false}));
       return helper.showError(returnMsg);
     }
     dispatch(action.assign({confirmLoading:false}));
@@ -126,7 +127,7 @@ const okActionCreator = () => async (dispatch, getState) => {
           }
         }
         dispatch(action.assign({confirmLoading:false}));
-        helper.showSuccessMsg('新增成功');
+        helper.showSuccessMsg('操作成功');
         dispatch(action.assign({visible: false, ok: true}));
       })
     });

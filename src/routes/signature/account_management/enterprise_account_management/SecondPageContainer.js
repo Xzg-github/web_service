@@ -170,7 +170,10 @@ const changeActionCreator = (key, value) => (dispatch,getState) =>{
 };
 
 const checkActionCreator = (checked,key) => (dispatch,getState) =>{
-  dispatch(action.assign({[key]: checked}, [TAB_KEY,'checkValue']))
+  const obj = {
+    [key] : checked
+  };
+  dispatch(action.assign({checkValue:obj}, [TAB_KEY]))
 };
 
 const radioActionCreator = (radio,key) => async(dispatch,getState) =>{

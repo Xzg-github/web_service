@@ -27,7 +27,7 @@ const changeActionCreator = (key, value) => {
 };
 
 const checkPhone= (phone) => {
-  if(!(/^(((13[0-9]{1})|(15[0-9]{1})|(18[0-9]{1}))+\d{8})$/.test(phone))){
+  if(!(/^(((16[0-9]{1})|(17[0-9]{1})|(19[0-9]{1})|(13[0-9]{1})|(15[0-9]{1})|(18[0-9]{1}))+\d{8})$/.test(phone))){
     return false;
   }else {
     return true
