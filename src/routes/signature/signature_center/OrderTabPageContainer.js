@@ -143,7 +143,7 @@ const onLinkActionCreator = (tabKey, key, rowIndex, item) => async (dispatch, ge
     return updateTable(dispatch, action, getSelfState(getState()), ['mySign', 'hisSign', 'draft', 'other']);
   };
   buildShowState(showConfig, result, dispatch, title, user, closeFunc);
-  showPopup(ShowPageContainer);
+  showPopup(ShowPageContainer, {}, true);
 };
 
 //下载模板

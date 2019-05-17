@@ -68,6 +68,7 @@ class Person extends React.Component {
       width: 1000,
       visible: this.props.visible,
       maskClosable: false,
+      afterClose: this.props.afterClose,
       ...extra
     };
   };
@@ -217,7 +218,6 @@ class Person extends React.Component {
   };
 
   render() {
-    const data = this.props.data;
     const {panels = [], value} = this.props;
     return (
       <ModalWithDrag {...this.getProps()}>
