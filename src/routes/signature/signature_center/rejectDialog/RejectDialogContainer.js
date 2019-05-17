@@ -4,12 +4,12 @@ import {Action} from '../../../../action-reducer/action';
 import showPopup from '../../../../standard-business/showPopup';
 import helper, {fetchJson, postOption, showError} from '../../../../common/common';
 
-const action = new Action(['temp'], false);
+const action = new Action(['fadada'], false);
 
 const url = '/api/signature/signature_center/reject';
 
 const getSelfState = (state) => {
-  return state.temp || {}
+  return state.fadada || {}
 };
 
 const buildState = (controls, id, closeFunc, item = {}) => {

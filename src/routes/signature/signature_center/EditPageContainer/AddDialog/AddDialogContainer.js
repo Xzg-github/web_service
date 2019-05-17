@@ -5,7 +5,7 @@ import {getPathValue} from '../../../../../action-reducer/helper';
 import {postOption, fetchJson, showSuccessMsg, showError} from '../../../../../common/common';
 import {getCookie} from '../createEditPageContainer'
 
-const STATE_PATH = ['temp'];
+const STATE_PATH = ['fadada'];
 const action = new Action(STATE_PATH);
 
 const getSelfState = (rootState) => {
