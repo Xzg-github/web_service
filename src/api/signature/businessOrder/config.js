@@ -18,7 +18,7 @@ const invoiceStatusOptions = [
 const payWayOptions = [
   {value: 1, title: '微信支付'},
   {value: 2, title: '支付宝'},
-  {value: 3, title: '网银支付'}
+  {value: 3, title: '对公转帐'}
 ]
 
 /** OrderPage Config Information **/

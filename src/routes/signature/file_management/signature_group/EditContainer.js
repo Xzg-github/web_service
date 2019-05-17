@@ -112,6 +112,10 @@ const okActionCreator = (props) => async (dispatch,getState) => {
     dispatch(action.assign({valid: true},tabKey));
     return;
   }
+  if(tableItems < 1){
+    helper.showError('组员信息不能为空');
+    return
+  }
   let childDto = [];
   for(let [index,elem] of new Map( tableItems.map( ( item, i ) => [ i, item ] ) )){
     let i = {
