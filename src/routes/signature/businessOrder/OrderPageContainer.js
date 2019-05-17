@@ -52,7 +52,12 @@ const auditActionCreator = async (dispatch, getState) => {
     return result;
     }, []);
   if (validItem.length !== 1) return showError('请选择一条未支付的记录');
-  if (true === await showEditDialog(auditDialogConfig, {id: validItem[0].id, orderStatus: validItem[0].orderStatus}, 'audit')) {
+  const data = {
+    id: validItem[0].id,
+    orderStatus: validItem[0].orderStatus,
+    nativeOrderNo: validItem[0].nativeOrderNo
+  };
+  if (true === await showEditDialog(auditDialogConfig, data, 'audit')) {
     return updateTable(dispatch, getState);
   }
 };

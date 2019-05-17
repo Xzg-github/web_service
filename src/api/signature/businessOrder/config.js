@@ -18,7 +18,7 @@ const invoiceStatusOptions = [
 const payWayOptions = [
   {value: 1, title: '微信支付'},
   {value: 2, title: '支付宝'},
-  {value: 3, title: '网银支付'}
+  {value: 3, title: '对公转帐'}
 ]
 
 /** OrderPage Config Information **/
@@ -43,7 +43,8 @@ const tableCols = [
   {key: 'companyName', title: '客户名称'},
   {key: 'orderMoney', title: '订购金额'},
   {key: 'usedMoney', title: '已用金额'},
-  {key: 'orderTime', title: '订购时间'},
+  {key: 'orderTime', title: '下单时间'},
+  {key: 'payTime', title: '支付时间'},
   {key: 'payWay', title: '支付方式', options: payWayOptions},
   {key: 'outerOrderNo', title: '支付流水号'},
   {key: 'payDescription', title: '支付备注'},
