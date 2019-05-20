@@ -75,6 +75,7 @@ const okActionCreator = () => async (dispatch, getState) => {
     };
     const {result,returnCode,returnMsg} = await helper.fetchJson(URL_ADD,helper.postOption(body));
     if(returnCode !== 0){
+      dispatch(action.assign({confirmLoading:false}));
       return helper.showError(returnMsg);
     }
     dispatch(action.assign({confirmLoading:false}));
