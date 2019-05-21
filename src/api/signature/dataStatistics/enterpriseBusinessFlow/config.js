@@ -14,6 +14,7 @@ const filters = [
   {key: 'isReversal', title: '是否冲销', type: 'select', options: isReversalOptions},
   {key: 'consumerTimeFrom', title: '实际扣费时间', type: 'date'},
   {key: 'consumerTimeTo', title: '至', type: 'date'},
+  {key: 'signFileNo', title: '关联系统编号', type: 'text'},
 ];
 
 const buttons = [
