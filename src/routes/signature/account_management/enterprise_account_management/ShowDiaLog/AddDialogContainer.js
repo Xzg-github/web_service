@@ -1,5 +1,6 @@
 import {connect} from 'react-redux';
 import AddDialog from './AddDialog';
+import execWithLoading from '../../../../../standard-business/execWithLoading';
 import {Action} from '../../../../../action-reducer/action';
 import showPopup from '../../../../../standard-business/showPopup';
 import helper from '../../../../../common/common';
@@ -58,13 +59,15 @@ const okActionCreator = () => async (dispatch, getState) => {
     dispatch(action.assign({valid: true}));
     return;
   }
-  const body = helper.postOption(helper.convert(value),!edit?'post':'put');
-  const {result,returnCode,returnMsg} = await helper.fetchJson(URL_UPDATE,body)
-  if(returnCode != 0){
-    helper.showError(returnMsg);
-    return
-  }
-  dispatch(action.assign({visible: false, ok: true}));
+  execWithLoading(async()=> {
+    const body = helper.postOption(helper.convert(value),!edit?'post':'put');
+    const {result,returnCode,returnMsg} = await helper.fetchJson(URL_UPDATE,body)
+    if(returnCode != 0){
+      helper.showError(returnMsg);
+      return
+    }
+    dispatch(action.assign({visible: false, ok: true}));
+  });
 };
 
 const closeActionCreator = () => (dispatch) => {
