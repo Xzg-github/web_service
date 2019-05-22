@@ -77,6 +77,7 @@ class Login extends React.Component {
     };
     return <Input {...props} />;
   };
+
   toPassword = (key, type, extra = {}) => {
     const props = {
       ...extra,
@@ -88,7 +89,7 @@ class Login extends React.Component {
       name: key
     };
     return <Input {...props} />;
-    }
+    };
 
   toOkButton = () => {
     const props = {

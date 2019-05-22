@@ -53,7 +53,7 @@ const isLogin = (req) => {
 };
 
 const isJumpLogin = (req) => {
-  const path = req.cookies;
+  const path = req.path;
   if(path === '/password/find'){
     return false;
   }else if(path === '/password/reset'){
@@ -68,7 +68,7 @@ const isJumpLogin = (req) => {
 const isRegistered = (req) => {
   const {token} = req.cookies;
   const path = req.path;
-  if(path === '/registered'){
+  if(path === '/login'){
     return true
   }
   return !!token;
