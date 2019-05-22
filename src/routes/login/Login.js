@@ -129,7 +129,7 @@ class Login extends React.Component {
                     <Form.Item>
                       <Checkbox defaultChecked>记住密码</Checkbox>
                       <a role='registered' href='/registered'>注册账户</a>
-                      <a role='forget' href='/password/find'>忘记密码</a>
+                      {/*<a role='forget' href='/password/find'>忘记密码</a>*/}
                       {this.toOkButton()}
                       <div style={{width: '350px',height: '20px', textAlign: 'center'}}>
                       </div>
