@@ -68,7 +68,7 @@ const isJumpLogin = (req) => {
 const isRegistered = (req) => {
   const {token} = req.cookies;
   const path = req.path;
-  if(path === '/login'){
+  if(path === '/registered'){
     return true
   }
   return !!token;
@@ -111,10 +111,10 @@ app.get('*', async (req, res, next) => {
       return;
     }
     //识别不到token跳转去注册页面
-    if (!isRegistered(req)) {
+/*    if (!isRegistered(req)) {
       res.redirect(302, '/registered');
       return;
-    }
+    }*/
 
 
     const css = new Set();
