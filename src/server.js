@@ -47,6 +47,24 @@ if (process.env.NODE_ENV !== 'production') {
 
 app.use('/api', api);
 
+const isLogin = (req) => {
+  const {token} = req.cookies;
+  return !!token;
+};
+
+const isJumpLogin = (req) => {
+  const path = req.cookies;
+  if(path === '/password/find'){
+    return false;
+  }else if(path === '/password/reset'){
+    return false
+  }else if(path === '/registered'){
+    return false
+  }else{
+    return !isLogin(req) && (path !== '/login')
+  }
+};
+
 const isRegistered = (req) => {
   const {token} = req.cookies;
   const path = req.path;
@@ -69,16 +87,21 @@ app.get('*', async (req, res, next) => {
       return;
     }
 
-    //跳转去epld
+/*    //跳转去epld
     if (req.path === '/epldLogin'){
       res.redirect(302, epld);
       return;
-    }
+    }*/
 
     if(req.path === '/code'){
       res.cookie('token', req.query.token);
       res.cookie('accountId', req.query.accountId);
       res.redirect(302, '/fadada');
+      return
+    }
+
+    if(isJumpLogin(req)){
+      res.redirect(302, '/login');
       return
     }
 

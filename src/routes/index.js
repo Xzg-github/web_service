@@ -42,7 +42,7 @@ export default {
 
   children: [
       //require('./home').default,
-      //require('./login').default,
+      require('./login').default,
       createRoute('/signature', loadSignature),
       require('./password/modify').default,
       require('./password/find').default,

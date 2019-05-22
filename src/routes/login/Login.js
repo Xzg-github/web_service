@@ -13,7 +13,7 @@ const URL_LOGIN = '/api/login';
 class Login extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {loading: false, email: '',phoneNumber: '', accountPassword: '', disabled: true};
+    this.state = {loading: false, account: '',phoneNumber: '', password: '', disabled: true};
     this.onLogin = this.onLogin.bind(this);
   }
   componentDidMount() {
@@ -22,16 +22,16 @@ class Login extends React.Component {
 
   async onLogin(e) {
     e.preventDefault();
-    const {email, accountPassword} = this.state;
-    if (!email || !accountPassword) {
+    const {account, password} = this.state;
+    if (!account || !password) {
       helper.showError('请输入用户名或密码');
       return;
     }
     let params = {};
-    if(this.isEmail(email)){
-      params = {accountPassword, email};
-    }else if(this.isMobile(email)){
-      params = {accountPassword, phoneNumber:email}
+    if(this.isEmail(account)){
+      params = {password, account};
+    }else if(this.isMobile(account)){
+      params = {password, phoneNumber:account}
   }else{
       helper.showError('手机账号或邮箱格式不正确');
       return
@@ -77,6 +77,18 @@ class Login extends React.Component {
     };
     return <Input {...props} />;
   };
+  toPassword = (key, type, extra = {}) => {
+    const props = {
+      ...extra,
+      type,
+      prefix:this.toIcon('lock'),
+      size: 'large',
+      value: this.state[key],
+      onChange: this.onChange,
+      name: key
+    };
+    return <Input {...props} />;
+    }
 
   toOkButton = () => {
     const props = {
@@ -108,10 +120,10 @@ class Login extends React.Component {
                 <h1 role='title'>电子合同管理系统</h1>
                   <Form onSubmit={this.onLogin}>
                     <Form.Item>
-                      {this.toInput('email', 'user', {placeholder: '邮箱/手机号'})}
+                      {this.toInput('account', 'user', {placeholder: '邮箱/手机号'})}
                     </Form.Item>
                     <Form.Item>
-                      {this.toInput('accountPassword', 'password', {type: 'accountPassword', placeholder: '密码'})}
+                      {this.toPassword('password', 'password', {type: 'password', placeholder: '密码'})}
                     </Form.Item>
                     <Form.Item>
                       <Checkbox defaultChecked>记住密码</Checkbox>
