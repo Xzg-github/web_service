@@ -281,7 +281,9 @@ const createEditPageContainer = (action, getSelfState, getParentState) => {
  const nextAction = async(dispatch, getState) => {
    try {
      const {value, controls1, controls2, tableCols, closeFunc} = getSelfState(getState());
+     let date = moment().format('YYYY-MM-DD'); //获取当前时间
      if(JSON.stringify(value) === "{}"){return showError('请上传签署文件！')}         //没有填写任何内容是，直接关闭
+     if(value.signExpirationTime <= date){return showError(('签署截至时间已过期，请重新确认！'))}
      if(!value.signContractId){return showError('请上传要签署的文件！')}
      if(!validValue(controls1, value)){                                                //判断from1必填
        dispatch(action.assign({valid: true}));

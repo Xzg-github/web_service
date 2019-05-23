@@ -117,7 +117,7 @@ const okActionCreator = (key) => async (dispatch, getState) => {
 
 //提交
 const onLoginCreator = (key) =>  (dispatch, getState) => {
-  setTimeout(() => window.location.href = '/epldLogin');
+  setTimeout(() => window.location.href = '/login');
 };
 
 const mapStateToProps = (state) => {
