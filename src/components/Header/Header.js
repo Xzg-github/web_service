@@ -112,14 +112,28 @@ class Header extends React.Component {
       <Menu className={s.menu} onClick={this.onMenuItemClick}>
         <MenuItemGroup title={this.state.username} />
         <MenuDivider />
-        {/*<MenuItem key='revoke'>注销</MenuItem>*/}
+        <MenuItem key='modify'>修改密码</MenuItem>
+        <MenuItem key='revoke'>注销</MenuItem>
       </Menu>
     );
   };
 
   toAvatar = () => {
+    const props = {
+      placement: 'bottomRight',
+      overlay: this.toMenu(),
+      trigger: ['click'],
+      onVisibleChange: this.onVisibleChange
+    };
     return (
-      <div style={{fontSize:14}}>您好,&nbsp;&nbsp;{this.state.username}</div>
+      <div>
+        <div style={{fontSize:14, float: 'left', marginRight: '15px'}}>您好,&nbsp;&nbsp;{this.state.username}</div>
+        <Dropdown {...props}>
+        <span role='avatar' data-role='block' data-active={this.state.visible ? true : null}>
+          <Avatar icon="user" />
+        </span>
+        </Dropdown>
+      </div>
     );
   };
 
