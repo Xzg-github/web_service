@@ -300,10 +300,29 @@ class SuperForm extends React.Component {
     return <Control {...props} />;
   };
 
-  toDate = (props, {rule}) => {
+/*  toDate = (props, {rule}) => {
     props.getCalendarContainer = this.getPopupContainer;
     props.style = {width: '100%'};
     rule && (props.disabledDate = this.validDate(rule));
+    return <Control {...props} />;
+  };*/
+
+   formatDate = (date) => {  //将时间格式转化成 YYYY-MM-DD
+    let y = date.getFullYear();
+    let m = date.getMonth() + 1;
+    m = m < 10 ? '0' + m : m;
+    let d = date.getDate();
+    d = d < 10 ? ('0' + d) : d;
+    return y + '-' + m + '-' + d;
+  };
+
+  toDate = (props, {rule, disabledBefore}) => {
+    props.getCalendarContainer = this.getPopupContainer;
+    props.style = {width: '100%'};
+    rule && (props.disabledDate = this.validDate(rule));
+    disabledBefore && (props.disabledDate = (currentDate) => {
+      return currentDate && (currentDate.format('YYYY-MM-DD') < this.formatDate(new Date()));
+    });
     return <Control {...props} />;
   };
 
